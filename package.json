@@ -1,0 +1,12 @@
+{
+    "name": "pounds"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+      "express": "2.3.11"
+    , "express-messages": ">= 0.0.2"
+    , "express-resource": ">= 0.2.1"
+    , "jade": ">= 0.0.1"
+    , "socket.io": ">= 0.6.18"
+  }
+}
