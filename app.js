@@ -94,7 +94,8 @@ socket.on('connection', function(client){
 // Routes
 app.get('/', function(req, res){
   res.render('index', {
-    title: 'Pounds!'
+    title: 'Pounds!',
+    people: people
   });
 });
 

@@ -22,3 +22,10 @@ div#update
   a#bump(href="#") hit the rock, don't smoke it
 div#stream
   ul#reciever
+  - if (people)
+  - each person in people
+    li
+      div(id= person.handle)
+        img(src= person.profile_image_url)
+        br
+        span #{person.bumps} Bumps
