@@ -20,7 +20,13 @@ $(document).ready(function() {
   });
 
   socket.on('message', function(data){
-    $('#reciever').append('<li>' + data + '</li>');
+    var person = JSON.parse(data);
+    
+    var element = "<li><div id=\"" + person.handle + 
+                  "\"><img src=\"" + person.profile_image_url + 
+                  "\" /><br/><span>" + person.bumps + " Bumps</span></div></li>";
+                  
+    $('#reciever').prepend(element);
   });
 
   socket.on('disconnect', function(){

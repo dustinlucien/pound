@@ -1,15 +1,24 @@
-h1= title
-p Welcome to #{title}
-
-div#content
-  div#update
-    span send a fist bump to
-    input#bump_to(type="text", value="@")
-    span for
-    input#bump_for(type="text")
-    span from
-    input#bump_from(type="text", value="@")
-    br
-    a#bump(href="#") bump it! you know you wanna
-  div#stream
-    ul#reciever
+div#update
+  span send a fist bump
+  br
+  br
+  table
+    tr
+      td 
+        span to
+      td 
+        input#bump_to(type="text", value="@")
+    tr
+      td 
+        span for
+      td
+        input#bump_for(type="text")
+    tr
+      td
+        span from
+      td
+        input#bump_from(type="text", value="@")
+  br
+  a#bump(href="#") hit the rock, don't smoke it
+div#stream
+  ul#reciever

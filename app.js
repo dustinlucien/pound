@@ -5,6 +5,8 @@
 
 var express = require('express');
 var io = require('socket.io');
+var events = require('events');
+var request = require('request');
 
 var app = module.exports = express.createServer();
 
@@ -30,14 +32,58 @@ app.configure('production', function(){
 });
 
 //setup for socket.io
+var people = []
+
 var socket = io.listen(app);
 socket.on('connection', function(client){
 	console.log('Client Connected');
 
 	client.on('message', function(message){
-	  console.log('Message recieved ' + message);
-	  client.broadcast(message);
-	  client.send(message);
+	  console.log('Bump recieved ' + message);
+	  
+	  var bump = JSON.parse(message)
+	  
+	  if (bump.them.length <= 1 ||
+	      bump.you.length <= 1) {
+	      console.log("ignoring bump.")
+	      return;
+	  }
+	  
+	  var found = false;
+	  for (var index in people) {
+	    var person = people[index];
+	    console.log("person in list : " + person.handle);
+	    if (bump.them == person.handle) {
+	      console.log("found an existing person");
+    	  found = true;
+	      person.bumps++;
+    	  
+	      //refactor this
+	      var person_json = JSON.stringify(person);
+    	  client.broadcast(person_json);
+    	  client.send(person_json);
+
+	    }
+	  }
+	  
+	  if (!found) {
+	    var twitter_profile_uri = "http://api.twitter.com/1/users/show/" + bump.them.substr(1, bump.them.length - 1) + ".json";
+	    
+	    console.log("profile uri: " + twitter_profile_uri);
+	    request({ uri:twitter_profile_uri }, function (error, response, body) {
+        if (error && response.statusCode !== 200) {
+          console.log('Error when contacting twitter.com');
+        }
+        var data = JSON.parse(body);
+        var person = {'handle':bump.them, 'profile_image_url': data['profile_image_url'], 'bumps': 1};
+  	    people.push(person);
+  	    
+  	    //refactor this
+  	    var person_json = JSON.stringify(person);
+    	  client.broadcast(person_json);
+    	  client.send(person_json);
+      });
+	  }
 	});
 	
 	client.on('disconnect', function(){
@@ -48,7 +94,7 @@ socket.on('connection', function(client){
 // Routes
 app.get('/', function(req, res){
   res.render('index', {
-    title: 'lbs!'
+    title: 'Pounds!'
   });
 });
 
