@@ -44,9 +44,9 @@ socket.on('connection', function(client){
 	  var bump = JSON.parse(message)
 	  
 	  if (bump.them.length <= 1 ||
-	      bump.you.length <= 1) {
-	      console.log("ignoring bump.")
-	      return;
+	    bump.you.length <= 1) {
+	    console.log("ignoring bump.")
+	    return;
 	  }
 	  
 	  var found = false;
@@ -76,6 +76,7 @@ socket.on('connection', function(client){
         }
         var data = JSON.parse(body);
         var person = {'handle':bump.them, 'profile_image_url': data['profile_image_url'], 'bumps': 1};
+  	    
   	    people.push(person);
   	    
   	    //refactor this
@@ -94,7 +95,7 @@ socket.on('connection', function(client){
 // Routes
 app.get('/', function(req, res){
   res.render('index', {
-    title: 'Pounds!',
+    title: 'Kudos!',
     people: people
   });
 });
