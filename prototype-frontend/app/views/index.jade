@@ -1,0 +1,31 @@
+div#update
+  span send a fist bump
+  br
+  br
+  table
+    tr
+      td 
+        span to
+      td 
+        input#bump_to(type="text", value="@")
+    tr
+      td 
+        span for
+      td
+        input#bump_for(type="text")
+    tr
+      td
+        span from
+      td
+        input#bump_from(type="text", value="@")
+  br
+  a#bump(href="#") hit the rock, don't smoke it
+div#stream
+  ul#reciever
+  - if (people)
+  - each person in people
+    li
+      div(id= person.handle)
+        img(src= person.profile_image_url)
+        br
+        span #{person.bumps} Bumps

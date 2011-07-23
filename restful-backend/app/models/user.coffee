@@ -1,28 +1,32 @@
-class User extends Backbone.Model
-  defaults: ->
-    firstname:""
-    lastname:""
-    twitter:null
-    recieved:0
-    balance:25
+mongoose = require('mongoose')
+
+User = new mongoose.Schema
+  id : ObjectId
+  username : String
+  firstname : String
+  lastname : String
+
+  facebook:
+      username : String
+      token : String
+      token_secret : String
+      
+  twitter : 
+    username : String
+    token : String
+    token_secret : String
+
+  linkedin :
+    username : String
+    token : String
+    token_secret : String
     
-  firstname: ->
-    @get('firstname')
-    
-  lastname: ->
-    @get('lastname')
-    
-  twitter: ->
-    @get('twitter')
+  kudos:
+      have: {type: Number, min: 0, default: 25}
+      sent: [Kudos]
+      received: [Kudos]
+
+  created: Date
+
+mongoose.model 'User', User
   
-  twitter_profile_url: ->
-    "http://api.twitter.com/1/users/show/#{@twitter()}.json"
-    
-  total_kudos: ->
-    @get('recieved')
-  
-  kudos_remains: ->
-    @get('balance')
-  
-class UserList extends Backbone.Collection
-  model: User
