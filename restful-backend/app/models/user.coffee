@@ -1,5 +1,7 @@
 mongoose = require('mongoose')
 
+ObjectId = mongoose.Schema.ObjectId
+
 User = new mongoose.Schema
   id : ObjectId
   username : String
