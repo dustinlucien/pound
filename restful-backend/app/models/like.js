@@ -5,7 +5,8 @@
   Like = new mongoose.Schema({
     id: ObjectId,
     sender: ObjectId,
-    created: Date
+    created: Date,
+    test: String
   });
   mongoose.model('Like', Like);
 }).call(this);

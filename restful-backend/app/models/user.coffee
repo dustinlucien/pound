@@ -1,4 +1,6 @@
 mongoose = require('mongoose')
+Kudo = require('./kudo')
+Like = require('./like')
 
 ObjectId = mongoose.Schema.ObjectId
 
@@ -25,8 +27,8 @@ User = new mongoose.Schema
     
   kudos:
       have: {type: Number, min: 0, default: 25}
-      sent: [Kudos]
-      received: [Kudos]
+      sent: [Kudo]
+      received: [Kudo]
 
   created: Date
 

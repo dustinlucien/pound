@@ -1,4 +1,5 @@
 mongoose = require('mongoose')
+Like = require('./like')
 
 ObjectId = mongoose.Schema.ObjectId
 

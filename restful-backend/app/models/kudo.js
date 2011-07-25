@@ -1,6 +1,7 @@
 (function() {
-  var Kudo, ObjectId, mongoose;
+  var Kudo, Like, ObjectId, mongoose;
   mongoose = require('mongoose');
+  Like = require('./like');
   ObjectId = mongoose.Schema.ObjectId;
   Kudo = new mongoose.Schema({
     id: ObjectId,
