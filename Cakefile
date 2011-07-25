@@ -17,6 +17,7 @@ task 'watch', 'Watch coffee-script files in directory passed as option', (option
 	log "Directory #{dir}"
 	files = fs.readDirSync(dir)
 
+	
 coffee = (options = "", file) ->
   log "Compiling #{file}"
   exec "coffee #{options} --compile #{file}", (err, stdout, stderr) -> 
