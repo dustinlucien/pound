@@ -3,9 +3,9 @@
  * Module dependencies.
  */
 
-var express = require('express'),
+var express = require('express')
 //RESTful routing helper
-	, Resource = require('express-resource'),
+	, Resource = require('express-resource')
 	, events = require('events')
 	, request = require('request');
 
@@ -31,6 +31,8 @@ app.configure('production', function(){
 
 
 //Wire up the controllers
+app.resource('users', require('./app/controllers/users'), { format: 'json' });
+app.resource('kudos', require('./app/controllers/kudos'), { format: 'json' });
 
 var port = process.env.PORT || 3000;
 app.listen(port, function(){

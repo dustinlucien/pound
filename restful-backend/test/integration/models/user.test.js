@@ -7,15 +7,15 @@ var vows = require('vows')
   , User = require('../../../app/models/user.js');
   
 function setup(callback) {
-  var db = mongoose.createConnection('mongodb://testing_user:kud05@dbh15.mongolab.com:27157/heroku_app563134')
+  var db = mongoose.createConnection('mongodb://testing_user:kud05@dbh15.mongolab.com:27157/heroku_app563134');
 
-  var User = db.model('User')
+  var User = db.model('User');
 
   User.remove({}, function(){
-    callback(User)     
+    callback(User);
   });
 
-  return db
+  return db;
 }
 
 function setupNewUser(model) {
@@ -28,7 +28,7 @@ function setupNewUser(model) {
   return model;
 }
 
-vows.describe('User Model').addBatch({
+vows.describe('User Model Integration Tests').addBatch({
   'WHEN I create a new user with valid data ': {
     topic: function() {
       var callback = this.callback;

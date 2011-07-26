@@ -3,8 +3,9 @@ exports.index = function(req, res) {
 	res.send('listing users');
 };
 
-//POST /users/create -> new
+//POST /users -> create
 exports.create = function(req, res) {
+	console.log();
 	res.send('creating a user');
 }
 

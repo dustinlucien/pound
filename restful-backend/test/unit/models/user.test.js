@@ -6,7 +6,7 @@ var vows = require('vows')
   , MongooseNumber = mongoose.Types.Number
   , User = require('../../../app/models/user.js');
   
-vows.describe('Users').addBatch({
+vows.describe('User Model Unit Tests').addBatch({
   'Before a User is created': {
     topic : function () { return mongoose.model('User') },
       'has no username': function (topic) {
