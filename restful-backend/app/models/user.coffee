@@ -9,11 +9,12 @@ User = new mongoose.Schema
   username : String
   firstname : String
   lastname : String
-
+  email : String
+  
   facebook:
-      username : String
-      token : String
-      token_secret : String
+    username : String
+    token : String
+    token_secret : String
       
   twitter : 
     username : String
@@ -29,8 +30,6 @@ User = new mongoose.Schema
       have: {type: Number, min: 0, default: 25}
       sent: [Kudo]
       received: [Kudo]
-
-  created: Date
 
 mongoose.model 'User', User
   
