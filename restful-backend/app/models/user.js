@@ -9,6 +9,7 @@
     username: String,
     firstname: String,
     lastname: String,
+    email: String,
     facebook: {
       username: String,
       token: String,
@@ -32,8 +33,7 @@
       },
       sent: [Kudo],
       received: [Kudo]
-    },
-    created: Date
+    }
   });
   mongoose.model('User', User);
 }).call(this);

@@ -4,7 +4,7 @@ var vows = require('vows')
   , mongoose = require('mongoose')
   , MongooseArray = mongoose.Types.Array
   , MongooseNumber = mongoose.Types.Number
-  , User = require('../app/models/user.js');
+  , User = require('../../../app/models/user.js');
   
 vows.describe('Users').addBatch({
   'Before a User is created': {
@@ -60,25 +60,5 @@ vows.describe('Users').addBatch({
     'Users should default to 25 kudos': function(topic) {
       should.equal(25, topic.get('kudos.have'));
     }
-  },
-  'Can we create and save Users to MongoDB': {
-    topic: function() {
-      mongoose.connect('test_user:kudo5@dbh15.mongolab.com:27157/heroku_app563134')
-      return mongoose.model('User');
-    },
-    'Should not be able to save a User with nothing set': function(topic) {
-      var user = new topic();
-      user.save(function(err) {
-        assert.isTrue(!err);
-      });
-      user.remove();
-    },
-    '': function(topic) {
-      var user = new topic();
-      user.save(function(err) {
-        assert.isTrue(!err);
-      });
-      user.remove();
-    }    
   }
 }).export(module);
