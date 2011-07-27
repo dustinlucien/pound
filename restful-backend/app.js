@@ -8,6 +8,7 @@ var express = require('express')
 	, Resource = require('express-resource')
 	, events = require('events')
 	, request = require('request');
+	
 
 // Configuration
 var app = module.exports = express.createServer();
@@ -22,11 +23,11 @@ app.configure(function(){
 });
 
 app.configure('development', function(){
-	app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 app.configure('production', function(){
-	app.use(express.errorHandler()); 
+	app.use(express.errorHandler());
 });
 
 
