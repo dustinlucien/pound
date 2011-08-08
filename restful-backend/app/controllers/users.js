@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+
 //GET /users  ->  index
 exports.index = function(req, res) {
 	res.send('listing users');
@@ -5,8 +7,18 @@ exports.index = function(req, res) {
 
 //POST /users -> create
 exports.create = function(req, res) {
-	console.log(req.body);
-	res.send('creating a user');
+  //user middleware to authenticate a user at some point
+  
+  var UserSchema = mongoose.model('User');
+  var user = new UserSchema(req.body);
+  //for now, synchronously save to mongo
+  user.save(function(err, doc) {
+    if (!err) {
+      res.send(doc);
+    } else {
+      res.send(err);
+    }
+  });
 }
 
 //GET /users/:user -> show

@@ -31,5 +31,10 @@ User = new mongoose.Schema
       sent: [Kudo]
       received: [Kudo]
 
+User.post('save', (next) ->
+  console.log('just saved a user')
+  console.log(arguments)
+  next()
+)
+
 mongoose.model 'User', User
-  

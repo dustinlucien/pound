@@ -35,5 +35,10 @@
       received: [Kudo]
     }
   });
+  User.post('save', function(next) {
+    console.log('just saved a user');
+    console.log(arguments);
+    return next();
+  });
   mongoose.model('User', User);
 }).call(this);

@@ -1,0 +1,36 @@
+{
+  "meta" : {
+    "code" : 200,
+    "error" : {
+      "type" : "authentication",
+      "detail" : "you're not authenticated"
+    }
+  },
+  
+  "response" : {
+    "user" : {
+      "id" : 1
+      "username" : "testuser",
+      "firstname" : "test",
+      "lastname" : "user",
+    },
+    
+    "friends" : {
+      count : 2,
+      items : [
+        {
+          id:12345,
+          username:testuser,
+          firstname:test,
+          lastname:user
+        },
+        {
+          id:34567,
+          username:anothertestuser,
+          firstname:anothertest,
+          lastname:user
+        }
+      ]
+    }
+  }
+}
