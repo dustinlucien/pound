@@ -21,7 +21,7 @@ directory node[:redis][:dir] do
 end
 
 remote_file "#{Chef::Config[:file_cache_path]}/redis.tar.gz" do
-  source "http://redis.googlecode.com/files/redis-2.2.12.tar.gz"
+  source "http://redis.googlecode.com/files/redis-2.2.11.tar.gz"
   action :create_if_missing
 end
 
@@ -29,7 +29,7 @@ bash "compile_redis_source" do
   cwd Chef::Config[:file_cache_path]
   code <<-EOH
     tar zxf redis.tar.gz
-    cd redis-2.2.12 
+    cd redis-2.2.11 
     make && make install
   EOH
   creates "/usr/local/bin/redis-server"

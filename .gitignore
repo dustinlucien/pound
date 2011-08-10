@@ -1,3 +1,4 @@
 node_modules
-restful-backend/.vagrant
+.vagrant
 restful-backend/node_modules
+frontend-prototype/node_modules
