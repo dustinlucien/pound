@@ -3,9 +3,7 @@ var vows = require('vows')
   , should = require('should')
   , request = require('request')
   , User = require('../../../app/models/user');
-
-require('../../../app.js');
-
+  
 var test_api_uri = 'http://localhost:3000/';
 
 var api = {
@@ -65,7 +63,7 @@ vows.describe('Users Api Integration Tests').addBatch({
     	assert.isNull(err);
     	assert.isNotNull(body);
     	assert.match(res.headers['content-type'], /application\/json/);
-    	assert.equal(body, 'listing users');
+    	body.length.should.be.above(0);
     }
   },
   'WHEN I create a new User with valid data and post JSON': {
@@ -75,6 +73,15 @@ vows.describe('Users Api Integration Tests').addBatch({
     'THEN I should get the same User back as the response': function(err, res, body) {
     	assert.isNull(err);
     	assert.isNotNull(body);
+    	
+    	var user = JSON.parse(body);
+    	user.username.should.equal('testuser');
+    	user.firstname.should.equal('test');
+    	user.lastname.should.equal('user');
+    	user.email.should.equal('testuser@testdomain.com');
+    	should.exist(user._id);
+    	
+    	this.userid = user._id;
     }
   },
   'WHEN I create a new User with valid data and post POST params': {
@@ -88,12 +95,60 @@ vows.describe('Users Api Integration Tests').addBatch({
   },
   'WHEN I get the list users':{
     topic: function() {
-      //api.get('users', this.callback);
+      api.get('users', this.callback);
     },
     'THEN i get back a few': function(err, res, body) {
-      //assert.isObject(body);
       assert.isNull(err);
     	assert.isNotNull(body);
+    	body.length.should.be.above(0);
+    	
+    	var users = JSON.parse(body);
+    	users.length.should.be.above(0);
     }
+  },
+  'WHEN I update a single user': {
+    topic: function() {
+      api.get('users', function(err, res, body) {
+        if (err) {
+          this.callback(err, res, body);
+        } else {
+          console.log('body of response:');
+          
+          var users = JSON.parse(body);
+          
+          api.put('users/' + users[0]._id, JSON.stringify({firstname:'test-changed', lastname:'user-changed'}), this.callback);
+        }
+      });
+    }, 
+    'THEN I get an update version of the user back': function(err, res, body) {
+      assert.isNull(err);
+      assert.isNotNull(body);
+      
+      var user = JSON.parse(body);
+      user.firstname.should.equal('test-changed');
+      user.lastname.should.equal('user-changed');
+    }
+  },
+  'WHEN I delete all the users': {
+    topic: function() {
+      api.get('users', function(err, res, body) {
+        if (err) {
+          this.callback(err, res, body);
+        } else {
+          var users = JSON.parse(body);
+          for (var user in users) {
+            api.del('users/' + user._id, function(err, res, body) {
+              if (err) {
+                this.callback(err, res, body);
+              }
+            });
+          }
+          api.get('users', this.callback);
+        }
+      });
+    }
+  },
+  'THEN i get back no users from a listing call': {
+    
   }
 }).export(module);

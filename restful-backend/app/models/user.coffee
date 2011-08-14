@@ -31,16 +31,14 @@ User = new mongoose.Schema
       sent: [Kudo]
       received: [Kudo]
 
-User.post('save', (next) ->
+User.post('save', (doc) ->
   console.log('just saved a user')
-  console.log(arguments)
-  
-  if this.isNew
-    console.log('the user is brand new')
-  else
-    console.log('the user already existed')
-  
-  next()
+  console.log('the user is brand new')
+)
+
+User.post('update', (doc) ->
+  console.log('just updated a user')
+  console.log('the user already existed')
 )
 
 mongoose.model 'User', User

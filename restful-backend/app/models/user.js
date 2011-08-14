@@ -35,10 +35,13 @@
       received: [Kudo]
     }
   });
-  User.post('save', function(next) {
+  User.post('save', function(doc) {
     console.log('just saved a user');
-    console.log(arguments);
-    return next();
+    return console.log('the user is brand new');
+  });
+  User.post('update', function(doc) {
+    console.log('just updated a user');
+    return console.log('the user already existed');
   });
   mongoose.model('User', User);
 }).call(this);

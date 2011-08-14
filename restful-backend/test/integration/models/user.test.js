@@ -7,7 +7,7 @@ var vows = require('vows')
   , User = require('../../../app/models/user.js');
   
 function setup(callback) {
-  var db = mongoose.createConnection('mongodb://testing_user:kud05@dbh15.mongolab.com:27157/heroku_app563134');
+  var db = mongoose.createConnection('mongodb://testing_user:kud05@dbh36.mongolab.com:27367/testing');
 
   var User = db.model('User');
 
@@ -39,11 +39,11 @@ vows.describe('User Model Integration Tests').addBatch({
         user = setupNewUser(user);
         
         user.save(callback);
-      })
+      });
     },
     'THEN it should set the created time stamp': function(err, user) {
       assert.equal(err, null);
-      assert.notEqual(user.created, null);
+      assert.notEqual(user._id, null);
     },
     teardown: function() {
       this.db.close();
