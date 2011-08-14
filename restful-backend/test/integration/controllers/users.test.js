@@ -94,7 +94,6 @@ vows.describe('Users Api Integration Tests').addBatch({
       //assert.isObject(body);
       assert.isNull(err);
     	assert.isNotNull(body);
-      assert.equal(body, 'listing users');
     }
   }
 }).export(module);

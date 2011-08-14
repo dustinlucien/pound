@@ -1,0 +1,18 @@
+var EventEmitter = require('events').EventEmitter,
+var redis = require('redis');
+
+function EventBus (obj) {
+  this.client = null;
+};
+
+/**
+ * Inherit from EventEmitter.
+ */
+
+EventBus.prototype.__proto__ = EventEmitter.prototype;
+
+EventBus.prototype.init = function() {
+  this.client = redis.createClient();
+};
+
+module.exports = new EventBus();

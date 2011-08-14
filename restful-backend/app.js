@@ -43,11 +43,6 @@ app.use(function(req, res){
 app.resource('users', require('./app/controllers/users'), { format: 'json' });
 app.resource('kudos', require('./app/controllers/kudos'), { format: 'json' });
 
-app.on('user-created', function(user) {
-  console.log('i got a user-created event');
-  console.log(user);  
-});
-
 var port = process.env.PORT || 3000;
 app.listen(port, function(){
   console.log("Listening on " + port);

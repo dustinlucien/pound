@@ -1,0 +1,11 @@
+Users:
+  user-created
+  user-updated
+  user-followed
+  
+Kudos:
+  kudos-created
+  kudos-liked
+  kudos-commented
+  kudos-glommed
+  

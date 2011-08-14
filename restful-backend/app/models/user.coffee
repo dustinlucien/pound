@@ -34,6 +34,12 @@ User = new mongoose.Schema
 User.post('save', (next) ->
   console.log('just saved a user')
   console.log(arguments)
+  
+  if this.isNew
+    console.log('the user is brand new')
+  else
+    console.log('the user already existed')
+  
   next()
 )
 
