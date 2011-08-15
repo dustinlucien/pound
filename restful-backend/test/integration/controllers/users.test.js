@@ -9,12 +9,6 @@ var test_api_uri = 'http://localhost:3000/';
 var JSON_HEADER = {'Content-Type': 'application/json'};
 var FORM_HEADER = {'Content-Type': 'application/x-www-form-urlencoded'};
 
-function bind(scope, fn) {
-  return function () {
-    fn.apply(scope, arguments);
-  };
-}
-
 var api = {
 	get: function(path, callback) {
 	  assert.isNotNull(path);
@@ -35,12 +29,7 @@ var api = {
 	  assert.isNotNull(path);
 	  assert.isNotNull(payload);
     assert.isNotNull(callback);
-    
-    console.log(path);
-    console.log(payload);
-    console.log(headers);
-    console.log(callback);
-    
+
 		request({method:'PUT', uri:test_api_uri + path, body: payload, headers: headers}, function (err, res, body) {
 			checkResponse(err, res, body, callback);
 		});
@@ -57,7 +46,6 @@ var api = {
 function checkResponse(err, res, body, callback) {
 	assert.isNull(err);
 	assert.isNotNull(res);
-	assert.equal(res.statusCode, '200');
 	callback(err, res, body);
 }
 
@@ -69,6 +57,11 @@ vows.describe('Users Api Integration Tests').addBatch({
     },
     'THEN I should get nothing as a response': function(err, res, body) {
     	assert.isNotNull(body);
+    	var response = JSON.parse(body);
+    	
+    	should.exist(response);
+    	should.exist(response.response);
+    	should.exist(response.response.users);
     },
     'AND the content-type should be application/json': function(err, res, body) {
     	assert.match(res.headers['content-type'], /application\/json/);
@@ -94,14 +87,13 @@ vows.describe('Users Api Integration Tests').addBatch({
     	assert.isNull(err);
     	assert.isNotNull(body);
     	
-    	var user = JSON.parse(body);
+    	var response = JSON.parse(body);
+    	var user = response.response.user;
     	user.username.should.equal('testuser');
     	user.firstname.should.equal('test');
     	user.lastname.should.equal('user');
     	user.email.should.equal('testuser@testdomain.com');
     	should.exist(user._id);
-    	
-    	this.userid = user._id;
     }
   },
   'WHEN I create a new User with valid data and post POST params': {
@@ -122,8 +114,9 @@ vows.describe('Users Api Integration Tests').addBatch({
       assert.isNull(err);
     	assert.isNotNull(body);
     	
-    	var users = JSON.parse(body);
+    	var response = JSON.parse(body);
     	
+    	response.response.users.count.should.be.above(0);
     }
   },
   'WHEN I update a single user': {
@@ -131,18 +124,18 @@ vows.describe('Users Api Integration Tests').addBatch({
       var callback = this.callback;
       
       api.get('users', function(err, res, body) {
-        var users = JSON.parse(body);
+        var response = JSON.parse(body);
         var payload = JSON.stringify({firstname:'test-changed', lastname:'user-changed'});
-        api.put('users/' + users[0]._id, payload, JSON_HEADER, callback);
+        api.put('users/' + response.response.users.items[0]._id, payload, JSON_HEADER, callback);
       });
     },
     'THEN I get an updated version of the user back': function(err, res, body) {
       assert.isNull(err);
       assert.isNotNull(body);
       
-      var user = JSON.parse(body);
-      user.firstname.should.equal('test-changed');
-      user.lastname.should.equal('user-changed');
+      var response = JSON.parse(body);
+      response.response.user.firstname.should.equal('test-changed');
+      response.response.user.lastname.should.equal('user-changed');
     }
   },
   'WHEN I delete all the users': {
@@ -153,8 +146,9 @@ vows.describe('Users Api Integration Tests').addBatch({
         if (err) {
           callback(err, res, body);
         } else {
-          var users = JSON.parse(body);
-          console.log('num users : ' + users.length);
+          var response = JSON.parse(body);
+          var users = response.response.users.items;
+          
           for (var i = 0; i < users.length; i++) {
             user = users[i];
             api.del('users/' + user._id, function(err, res, body) {
@@ -170,7 +164,6 @@ vows.describe('Users Api Integration Tests').addBatch({
     },
     'THEN i get back no users from a listing call': function(err, res, body) {
       console.log('returned from post delete');
-      console.log(body);
     }
   }
 }).export(module);
