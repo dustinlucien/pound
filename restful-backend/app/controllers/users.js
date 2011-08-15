@@ -11,7 +11,7 @@ var mongoose = require('mongoose'),
  * Class def
  */
 function UserController () {
-	// no members to set
+	this.label = 'users';
 }
 
 // extend the GenericController class

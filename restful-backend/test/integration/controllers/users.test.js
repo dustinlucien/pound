@@ -77,7 +77,10 @@ vows.describe('Users Api Integration Tests').addBatch({
     	assert.match(res.headers['content-type'], /application\/json/);
     	body.length.should.be.above(0);
     }
-  },
+  }
+
+}).addBatch({
+
   'WHEN I create a new User with valid data and post JSON': {
     topic: function() {
       var payload =  JSON.stringify({username:'testuser', firstname:'test', lastname:'user', email:'testuser@testdomain.com'});
@@ -105,7 +108,10 @@ vows.describe('Users Api Integration Tests').addBatch({
     	assert.isNull(err);
     	assert.isNotNull(body);
     }
-  },
+  }
+
+}).addBatch({
+
   'WHEN I get the list users':{
     topic: function() {
       api.get('users', this.callback);
@@ -137,7 +143,10 @@ vows.describe('Users Api Integration Tests').addBatch({
       response.response.user.firstname.should.equal('test-changed');
       response.response.user.lastname.should.equal('user-changed');
     }
-  },
+  }
+
+}).addBatch({
+
   'WHEN I delete all the users': {
     topic: function() {
       var callback = this.callback;
@@ -146,19 +155,23 @@ vows.describe('Users Api Integration Tests').addBatch({
         if (err) {
           callback(err, res, body);
         } else {
-          var response = JSON.parse(body);
-          var users = response.response.users.items;
+          var response = JSON.parse(body),
+              users = response.response.users.items,
+              l = users.length, deleted = 0;
           
           for (var i = 0; i < users.length; i++) {
             user = users[i];
             api.del('users/' + user._id, function(err, res, body) {
               if (err) {
                 callback(err, res, body);
+              } else {
+                deleted++;
+                if ( l === deleted ) {
+                  api.get('users', callback);
+                }
               }
             });
           }
-          //this isn't right.  it's calling before delete is finished
-          api.get('users', callback);
         }
       });
     },

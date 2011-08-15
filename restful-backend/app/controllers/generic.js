@@ -25,13 +25,13 @@ GenericController.prototype._formatApiResponse = function (res, err, docs) {
 	var statusCode;
   
 	if (!err) {
+		output.response = {};
 		if (docs == null) {
-			output.response = {}
 			statusCode = 200;
 		} else if (docs instanceof Array) {
-			output.response = {users : { count : docs.length, items : docs }};
+			output.response[ this.label ] = { count : docs.length, items : docs };
 		} else {
-			output.response = { user : docs } ;
+			output.response[ this.label.substring( 0, this.label.length - 1 ) ]  = docs;
 		}
 		output.meta = { code : 200 };
 		statusCode = 200;

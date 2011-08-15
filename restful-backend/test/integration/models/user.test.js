@@ -7,7 +7,7 @@ var vows = require('vows')
   , User = require('../../../app/models/user.js');
   
 function setup(callback) {
-  var db = mongoose.createConnection('mongodb://testing_user:kud05@dbh36.mongolab.com:27367/testing');
+  var db = mongoose.createConnection( 'mongodb://127.0.0.1:27017/test' );
 
   var User = db.model('User');
 
