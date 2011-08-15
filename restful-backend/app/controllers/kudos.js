@@ -1,25 +1,44 @@
+/**
+ * Class def
+ */
+
+function KudosController () {
+	// no members to set
+}
+
+// extend the GenericController class
+var GenericController = require( './generic.js' );
+KudosController.prototype.__proto__ = GenericController.prototype;
+
+// export the KudosController class
+module.exports = KudosController;
+
+/**
+ * Class methods
+ */
+
 //GET /kudos  ->  index
-exports.index = function(req, res) {
+KudosController.prototype.index = function(req, res) {
 	res.send('listing kudos');
 };
 
 //POST /kudos/create -> new
-exports.create = function(req, res) {
+KudosController.prototype.create = function(req, res) {
 	res.send('creating a kudos');
 }
 
 //GET /kudos/:kudo -> show
-exports.show = function(req, res) {
+KudosController.prototype.show = function(req, res) {
 	res.send('showing kudo ' + req.param.kudo);
 }
 
 //PUT /kudos/:kudo -> update
-exports.update = function(req, res) {
+KudosController.prototype.update = function(req, res) {
 	res.send('updating the kudo ' + req.params.kudo);
 }
 
 //DELETE /kudos/:kudo -> delete
-exports.destroy = function(req, res) {
+KudosController.prototype.destroy = function(req, res) {
 	res.send('destroying kudo ' + req.params.kudo);
 }
 
