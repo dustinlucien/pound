@@ -9,6 +9,12 @@ var test_api_uri = 'http://localhost:3000/';
 var JSON_HEADER = {'Content-Type': 'application/json'};
 var FORM_HEADER = {'Content-Type': 'application/x-www-form-urlencoded'};
 
+function bind(scope, fn) {
+  return function () {
+    fn.apply(scope, arguments);
+  };
+}
+
 var api = {
 	get: function(path, callback) {
 	  assert.isNotNull(path);
@@ -122,11 +128,12 @@ vows.describe('Users Api Integration Tests').addBatch({
   },
   'WHEN I update a single user': {
     topic: function() {
+      var callback = this.callback;
+      
       api.get('users', function(err, res, body) {
         var users = JSON.parse(body);
         var payload = JSON.stringify({firstname:'test-changed', lastname:'user-changed'});
-        
-        api.put('users/' + users[0]._id, payload, JSON_HEADER, this.callback);
+        api.put('users/' + users[0]._id, payload, JSON_HEADER, callback);
       });
     },
     'THEN I get an updated version of the user back': function(err, res, body) {
@@ -137,23 +144,27 @@ vows.describe('Users Api Integration Tests').addBatch({
       user.firstname.should.equal('test-changed');
       user.lastname.should.equal('user-changed');
     }
-  }/*,
+  },
   'WHEN I delete all the users': {
     topic: function() {
+      var callback = this.callback;
+      
       api.get('users', function(err, res, body) {
         if (err) {
-          this.callback(err, res, body);
+          callback(err, res, body);
         } else {
           var users = JSON.parse(body);
+          console.log('num users : ' + users.length);
           for (var i = 0; i < users.length; i++) {
             user = users[i];
             api.del('users/' + user._id, function(err, res, body) {
               if (err) {
-                this.callback(err, res, body);
+                callback(err, res, body);
               }
             });
           }
-          api.get('users', this.callback);
+          //this isn't right.  it's calling before delete is finished
+          api.get('users', callback);
         }
       });
     },
@@ -161,5 +172,5 @@ vows.describe('Users Api Integration Tests').addBatch({
       console.log('returned from post delete');
       console.log(body);
     }
-  }*/
+  }
 }).export(module);
