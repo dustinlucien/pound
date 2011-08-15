@@ -5,18 +5,14 @@ var User = require('../models/user');
 
 //GET /users  ->  index
 exports.index = function(req, res) {
-	var UserModel = mongoose.model('User');
-	UserModel.find({}, function(err, docs) {
-	  if (!err) {
-	    var output = '';
-	    for (var doc in docs) {
-	      output += doc.toJSON();
-	    }
-	    res.send(output);
-	  } else {
-	    res.send(err);
-	  }
-	});
+  var UserModel = mongoose.model('User');
+  UserModel.find({}, function(err, docs) {
+    if (!err) {
+      res.send(JSON.stringify(docs));
+    } else {
+      res.send(JSON.stringify(err));
+    }
+  });
 };
 
 //POST /users -> create
@@ -27,7 +23,7 @@ exports.create = function(req, res) {
   //for now, synchronously save to mongo
   user.save(function(err, doc) {
     if (!err) {
-      res.send(doc.toJSON());
+      res.send(JSON.stringify(doc));
     } else {
       res.send(err);
     }
@@ -42,7 +38,7 @@ exports.show = function(req, res) {
   var UserModel = mongoose.model('User');
   var user = UserModel.findById(req.params.user, function(err, doc) {
     if (!err) {
-      res.send(doc.toJSON());
+      res.send(JSON.stringify(doc));
     } else {
       res.send(err);
     }
@@ -50,37 +46,36 @@ exports.show = function(req, res) {
 }
 
 //PUT /users/:user -> update
+//INCOMPLETE!
 exports.update = function(req, res) {
-	console.log('updating user ' + req.params.user);
-	should.exist(req.params.user);
-	
-	var UserModel = mongoose.model('User');
+  should.exist(req.params.user);
+  should.exist(req.body);
 
+  var UserModel = mongoose.model('User');
   UserModel.findById(req.params.user, function(err, doc) {
-    if (!err) {
-      //validation?
-      doc.update(body, function(err, doc) {
-        if (!err) {
-          res.send(doc.toJSON());
-        } else {
-          res.send(err);
+    if (doc && !err) {
+      for (var field in req.body) {
+        console.log('field updating : ' + field);
+        doc.set(field, req.body[field]);
+      }
+      doc.save(function(err, doc) {
+        if (!err && doc) {
+          res.send(doc);
         }
       });
-    } else {
-      res.send(err);
     }
-  })
+  });
 }
 
 //DELETE /users/:user -> delete
 exports.destroy = function(req, res) {
-	res.send('destroying user ' + req.params.user);
 	should.exist(req.params.user);
+  console.log('destroying user ' + req.params.user);
 	
 	var UserModel = mongoose.model('User');
 	UserModel.findById(req.params.user, function(err, doc) {
 	  doc.remove(function() {
-	    res.send('');
+	    res.send(doc);
 	  });
 	});
 }

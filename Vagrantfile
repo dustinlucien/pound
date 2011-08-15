@@ -55,8 +55,6 @@ Vagrant::Config.run do |config|
 
     frontend_config.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = "cookbooks"
-      chef.add_recipe "redis"
-      chef.add_recipe "mongodb-debs"
       chef.add_recipe "nodejs"
       chef.add_recipe "nodejs::npm"
       chef.add_recipe "nodejs::frontend"
