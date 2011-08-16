@@ -5,5 +5,22 @@ kudos.views.ViewPort = Ext.extend( Ext.Panel, {
 	fullscreen: true,
 	layout: 'card',
 	activeItem: 0,
-	html: 'base'
+
+	// the view initialization method
+	initComponent: function () {
+
+		// instantiate panels
+		kudos.views.login_panel = new kudos.views.LoginPanel();
+
+		// add our view component to the viewport
+		Ext.apply( this, {
+			items: [
+				kudos.views.login_panel
+			]
+		});
+
+		// call the init method of the "superclass" of this component
+		kudos.views.ViewPort.superclass.initComponent.apply( this, arguments );
+	}
+
 });
