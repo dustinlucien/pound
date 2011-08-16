@@ -9,20 +9,28 @@ kudos.views.LoginPanel = Ext.extend( Ext.Panel, {
 		// two buttons occupy the toolbar, separated by a spacer
 		items: [{
 			text: 'Register',
-			ui: 'back'
+			ui: 'back',
+			// TODO refactor out to a controller
+			//handler: function () { this.fireEvent( 'register' ); }
+			handler: function () {
+				kudos.views.viewport.setActiveItem( 1 );
+			}
 		}, {
 			xtype: 'spacer'
 		}, {
 			text: 'Sign In',
-			ui: 'decline'
+			ui: 'decline',
+			// TODO refactor out to a controller
+			//handler: function () { this.fireEvent( 'signin' ); }
+			handler: function () {
+				alert( 'Not yet available' );
+			}
 		}]
 	}],
 
 	items: [
 		// the body panel
-		new Ext.Panel({
-			// padding of 5px on all sides
-			bodyPadding: 5,
+		new kudos.views.KudosFormPanel({
 			items: [
 				// the text above the login form
 				{
@@ -48,6 +56,13 @@ kudos.views.LoginPanel = Ext.extend( Ext.Panel, {
 				}
 			]
 		})
-	]
+	],
+
+	initComponent: function () {
+		this.addEvents( [ 'signin', 'register' ] );
+		this.enableBubble( [ 'signin', 'register' ] );
+		kudos.views.LoginPanel.superclass.initComponent.apply( this, arguments );
+	}
 	
 });
+

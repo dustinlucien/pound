@@ -8,14 +8,15 @@ kudos.views.ViewPort = Ext.extend( Ext.Panel, {
 
 	// the view initialization method
 	initComponent: function () {
-
 		// instantiate panels
 		kudos.views.login_panel = new kudos.views.LoginPanel();
+		kudos.views.register_panel = new kudos.views.RegisterPanel();
 
 		// add our view component to the viewport
 		Ext.apply( this, {
 			items: [
-				kudos.views.login_panel
+				kudos.views.login_panel,
+				kudos.views.register_panel
 			]
 		});
 
