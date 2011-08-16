@@ -1,8 +1,15 @@
+/**
+ * Dependencies
+ */
+var natural = require('natural'),
+	nounInflector = new natural.NounInflector;
 
 /**
  * Class def
  */
 function GenericController () {
+	//This didn't work.  how to call super class constructor in JavaScript?
+	//this.nounInflector = new natural.NounInflector;
 }
 
 // export the GenericController class
@@ -31,7 +38,7 @@ GenericController.prototype._formatApiResponse = function (res, err, docs) {
 		} else if (docs instanceof Array) {
 			output.response[ this.label ] = { count : docs.length, items : docs };
 		} else {
-			output.response[ this.label.substring( 0, this.label.length - 1 ) ]  = docs;
+			output.response[ nounInflector.singularize(this.label) ]  = docs;
 		}
 		output.meta = { code : 200 };
 		statusCode = 200;
