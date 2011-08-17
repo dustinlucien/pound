@@ -7,7 +7,8 @@ var URL = require( 'url' ),
 // path is being accessed (such as a new account registration)
 function access_allowed ( req, res, url, is_session ) {
 	return ( is_session ) ||
-		   ( url.pathname === '/users/create' );
+		   ( url.pathname === '/users' &&
+			 req.method === 'POST' );
 }
 
 function login ( req, res ) {
