@@ -1,4 +1,7 @@
-var URL = require( 'url' );
+var URL = require( 'url' ),
+	mongoose = require( 'mongoose' ),
+	User = require('../models/user'),
+	UserModel = mongoose.model( 'User' );
 
 // allow a request if a valid session is present or if a certain
 // path is being accessed (such as a new account registration)
@@ -8,11 +11,31 @@ function access_allowed ( req, res, url, is_session ) {
 }
 
 function login ( req, res ) {
-	res.send( 'No login yet' );
+	var email = req.param( 'email' ),
+		clear_pass = req.param( 'password' ),
+		pass = UserModel.encrypt_pass( clear_pass );
+
+	// find users with the given email/password combination
+	UserModel.find({ email: email, password: pass }, function ( err, docs ) {
+		// if we found the user, set the id on the session
+		// and respond with a success code
+		if ( docs.length === 1 ) {
+			req.session.uid = docs[ 0 ]._id;
+			res.send( { meta: { code: 200 } } );
+		// otherwise, respond with a 'not found' code
+		} else {
+			res.send( { meta: { code: 404 } } );
+		}
+	});
 }
 
+//var apeace = new UserModel({ email: 'apeace@gmail.com', password: '1234'});
+//apeace.save();
+
 function logout ( req, res ) {
-	res.send( 'No logout yet' );
+	req.session.destroy( function () {
+		res.send( { meta: { code: 200 } } );
+	});
 }
 
 function forbid ( req, res ) {
@@ -29,7 +52,7 @@ module.exports = function ( req, res, next ) {
 		if ( is_session ) {
 			session = { uid: req.session.uid };
 		}
-		res.send( { session: session } );
+		res.send( { meta: { code: 200 }, session: session } );
 		return;
 
 	// always process login requests

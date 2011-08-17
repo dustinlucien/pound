@@ -10,6 +10,7 @@ User = new mongoose.Schema
   firstname : String
   lastname : String
   email : String
+  password : String
   
   facebook:
     username : String
@@ -27,7 +28,7 @@ User = new mongoose.Schema
     token_secret : String
     
   kudos:
-      have: {type: Number, min: 0, default: 25}
+      have: {type: Number, min: 0, 'default': 25}
       sent: [Kudo]
       received: [Kudo]
 
