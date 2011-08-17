@@ -11,13 +11,16 @@ kudos.views.RegisterPanel = Ext.extend( Ext.Panel, {
 			text: 'Cancel',
 			ui: 'back',
 			handler: function () {
-				kudos.views.viewport.setActiveItem( 0 );
+				// dispatch to the Register controller
+				Ext.dispatch({
+					controller: 'Register',
+					action: 'cancel'
+				});
 			}
 		}]
 	}],
 
 	initComponent: function () {
-
 		// the registration form, contained in a fieldset
 		var register_form = new Ext.form.FieldSet({
 			items: [
@@ -49,12 +52,19 @@ kudos.views.RegisterPanel = Ext.extend( Ext.Panel, {
 					label: 'hide password',
 					labelWidth: '50%',
 					listeners: {
-						// TODO refactor these out to a controller
 						check: function () {
-							register_form.getComponent( 2 ).getEl().down( 'input[name="password"]' ).dom.type = 'password';
+							Ext.dispatch({
+								controller: 'Register',
+								action: 'hide_password',
+								args: [ true ]
+							});
 						},
 						uncheck: function () {
-							register_form.getComponent( 2 ).getEl().down( 'input[name="password"]' ).dom.type = 'text';
+							Ext.dispatch({
+								controller: 'Register',
+								action: 'hide_password',
+								args: [ false ]
+							});
 						}
 					}
 				}
@@ -66,7 +76,12 @@ kudos.views.RegisterPanel = Ext.extend( Ext.Panel, {
 			text: 'Create Account',
 			ui: 'decline',
 			padding: '10 0',
-			handler: function () { alert( 'Not yet available' ); }
+			handler: function () {
+				Ext.dispatch({
+					controller: 'Register',
+					action: 'register'
+				});
+			}
 		});
 
 		// add the three items to the panel, wrapped inside a KudosFormPanel
@@ -79,7 +94,11 @@ kudos.views.RegisterPanel = Ext.extend( Ext.Panel, {
 						submit_button
 					]
 				})
-			]
+			],
+
+			// store the register form on the object so that a controller
+			// can more easily access it
+			register_form: register_form
 		});
 
 		// always call the super method...

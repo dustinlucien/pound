@@ -1,8 +1,8 @@
 kudos.views.LoginPanel = Ext.extend( Ext.Panel, {
-	// panel config
+	// let items take up all available with and their required height
 	layout: 'fit',
 
-	// we'll dock a toolbar that displays a title
+	// dock a toolbar that displays a title
 	dockedItems: [{
 		xtype: 'toolbar',
 		title: 'Kudos',
@@ -10,20 +10,24 @@ kudos.views.LoginPanel = Ext.extend( Ext.Panel, {
 		items: [{
 			text: 'Register',
 			ui: 'back',
-			// TODO refactor out to a controller
-			//handler: function () { this.fireEvent( 'register' ); }
 			handler: function () {
-				kudos.views.viewport.setActiveItem( 1 );
+				// dispatch to the Login controller
+				Ext.dispatch({
+					controller: 'Login',
+					action: 'register'
+				});
 			}
 		}, {
 			xtype: 'spacer'
 		}, {
 			text: 'Sign In',
 			ui: 'decline',
-			// TODO refactor out to a controller
-			//handler: function () { this.fireEvent( 'signin' ); }
 			handler: function () {
-				alert( 'Not yet available' );
+				// dispatch to the Login controller
+				Ext.dispatch({
+					controller: 'Login',
+					action: 'login'
+				});
 			}
 		}]
 	}],
@@ -35,7 +39,6 @@ kudos.views.LoginPanel = Ext.extend( Ext.Panel, {
 				// the text above the login form
 				{
 					html: 'Hi there, ready to sign in?',
-					// adjust padding
 					padding: '10 0 0 5'
 				},
 				// a login form contained in a fieldset
@@ -56,13 +59,7 @@ kudos.views.LoginPanel = Ext.extend( Ext.Panel, {
 				}
 			]
 		})
-	],
-
-	initComponent: function () {
-		this.addEvents( [ 'signin', 'register' ] );
-		this.enableBubble( [ 'signin', 'register' ] );
-		kudos.views.LoginPanel.superclass.initComponent.apply( this, arguments );
-	}
+	]
 	
 });
 
