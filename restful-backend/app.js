@@ -13,10 +13,15 @@ var express = require('express')
 	, request = require('request')
 // For connecting to MongoDB
 	, mongoose = require('mongoose')
+// For storing sessions in Redis
+    , RedisStore = require('connect-redis')( express )
 
 // Controllers
 	, UserController = require( './app/controllers/users' )
-	, KudosController = require( './app/controllers/kudos' );
+	, KudosController = require( './app/controllers/kudos' )
+
+// Middleware
+    , AuthMiddleware = require( './app/lib/auth' );
 	
 
 /**
@@ -28,10 +33,13 @@ var app = module.exports = express.createServer();
 app.configure(function(){
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'jade');
+	app.use(express.cookieParser());
+	app.use(express.session({store: new RedisStore, secret: 'mmmm javascript'}));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
-	app.use(app.router);
 	app.use(express.static(__dirname + '/public'));
+	app.use(AuthMiddleware);
+	app.use(app.router);
 });
 
 // development config
@@ -50,7 +58,7 @@ app.configure('production', function(){
 
 // generic 404 message
 app.use(function(req, res){
-  res.send(404, { meta: { code : 404, error: "Lame, can't find that" }});
+  res.send( { meta: { code : 404, error: "Lame, can't find that" } }, 404 );
 });
 
 /**
