@@ -29,9 +29,6 @@ function login ( req, res ) {
 	});
 }
 
-//var apeace = new UserModel({ email: 'apeace@gmail.com', password: '1234'});
-//apeace.save();
-
 function logout ( req, res ) {
 	req.session.destroy( function () {
 		res.send( { meta: { code: 200 } } );
