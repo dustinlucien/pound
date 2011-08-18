@@ -4,7 +4,6 @@ kudos.views.ViewPort = Ext.extend( Ext.Panel, {
 	// config options for the panel
 	fullscreen: true,
 	layout: 'card',
-	activeItem: 0,
 
 	// the view initialization method
 	initComponent: function () {
@@ -16,7 +15,9 @@ kudos.views.ViewPort = Ext.extend( Ext.Panel, {
 		Ext.apply( this, {
 			items: [
 				kudos.views.login_panel,
-				kudos.views.register_panel
+				kudos.views.register_panel,
+				// TODO replace with real app panel
+				{ html: 'Welcome to the app...' }
 			]
 		});
 

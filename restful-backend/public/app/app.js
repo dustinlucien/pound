@@ -6,8 +6,11 @@ Ext.regApplication({
 
 	// this function is called when the app is ready to launch
 	launch: function () {
-		// define the default viewport as an instance of the class
-		// kudos.views.ViewPort (defined in the views folder)
-		this.views.viewport = new this.views.ViewPort();
+		// dispatch to the Login controller to check whether the user
+		// is logged in and determine which panel to load
+		Ext.dispatch({
+			controller: 'Login',
+			action: 'test_session'
+		});
 	}
 });
