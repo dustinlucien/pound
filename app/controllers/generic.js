@@ -12,35 +12,49 @@ module.exports = GenericController;
  * "Private" methods
  */
 
-GenericController.prototype._403 = function ( req, res ) {
-	res.send( 'Action not available', 403 );
+var error_message = {
+	400: 'Bad request',
+	401: 'Authorization required',
+	403: 'Forbidden',
+	404: 'Resource not found',
+	500: 'Server error'
 };
 
-GenericController.prototype._404 = function ( req, res ) {
-	res.send( 'Resource not available', 404 );
+var error_type = {
+	400: 'client',
+	401: 'client',
+	403: 'client',
+	404: 'client',
+	500: 'server'
 };
 
-GenericController.prototype._formatApiResponse = function (res, err, docs) {
-	var output = {};  
-	var statusCode;
-  
-	if (!err) {
-		output.response = {};
-		if (docs == null) {
-			statusCode = 200;
-		} else if (docs instanceof Array) {
-			output.response[ this.label ] = { count : docs.length, items : docs };
-		} else {
-			output.response[ this.label.substring( 0, this.label.length - 1 ) ]  = docs;
-		}
-		output.meta = { code : 200 };
-		statusCode = 200;
-	} else {
-		output.error = { type : 'server', description : err };
-		output.meta = { code : 500 };
-		statusCode = 500;
+GenericController.prototype._respond = function ( res, docs, code, err ) {
+	var output = {};
+
+	code = code || 200;
+	docs = docs || [];
+
+	if ( ! ( docs instanceof Array ) ) {
+		docs = [ docs ];
 	}
-	res.send(JSON.stringify(output), statusCode);
+
+	if ( code !== 200 && ! err ) {
+		err = error_message[ code ] || 'Unknown error';
+	}
+
+	if ( err ) {
+		output.error = {
+			type: error_type[ code ] || 'unknown',
+			description: err
+		};
+	}
+
+	output.meta = { code: code };
+
+	output.response = {};
+	output.response[ this.label ] = { count: docs.length, items: docs };
+
+	res.send( JSON.stringify( output ), code );
 };
 
 /**

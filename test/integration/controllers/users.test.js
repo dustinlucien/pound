@@ -11,6 +11,8 @@ var JSON_HEADER = {'Content-Type': 'application/json'},
 	FORM_HEADER = {'Content-Type': 'application/x-www-form-urlencoded'},
 	COOKIE_HEADER = {};
 
+var ME = null;
+
 function merge ( header1, header2 ) {
 	var header3 = {};
 	for ( key in header1 ) {
@@ -28,8 +30,9 @@ function checkResponse( err, res, body, callback ) {
 	callback(err, res, body);
 }
 
-var db = mongoose.createConnection( 'mongodb://127.0.0.1:27017/test' ),
-	User = db.model( 'User' );
+mongoose.connect( 'mongodb://127.0.0.1:27017/test' );
+
+var User = require( '../../../app/models/user.js' );
 
 var api = {
 	get: function(path, headers, callback) {
@@ -81,12 +84,13 @@ vows.describe('Users Api Integration Tests').addBatch({
 			});
 		},
 		'THEN I should get a null session': function ( err, res, body ) {
+			assert.equal( res.statusCode, 200 );
+
 			var cookie_str = res.headers[ 'set-cookie' ][ 0 ].split( '; ' )[ 0 ],
 				response = JSON.parse( body );
 
 			COOKIE_HEADER.Cookie = cookie_str;
 
-			assert.equal( response.meta.code, 200 );
 			assert.isNull( response.session );
 		}
 	},
@@ -95,8 +99,8 @@ vows.describe('Users Api Integration Tests').addBatch({
 		topic: function () {
 			api.get( 'users.json', null, this.callback );
 		},
-		'THEN I should get a 403': function ( err, res, body ) {
-			assert.equal( res.statusCode, 403 );
+		'THEN I should get a 401': function ( err, res, body ) {
+			assert.equal( res.statusCode, 401 );
 		}
 	}
 
@@ -105,141 +109,138 @@ vows.describe('Users Api Integration Tests').addBatch({
 	'WHEN I create a new User with valid data and post JSON': {
 		topic: function () {
 			var payload =  JSON.stringify({
-				username: 'testuser',
-				firstname: 'test',
-				lastname: 'user',
-				email: 'testuser@testdomain.com',
-				password: '1234'
+				records: [{
+					name: 'test user',
+					email: 'testuser@testdomain.com',
+					password: '1234'
+				}]
 			});
 
 			api.post( 'users', payload, JSON_HEADER, this.callback );
     	},
 	    'THEN I should get the same User back as the response': function ( err, res, body ) {
-			assert.isNull( err );
-			assert.isNotNull( body );
+			var response = JSON.parse( body );
 
-			var response = JSON.parse( body ),
-				user = response.response.user;
+			should.exist( response.response.users );
+			response.response.users.count.should.equal( 1 );
 
-			user.username.should.equal( 'testuser' );
-			user.firstname.should.equal( 'test' );
-			user.lastname.should.equal( 'user' );
+			var user = response.response.users.items[ 0 ];
+
+			user.name.should.equal( 'test user' );
 			user.email.should.equal( 'testuser@testdomain.com' );
 			should.exist( user._id );
+
+			ME = user._id;
 		}
 	},
 
+/*
 }).addBatch({
 
 	'WHEN I create a new User with valid data and post POST params': {
 		topic: function () {
 			var callback = this.callback;
 			User.remove( {}, function () {
-				var payload = 'username=testuser&firstname=test&lastname=user&email=testuser@testdomain.com&password=1234';
+				var payload = 'name=test%20user&email=testuser@testdomain.com&password=1234';
 				api.post( 'users', payload, FORM_HEADER, callback );
 			});
 		},
 		'THEN I should get the same User back as the response': function ( err, res, body ) {
-			assert.isNull( err );
-			assert.isNotNull( body );
+			var response = JSON.parse( body );
+
+			should.exist( response.response.users );
+			response.response.users.count.should.equal( 1 );
+
+			var user = response.response.users.items[ 0 ];
+
+			user.name.should.equal( 'test user' );
+			user.email.should.equal( 'testuser@testdomain.com' );
+			should.exist( user._id );
 		}
 	}
-
+*/
 }).addBatch({
 
 	'WHEN I log in': {
 		topic: function () {
-			var payload = 'email=testuser%40testdomain.com&password=1234',
-				headers = merge( COOKIE_HEADER, FORM_HEADER );
+			var payload = JSON.stringify({
+					email: 'testuser@testdomain.com',
+					password: '1234'
+				}),
+				headers = merge( COOKIE_HEADER, JSON_HEADER );
 
 			api.post( 'auth/login', payload, headers, this.callback );
 		},
 		'THEN I should get a 200 code': function ( err, res, body ) {
-			var response = JSON.parse( body );
-			assert.equal( response.meta.code, 200 );
+			assert.equal( res.statusCode, 200 );
 		}
 	}
 
 }).addBatch({
 
-	'WHEN I get the list users': {
+	'WHEN I get the list of users': {
 		topic: function () {
 			api.get( 'users', COOKIE_HEADER, this.callback );
 		},
-		'THEN i get back a few': function ( err, res, body ) {
-			assert.isNull( err );
-			assert.isNotNull( body );
+		'THEN I get back a few': function ( err, res, body ) {
+			assert.equal( res.statusCode, 200 );
 
 			var response = JSON.parse( body );
+
 			response.response.users.count.should.be.above( 0 );
+		}
+	},
+
+	'WHEN I get the user': {
+		topic: function () {
+			api.get( 'users/' + ME, COOKIE_HEADER, this.callback );
+		},
+		'THEN the information should be correct': function ( err, res, body ) {
+			assert.equal( res.statusCode, 200 );
+
+			var response = JSON.parse( body ),
+				user = response.response.users.items[ 0 ];
+
+			assert.equal( user.name, 'test user' );
+			assert.equal( user.email, 'testuser@testdomain.com' );
 		}
 	},
 
 	'WHEN I update a single user': {
 		topic: function () {
-			var callback = this.callback;
+			var payload = JSON.stringify({
+				name: 'test-changed'
+			}),
 
-			api.get( 'users', COOKIE_HEADER, function ( err, res, body ) {
-				var response = JSON.parse( body ),
+			headers = merge( JSON_HEADER, COOKIE_HEADER );
 
-				payload = JSON.stringify({
-					firstname: 'test-changed',
-					lastname: 'user-changed'
-				}),
-
-				headers = merge( JSON_HEADER, COOKIE_HEADER );
-
-				api.put( 'users/' + response.response.users.items[0]._id, payload, headers, callback );
-			});
+			api.put( 'users/' + ME, payload, headers, this.callback );
 		},
 		'THEN I get an updated version of the user back': function ( err, res, body ) {
-			assert.isNull( err );
-			assert.isNotNull( body );
+			assert.equal( res.statusCode, 200 );
 
 			var response = JSON.parse( body );
-			response.response.user.firstname.should.equal( 'test-changed' );
-			response.response.user.lastname.should.equal( 'user-changed' );
-		},
-		teardown: function () {
-			db.close();
+
+			response.response.users.items[ 0 ].name.should.equal( 'test-changed' );
 		}
 	}
 
 }).addBatch({
 
-	'WHEN I delete all the users': {
+	'WHEN I delete my user': {
 		topic: function () {
 			var callback = this.callback;
 
-			api.get( 'users', COOKIE_HEADER, function ( err, res, body ) {
-				if ( err ) {
-					callback( err, res, body );
-				} else {
-					var response = JSON.parse( body ),
-					users = response.response.users.items,
-					l = users.length,
-					deleted = 0;
-
-					for ( var i = 0; i < l; i++ ) {
-						user = users[i];
-						api.del( 'users/' + user._id, COOKIE_HEADER, function( err, res, body ) {
-							if ( err ) {
-								callback( err, res, body );
-							} else {
-								deleted++;
-								if ( l === deleted ) {
-									api.get( 'users', COOKIE_HEADER, callback );
-								}
-							}
-						});
-					}
-				}
+			api.del( 'users/' + ME, COOKIE_HEADER, function ( err, res, body ) {
+				api.get( 'users/' + ME, COOKIE_HEADER, callback );
 			});
 		},
-		'THEN i get back no users from a listing call': function ( err, res, body ) {
-			var response = JSON.parse( body );
-			assert.equal( response.response.users.count, 0 );
+		'THEN the user is gone': function ( err, res, body ) {
+			assert.equal( res.statusCode, 404 );
 		}
+	},
+	teardown: function () {
+		mongoose.connections[ 0 ].close();
 	}
 
 }).export( module );

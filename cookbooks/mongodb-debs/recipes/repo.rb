@@ -20,6 +20,10 @@
 
 return unless ["ubuntu", "debian"].include?(node[:platform])
 
+execute "create data directory" do
+	command "sudo mkdir -p /data/db/"
+end
+
 execute "request mongodb key" do
   command "gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 7F0CEB10"
   not_if "gpg --list-keys 7F0CEB10"

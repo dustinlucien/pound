@@ -29,20 +29,12 @@ Ext.regController( 'Login', {
 				password: password
 			},
 			success: function ( response, opts ) {
-				var obj = Ext.decode( response.responseText );
-
-				// if the login was invalid
-				if ( obj.meta.code !== 200 ) {
-					Ext.Msg.alert( 'Error', 'Invalid login' );
-				// if the login was valid
-				} else {
-					// slide on over to the app panel
-					kudos.views.viewport.setActiveItem( 2, {
-						type: 'slide',
-						direction: 'right',
-						reveal: true
-					});
-				}
+				// slide on over to the app panel
+				kudos.views.viewport.setActiveItem( 2, {
+					type: 'slide',
+					direction: 'right',
+					reveal: true
+				});
 
 				// reset and enable the fields
 				email_field.reset();
@@ -51,6 +43,9 @@ Ext.regController( 'Login', {
 				password_field.enable();
 			},
 			failure: function ( response, opts ) {
+				email_field.enable();
+				password_field.enable();
+				// TODO better error messages
 				Ext.Msg.alert( 'Error', 'Could not contact server. Please try again' );
 			}
 		});

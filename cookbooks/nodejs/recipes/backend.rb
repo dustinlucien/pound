@@ -5,7 +5,7 @@ include_recipe "mongodb-debs"
 
 nodejs_server "backend" do
   script_file "app.js"
-  script_dir "/vagrant/restful-backend/"
+  script_dir "/vagrant/"
   user "vagrant"
   action :start
 end
