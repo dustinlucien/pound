@@ -18,7 +18,8 @@ var express = require('express')
 
 // Controllers
 	, UserController = require( './app/controllers/users' )
-	, KudosController = require( './app/controllers/kudos' )
+	, KudoCategoryController = require( './app/controllers/kudo-categories' )
+	, KudoController = require( './app/controllers/kudos' )
 
 // Middleware
     , AuthMiddleware = require( './app/lib/auth' );
@@ -67,10 +68,13 @@ app.use(function(req, res){
  */
 
 var user_controller = new UserController();
-app.resource('users', user_controller.router(), { format: 'json' });
+app.resource( 'users', user_controller.router() );
 
-var kudos_controller = new KudosController();
-app.resource('kudos', kudos_controller.router(), { format: 'json' });
+var kudo_category_controller = new KudoCategoryController();
+app.resource( 'kudo_categories', kudo_category_controller.router() );
+
+var kudo_controller = new KudoController();
+app.resource( 'kudos', kudo_controller.router() );
 
 /**
  * Start the app!

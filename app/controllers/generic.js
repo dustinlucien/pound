@@ -1,15 +1,7 @@
 /**
- * Dependencies
- */
-var natural = require('natural'),
-	nounInflector = new natural.NounInflector;
-
-/**
  * Class def
  */
 function GenericController () {
-	//This didn't work.  how to call super class constructor in JavaScript?
-	//this.nounInflector = new natural.NounInflector;
 }
 
 // export the GenericController class
@@ -35,27 +27,6 @@ var error_type = {
 	500: 'server'
 };
 
-<<<<<<< HEAD:restful-backend/app/controllers/generic.js
-GenericController.prototype._formatApiResponse = function (res, err, docs) {
-	var output = {};  
-	var statusCode;
-  
-	if (!err) {
-		output.response = {};
-		if (docs == null) {
-			statusCode = 200;
-		} else if (docs instanceof Array) {
-			output.response[ this.label ] = { count : docs.length, items : docs };
-		} else {
-			output.response[ nounInflector.singularize(this.label) ]  = docs;
-		}
-		output.meta = { code : 200 };
-		statusCode = 200;
-	} else {
-		output.error = { type : 'server', description : err };
-		output.meta = { code : 500 };
-		statusCode = 500;
-=======
 GenericController.prototype._respond = function ( res, docs, code, err ) {
 	var output = {};
 
@@ -64,7 +35,6 @@ GenericController.prototype._respond = function ( res, docs, code, err ) {
 
 	if ( ! ( docs instanceof Array ) ) {
 		docs = [ docs ];
->>>>>>> ui-first-steps:app/controllers/generic.js
 	}
 
 	if ( code !== 200 && ! err ) {

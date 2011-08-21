@@ -1,12 +1,11 @@
-(function() {
-  var Like, ObjectId, mongoose;
-  mongoose = require('mongoose');
-  ObjectId = mongoose.Schema.ObjectId;
-  Like = new mongoose.Schema({
-    id: ObjectId,
-    sender: ObjectId,
-    created: Date,
-    test: String
-  });
-  mongoose.model('Like', Like);
-}).call(this);
+var mongoose = require('mongoose'),
+	ObjectId = mongoose.Schema.ObjectId;
+
+var Like = new mongoose.Schema({
+	sender: ObjectId,
+	created: Date
+});
+
+mongoose.model( 'Like', Like );
+
+module.exports = mongoose.model( 'Like' );

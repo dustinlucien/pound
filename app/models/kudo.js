@@ -1,16 +1,18 @@
-(function() {
-  var Kudo, Like, ObjectId, mongoose;
-  mongoose = require('mongoose');
-  Like = require('./like');
-  ObjectId = mongoose.Schema.ObjectId;
-  Kudo = new mongoose.Schema({
-    id: ObjectId,
-    message: String,
-    sender: ObjectId,
-    recipient: ObjectId,
-    gloms: [Kudo],
-    likes: [Like],
-    created: Date
-  });
-  mongoose.model('Kudo', Kudo);
-}).call(this);
+var mongoose = require('mongoose'),
+	Like = require( './like' ),
+	Comment = require( './comment' ),
+	ObjectId = mongoose.Schema.ObjectId;
+
+var Kudo = new mongoose.Schema({
+	message: String,
+	sender: ObjectId,
+	recipient: ObjectId,
+	category: ObjectId,
+	likes: [ Like ],
+	comments: [ Comment ],
+	created: Date
+});
+
+mongoose.model( 'Kudo', Kudo );
+
+module.exports = mongoose.model( 'Kudo' );
