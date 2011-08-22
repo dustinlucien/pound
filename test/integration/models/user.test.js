@@ -1,10 +1,9 @@
 var vows = require( 'vows' ),
 	assert = require( 'assert' ),
-	mongoose = require( 'mongoose' ),
+	lib = require( '../../test-lib' ),
+	teardown = lib.teardown,
 	User = require('../../../app/models/user.js');
 
-mongoose.connect( 'mongodb://127.0.0.1:27017/test' );
-  
 vows.describe( 'User Model Integration Tests' ).addBatch({
 
 	'WHEN I create a new user with valid data': {
@@ -41,9 +40,7 @@ vows.describe( 'User Model Integration Tests' ).addBatch({
 		}
 	},
 
-	teardown: function () {
-		mongoose.connections[ 0 ].close();
-	}
+	teardown: teardown
 
 }).export( module );
 

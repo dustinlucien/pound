@@ -1,7 +1,7 @@
 var vows = require( 'vows' ),
 	assert = require( 'assert' ),
 	should = require( 'should' ),
-	lib = require( './test-lib' ),
+	lib = require( '../../test-lib' ),
 	api = lib.api,
 	merge = lib.merge,
 	teardown = lib.teardown;
@@ -144,7 +144,9 @@ vows.describe( 'Users Api Integration Tests' ).addBatch({
 			assert.equal( user.name, 'test user' );
 			assert.equal( user.email, 'testuser@testdomain.com' );
 		}
-	},
+	}
+
+}).addBatch({
 
 	'WHEN I update a single user': {
 		topic: function () {
