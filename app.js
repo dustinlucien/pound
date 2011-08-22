@@ -47,8 +47,8 @@ app.configure(function(){
 app.configure('development', function(){
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 	console.log('connecting to mongoose for development');
-	//mongoose.connect('mongodb://testing_user:kud05@dbh30.mongolab.com:27307/development');
-	mongoose.connect('mongodb://localhost:27017/test');
+	mongoose.connect('mongodb://testing_user:kud05@dbh30.mongolab.com:27307/development');
+	//mongoose.connect('mongodb://localhost:27017/test');
 });
 
 // production config
