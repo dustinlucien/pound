@@ -63,6 +63,9 @@ app.use(function(req, res){
   res.send( { meta: { code : 404, error: "Lame, can't find that" } }, 404 );
 });
 
+// import categories
+require( './app/util/ensure-categories' )( true, function () {} );
+
 /**
  * Controllers
  */

@@ -2,7 +2,10 @@ var mongoose = require('mongoose'),
 	ObjectId = mongoose.Schema.ObjectId;
 
 var KudoCategory = new mongoose.Schema({
-	name: String,
+	name: {
+		type: String,
+		unique: true
+	},
 	shoutout: String,
 	description: String
 });

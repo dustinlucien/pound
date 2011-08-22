@@ -1,80 +1,20 @@
 var vows = require( 'vows' ),
 	assert = require( 'assert' ),
 	should = require( 'should' ),
-	request = require( 'request' ),
-	mongoose = require( 'mongoose' ),
-	UserModel = require( '../../../app/models/user' );
+	lib = require( './test-lib' ),
+	api = lib.api,
+	merge = lib.merge,
+	teardown = lib.teardown;
   
-var test_api_uri = 'http://localhost:3000/';
-
 var JSON_HEADER = {'Content-Type': 'application/json'},
 	FORM_HEADER = {'Content-Type': 'application/x-www-form-urlencoded'},
 	COOKIE_HEADER = {};
 
 var ME = null;
 
-function merge ( header1, header2 ) {
-	var header3 = {};
-	for ( key in header1 ) {
-		header3[ key ] = header1[ key ];
-	}
-	for ( key in header2 ) {
-		header3[ key ] = header2[ key ];
-	}
-	return header3;
-}
-
-function checkResponse( err, res, body, callback ) {
-	assert.isNull(err);
-	assert.isNotNull(res);
-	callback(err, res, body);
-}
-
-mongoose.connect( 'mongodb://127.0.0.1:27017/test' );
-
 var User = require( '../../../app/models/user.js' );
 
-var api = {
-	get: function(path, headers, callback) {
-		assert.isNotNull(path);
-		assert.isNotNull(callback);
-
-		request.get({uri:test_api_uri + path, headers: headers}, function (err, res, body) {
-			checkResponse(err, res, body, callback);
-		});
-	},
-
-	post: function(path, payload, headers, callback) {
-		assert.isNotNull(path);
-		assert.isNotNull(payload);
-		assert.isNotNull(callback);
-
-		request.post({uri:test_api_uri + path, body: payload, headers: headers}, function (err, res, body) {
-			checkResponse(err, res, body, callback);
-		});
-	},
-
-	put: function(path, payload, headers, callback) {
-		assert.isNotNull(path);
-		assert.isNotNull(payload);
-		assert.isNotNull(callback);
-
-		request({method:'PUT', uri:test_api_uri + path, body: payload, headers: headers}, function (err, res, body) {
-			checkResponse(err, res, body, callback);
-		});
-	},
-
-	del: function(path, headers, callback) {
-		assert.isNotNull(path);
-		assert.isNotNull(callback);
-		request({method:'DELETE', uri:test_api_uri + path, headers: headers}, function(err, res, body) {
-			checkResponse(err, res, body, callback);
-		});
-	}
-};
-
-
-vows.describe('Users Api Integration Tests').addBatch({
+vows.describe( 'Users Api Integration Tests' ).addBatch({
 
 	'WHEN I check session status before authenticating': {
 		topic: function () {
@@ -97,7 +37,7 @@ vows.describe('Users Api Integration Tests').addBatch({
 
 	'WHEN I list users before authenticating': {
 		topic: function () {
-			api.get( 'users.json', null, this.callback );
+			api.get( 'users', null, this.callback );
 		},
 		'THEN I should get a 401': function ( err, res, body ) {
 			assert.equal( res.statusCode, 401 );
@@ -239,9 +179,7 @@ vows.describe('Users Api Integration Tests').addBatch({
 			assert.equal( res.statusCode, 404 );
 		}
 	},
-	teardown: function () {
-		mongoose.connections[ 0 ].close();
-	}
+	teardown: teardown
 
 }).export( module );
 

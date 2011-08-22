@@ -1,0 +1,22 @@
+[
+	{
+		"name": "Amazing Brain",
+		"shoutout": "You've got an amazing brain!",
+		"description": "is a brainiac"
+	},
+	{
+		"name": "Gift of Gab",
+		"shoutout": "You've got the gift of gab!",
+		"description": "knew what to say"
+	},
+	{
+		"name": "Coffee is for closers",
+		"shoutout": "Coffee is for closers!",
+		"description": "closed the deal"
+	},
+	{
+		"name": "Night shift",
+		"shoutout": "Nice job!",
+		"description": "chipped in"
+	}
+]
