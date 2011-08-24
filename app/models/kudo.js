@@ -4,10 +4,22 @@ var mongoose = require('mongoose'),
 	ObjectId = mongoose.Schema.ObjectId;
 
 var Kudo = new mongoose.Schema({
-	message: String,
-	sender: ObjectId,
-	recipient: ObjectId,
-	category: ObjectId,
+	message: {
+		type: String,
+		required: true
+	},
+	sender: {
+		type: ObjectId,
+		required: true,
+	},
+	recipient: {
+		type: ObjectId,
+		required: true
+	},
+	category: {
+		type: ObjectId,
+		required: true
+	},
 	likes: [ Like ],
 	comments: [ Comment ],
 	created: Date

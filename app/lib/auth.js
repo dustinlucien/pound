@@ -5,7 +5,9 @@ var URL = require( 'url' ),
 // allow a request if a valid session is present or if a certain
 // path is being accessed (such as a new account registration)
 function access_allowed ( req, res, url, is_session ) {
+	// TODO clean up handling of allowed paths
 	return ( is_session ) ||
+		   ( url.pathname === '/kudo_categories' || url.pathname === '/kudo_categories/' ) ||
 		   ( ( url.pathname === '/users' || url.pathname === '/users/' ) &&
 			 req.method === 'POST' );
 }

@@ -1,0 +1,32 @@
+[
+	{
+		"name": "Amazing Brain",
+		"shoutout": "You've got an amazing brain!",
+		"description": "is a brainiac"
+	},
+	{
+		"name": "Gift of Gab",
+		"shoutout": "You've got the gift of gab!",
+		"description": "knew what to say"
+	},
+	{
+		"name": "Coffee is for closers",
+		"shoutout": "Coffee is for closers!",
+		"description": "closed the deal"
+	},
+	{
+		"name": "Night shift",
+		"shoutout": "Nice job!",
+		"description": "chipped in"
+	},
+	{
+		"name": "Cool attitude",
+		"shoutout": "You are too cool for school!",
+		"description": "kept us calm"
+	},
+	{
+		"name": "Encyclopedia",
+		"shoutout": "That's using your noggin!",
+		"description": "had the answer"
+	}
+]

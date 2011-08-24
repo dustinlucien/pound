@@ -48,7 +48,7 @@ app.configure('development', function(){
 	console.log('connecting to Redis for sessions in development');
 	app.use(express.session({store: new RedisStore, secret: 'mmmm javascript'}));
 	console.log('connecting to mongoose for development');
-	mongoose.connect('mongodb://localhost:27017/development');
+	mongoose.connect('mongodb://localhost:27017/test');
 });
 
 // production config
@@ -64,6 +64,9 @@ app.configure('production', function(){
 app.use(function(req, res){
   res.send( { meta: { code : 404, error: "Lame, can't find that" } }, 404 );
 });
+
+// import categories
+require( './app/util/ensure-categories' )( true, function () {} );
 
 /**
  * Controllers

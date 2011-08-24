@@ -39,8 +39,7 @@ UserController.prototype.index = function( req, res ) {
 
 //POST /users -> create
 UserController.prototype.create = function( req, res ) {
-	var self = this,
-		records = req.body.records;
+	var self = this;
 
 	// if the records param was not given, return an error
 	if ( ! req.body.records ) {
@@ -50,7 +49,6 @@ UserController.prototype.create = function( req, res ) {
 		self._respond( res, null, 400, 'Only one record may be created at a time' );
 	// otherwise, create the user
 	} else {
-		// TODO validation
 		var user = new User({
 			email: req.body.records[ 0 ].email,
 			password: req.body.records[ 0 ].password,
@@ -58,6 +56,7 @@ UserController.prototype.create = function( req, res ) {
 		});
 
 		user.save( function ( err, doc ) {
+			// TODO better error response
 			if ( err ) {
 				self._respond( res, null, 500, err );
 			} else {
