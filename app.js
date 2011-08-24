@@ -14,7 +14,7 @@ var express = require('express')
 // For connecting to MongoDB
 	, mongoose = require('mongoose')
 // For storing sessions in Redis
-    , RedisStore = require('connect-redis')( express )
+  , RedisStore = require('connect-redis')( express )
 
 // Controllers
 	, UserController = require( './app/controllers/users' )
@@ -22,7 +22,7 @@ var express = require('express')
 	, KudoController = require( './app/controllers/kudos' )
 
 // Middleware
-    , AuthMiddleware = require( './app/lib/auth' );
+  , AuthMiddleware = require( './app/lib/auth' );
 	
 
 /**
@@ -35,7 +35,6 @@ app.configure(function(){
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'jade');
 	app.use(express.cookieParser());
-	app.use(express.session({store: new RedisStore, secret: 'mmmm javascript'}));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
 	app.use(express.static(__dirname + '/public'));
@@ -46,6 +45,8 @@ app.configure(function(){
 // development config
 app.configure('development', function(){
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+	console.log('connecting to Redis for sessions in development');
+	app.use(express.session({store: new RedisStore, secret: 'mmmm javascript'}));
 	console.log('connecting to mongoose for development');
 	mongoose.connect('mongodb://testing_user:kud05@dbh30.mongolab.com:27307/development');
 	//mongoose.connect('mongodb://localhost:27017/test');
@@ -54,6 +55,8 @@ app.configure('development', function(){
 // production config
 app.configure('production', function(){
 	app.use(express.errorHandler());
+	console.log('connecting to Redis for sessions in production');
+	app.use(express.session({store: new RedisStore, secret: 'mmmm javascript'}));
 	console.log('connecting to mongoose for production');
 	mongoose.connect('mongodb://testing_user:kud05@dbh15.mongolab.com:27157/heroku_app563134');
 });

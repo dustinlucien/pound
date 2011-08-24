@@ -1,5 +1,5 @@
 var EventEmitter = require('events').EventEmitter,
-var redis = require('redis');
+    redis = require('redis');
 
 function EventBus (obj) {
   this.client = null;
