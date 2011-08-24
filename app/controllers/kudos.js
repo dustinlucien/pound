@@ -2,7 +2,8 @@
  * Dependencies
  */
 
-var Kudo = require( '../models/kudo' );
+var Kudo = require( '../models/kudo' ),
+	User = require( '../models/user' );
 
 /**
  * Class def
@@ -36,8 +37,35 @@ KudoController.prototype.index = function( req, res ) {
 	});
 };
 
-KudoController.prototype._build_kudo = function ( res, fields, cb ) {
-	cb( null, new Kudo( fields ) );
+KudoController.prototype._build_kudo = function ( req, res, fields, cb ) {
+	var self = this;
+	fields._id = null;
+
+	if ( ! fields.sender ) {
+		fields.sender = req.session.uid;
+	}
+
+	if ( fields.recipient ) {
+		cb( null, new Kudo({
+			recipient: fields.recipient,
+			sender: fields.sender,
+			message: fields.message,
+			category: fields.category
+		}));
+	} else if ( fields.recipient_email ) {
+		User.find( { email: fields.recipient_email }, function ( err, docs ) {
+			if ( ! docs || docs.length < 1 ) {
+				self._respond( res, null, 404, 'No user by that email address' );
+			} else {
+				cb( null, new Kudo({
+					recipient: docs[ 0 ]._id,
+					sender: fields.sender,
+					message: fields.message,
+					category: fields.category
+				}));
+			}
+		});
+	}
 };
 
 //POST /kudos -> create
@@ -52,8 +80,8 @@ KudoController.prototype.create = function( req, res ) {
 		self._respond( res, null, 400, 'Only one record may be created at a time' );
 	// otherwise, create the kudo
 	} else {
-		self._build_kudo( res, req.body.records[ 0 ], function ( err, kudo ) {
-			if ( String( kudo.sender ) !== req.session.uid ) {
+		self._build_kudo( req, res, req.body.records[ 0 ], function ( err, kudo ) {
+			if ( String( kudo.sender ) !== String( req.session.uid ) ) {
 				self._respond( res, null, 403, 'Cannot send Kudo as another user' );
 			} else if ( String( kudo.sender ) === String( kudo.recipient ) ) {
 				self._respond( res, null, 403, 'Cannot send Kudo to yourself' );

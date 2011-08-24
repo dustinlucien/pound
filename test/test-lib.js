@@ -3,7 +3,8 @@ var assert = require( 'assert' ),
 	mongoose = require( 'mongoose' );
 
 var api_uri = exports.api_uri = 'http://localhost:3000/',
-	mongo_uri = exports.mongo_uri = 'mongo://127.0.0.1:27017/test';
+	//mongo_uri = exports.mongo_uri = 'mongo://127.0.0.1:27017/test';
+	mongo_uri = exports.mongo_uri = 'mongodb://testing_user:kud05@dbh30.mongolab.com:27307/development';
 
 var merge = exports.merge = function ( header1, header2 ) {
 	var header3 = {};

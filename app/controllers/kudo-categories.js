@@ -8,7 +8,7 @@ var KudoCategory = require( '../models/kudo-category' );
  * Class def
  */
 function KudoCategoryController () {
-	this.label = 'kudo_categories';
+	this.label = 'categories';
 }
 
 // extend the GenericController class

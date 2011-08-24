@@ -1,0 +1,25 @@
+/* For toolbars with left-aligned text */
+.toolbar-title-left {
+	text-align: left;
+	padding-left: 10px;
+}
+
+/* For bright-blue backgrounds */
+.bright-blue {
+	background: #00c9ff;
+}
+
+/* For bright-green backgrounds */
+.bright-green {
+	background: #00ff49;
+}
+
+/* For white text */
+.white-text {
+	color: #fff;
+}
+
+/* For smaller text */
+.small-text {
+	font-size: small;
+}

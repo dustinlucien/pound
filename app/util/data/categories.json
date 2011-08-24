@@ -18,5 +18,15 @@
 		"name": "Night shift",
 		"shoutout": "Nice job!",
 		"description": "chipped in"
+	},
+	{
+		"name": "Cool attitude",
+		"shoutout": "You are too cool for school!",
+		"description": "kept us calm"
+	},
+	{
+		"name": "Encyclopedia",
+		"shoutout": "That's using your noggin!",
+		"description": "had the answer"
 	}
 ]
