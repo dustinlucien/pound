@@ -49,12 +49,14 @@ Ext.regController( 'Register', {
 			new_user.save({
 				success: function ( record, operation ) {
 					var obj = Ext.decode( operation.response.responseText );
-
 					if ( obj.meta.code === 200 ) {
 						kudos.views.viewport.setActiveItem( 2 );
 					} else {
-						// TODO better errors
-						Ext.Msg.alert( 'Whoops!', 'Unknown error. Please try again.' );
+						var msg = 'Unknown error. Please try again';
+						if ( obj.error && obj.error.description ) {
+							msg = obj.error.description;
+						}
+						Ext.Msg.alert( 'Whoops!', msg );
 					}
 				},
 				failure: function () {
