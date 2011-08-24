@@ -55,7 +55,7 @@ app.configure('development', function(){
 app.configure('production', function(){
 	app.use(express.errorHandler());
 	console.log('connecting to Redis for sessions in production');
-	app.use(express.session({store: new RedisStore({host : 'filefish.redistogo.com', port : '9623', pass: '1fa9a5e3f75d1620ae83ebcf05dd884d'}), secret: 'mmmm javascript'}));
+	app.use(express.session({store: new RedisStore({host : 'filefish.redistogo.com', port : '9623', db : 'redistogo', pass: '1fa9a5e3f75d1620ae83ebcf05dd884d'}), secret: 'mmmm javascript'}));
 	console.log('connecting to mongoose for production');
 	mongoose.connect('mongodb://testing_user:kud05@dbh15.mongolab.com:27157/heroku_app563134');
 });
