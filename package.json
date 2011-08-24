@@ -13,8 +13,8 @@
     , "connect-redis": ">= 1.0.7"
     , "natural": ">= 0.0.32"
   }
-	, "devDependencies": {
-		"should": ">= 0.2.1"
+  , "devDependencies": {
+      "should": ">= 0.2.1"
     , "vows": ">= 0.5.9"
-	}
+}
 }
