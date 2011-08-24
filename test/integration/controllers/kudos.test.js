@@ -53,13 +53,12 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			});
 		},
 		'THEN I should get a null session': function ( err, res, body ) {
-			assert.equal( res.statusCode, 200 );
-
 			var cookie_str = res.headers[ 'set-cookie' ][ 0 ].split( '; ' )[ 0 ],
 				response = JSON.parse( body );
 
 			COOKIE_HEADER.Cookie = cookie_str;
 
+			assert.equal( response.meta.code, 200 );
 			assert.isNull( response.session );
 		}
 	},
@@ -69,7 +68,7 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			api.get( 'kudos', null, this.callback );
 		},
 		'THEN I should get a 401': function ( err, res, body ) {
-			assert.equal( res.statusCode, 401 );
+			assert.equal( JSON.parse( body ).meta.code, 401 );
 		}
 	}
 
@@ -86,7 +85,7 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			api.post( 'auth/login', payload, headers, this.callback );
 		},
 		'THEN I should get a 200 code': function ( err, res, body ) {
-			assert.equal( res.statusCode, 200 );
+			assert.equal( JSON.parse( body ).meta.code, 200 );
 		}
 	}
 
@@ -108,7 +107,7 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			api.post( 'kudos', payload, headers, this.callback );
 		},
 		'THEN I should get a 403 code': function ( err, res, body ) {
-			assert.equal( res.statusCode, 403 );
+			assert.equal( JSON.parse( body ).meta.code, 403 );
 		}
 	},
 
@@ -128,7 +127,7 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			api.post( 'kudos', payload, headers, this.callback );
 		},
 		'THEN I should get a 403 code': function ( err, res, body ) {
-			assert.equal( res.statusCode, 403 );
+			assert.equal( JSON.parse( body ).meta.code, 403 );
 		}
 	},
 
@@ -148,7 +147,7 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			api.post( 'kudos', payload, headers, this.callback );		
 		},
 		'THEN I should get a 200 code': function ( err, res, body ) {
-			assert.equal( res.statusCode, 200 );
+			assert.equal( JSON.parse( body ).meta.code, 200 );
 		},
 		'THEN I should get back the same Kudo': function ( err, res, body ) {
 			var kudo = JSON.parse( body ).response.kudos.items[ 0 ];
@@ -170,7 +169,7 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			api.get( 'kudos', COOKIE_HEADER, this.callback );
 		},
 		'THEN I should get a 200 status code': function ( err, res, body ) {
-			assert.equal( res.statusCode, 200 );
+			assert.equal( JSON.parse( body ).meta.code, 200 );
 		},
 		'THEN I should get a list of Kudos': function ( err, res, body ) {
 			var items = JSON.parse( body ).response.kudos.items;
@@ -185,7 +184,7 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			api.get( 'kudos/' + KUDO, COOKIE_HEADER, this.callback );		
 		},
 		'THEN I should get a 200 code': function ( err, res, body ) {
-			assert.equal( res.statusCode, 200 );
+			assert.equal( JSON.parse( body ).meta.code, 200 );
 		},
 		'THEN I should get back the same Kudo': function ( err, res, body ) {
 			var kudo = JSON.parse( body ).response.kudos.items[ 0 ];
@@ -209,7 +208,7 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			api.put( 'kudos/' + KUDO, payload, headers, this.callback );
 		},
 		'THEN I should get a 403 status code': function ( err, res, body ) {
-			assert.equal( res.statusCode, 403 );
+			assert.equal( JSON.parse( body ).meta.code, 403 );
 		}
 	},
 
@@ -218,7 +217,7 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			api.del( 'kudos/' + KUDO, COOKIE_HEADER, this.callback );
 		},
 		'THEN I should get a 403 status code': function ( err, res, body ) {
-			assert.equal( res.statusCode, 403 );
+			assert.equal( JSON.parse( body ).meta.code, 403 );
 		}
 	},
 

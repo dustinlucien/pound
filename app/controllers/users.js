@@ -29,7 +29,8 @@ UserController.prototype.index = function( req, res ) {
 	// TODO filter users
 	User.find({}, function( err, docs ) {
 		if ( err ) {
-			self._respond( res, null, 500, err );
+			// TODO log
+			self._respond( res, null, 500 );
 		} else {
 			// TODO only show certain fields
 			self._respond( res, docs );

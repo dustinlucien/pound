@@ -43,14 +43,21 @@ Ext.regController( 'Register', {
 		});
 
 		if ( !new_user.validate().isValid() ) {
+			// TODO better errors
 			Ext.Msg.alert( 'Error', 'Please include a name, valid email, and password' );
 		} else {
 			new_user.save({
-				success: function () {
-					kudos.views.viewport.setActiveItem( 2 );
+				success: function ( record, operation ) {
+					var obj = Ext.decode( operation.response.responseText );
+
+					if ( obj.meta.code === 200 ) {
+						kudos.views.viewport.setActiveItem( 2 );
+					} else {
+						// TODO better errors
+						Ext.Msg.alert( 'Whoops!', 'Unknown error. Please try again.' );
+					}
 				},
 				failure: function () {
-					// TODO detect different errors
 					Ext.Msg.alert( 'Error', 'Could not contact server. Please try again' );
 				}
 			});

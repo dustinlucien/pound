@@ -24,13 +24,13 @@ vows.describe( 'Users Api Integration Tests' ).addBatch({
 			});
 		},
 		'THEN I should get a null session': function ( err, res, body ) {
-			assert.equal( res.statusCode, 200 );
 
 			var cookie_str = res.headers[ 'set-cookie' ][ 0 ].split( '; ' )[ 0 ],
 				response = JSON.parse( body );
 
 			COOKIE_HEADER.Cookie = cookie_str;
 
+			assert.equal( response.meta.code, 200 );
 			assert.isNull( response.session );
 		}
 	},
@@ -40,7 +40,7 @@ vows.describe( 'Users Api Integration Tests' ).addBatch({
 			api.get( 'users', null, this.callback );
 		},
 		'THEN I should get a 401': function ( err, res, body ) {
-			assert.equal( res.statusCode, 401 );
+			assert.equal( JSON.parse( body ).meta.code, 401 );
 		}
 	}
 
@@ -112,7 +112,7 @@ vows.describe( 'Users Api Integration Tests' ).addBatch({
 			api.post( 'auth/login', payload, headers, this.callback );
 		},
 		'THEN I should get a 200 code': function ( err, res, body ) {
-			assert.equal( res.statusCode, 200 );
+			assert.equal( JSON.parse( body ).meta.code, 200 );
 		}
 	}
 
@@ -123,10 +123,9 @@ vows.describe( 'Users Api Integration Tests' ).addBatch({
 			api.get( 'users', COOKIE_HEADER, this.callback );
 		},
 		'THEN I get back a few': function ( err, res, body ) {
-			assert.equal( res.statusCode, 200 );
-
 			var response = JSON.parse( body );
 
+			assert.equal( response.meta.code, 200 );
 			response.response.users.count.should.be.above( 0 );
 		}
 	},
@@ -136,11 +135,10 @@ vows.describe( 'Users Api Integration Tests' ).addBatch({
 			api.get( 'users/' + ME, COOKIE_HEADER, this.callback );
 		},
 		'THEN the information should be correct': function ( err, res, body ) {
-			assert.equal( res.statusCode, 200 );
-
 			var response = JSON.parse( body ),
 				user = response.response.users.items[ 0 ];
 
+			assert.equal( response.meta.code, 200 );
 			assert.equal( user.name, 'test user' );
 			assert.equal( user.email, 'testuser@testdomain.com' );
 		}
@@ -159,10 +157,9 @@ vows.describe( 'Users Api Integration Tests' ).addBatch({
 			api.put( 'users/' + ME, payload, headers, this.callback );
 		},
 		'THEN I get an updated version of the user back': function ( err, res, body ) {
-			assert.equal( res.statusCode, 200 );
-
 			var response = JSON.parse( body );
 
+			assert.equal( response.meta.code, 200 );
 			response.response.users.items[ 0 ].name.should.equal( 'test-changed' );
 		}
 	}
@@ -178,7 +175,7 @@ vows.describe( 'Users Api Integration Tests' ).addBatch({
 			});
 		},
 		'THEN the user is gone': function ( err, res, body ) {
-			assert.equal( res.statusCode, 404 );
+			assert.equal( JSON.parse( body ).meta.code, 404 );
 		}
 	},
 	teardown: teardown

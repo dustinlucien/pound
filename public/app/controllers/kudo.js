@@ -45,27 +45,34 @@ Ext.regController( 'Kudo', {
 
 		// TODO better errors
 		if ( ! new_kudo.validate().isValid() ) {
-			Ext.Msg.alert( 'Error', 'Please include an email, a message, and select a reason' );
+			Ext.Msg.alert( 'Whoops!', 'Please include an email, a message, and select a reason' );
 		} else {
 			email_field.disable();
 			message_field.disable();
 
 			new_kudo.save({
-				success: function () {
-					email_field.reset();
+				success: function ( record, operation ) {
+					var obj = Ext.decode( operation.response.responseText );
+
+					if ( obj.meta.code === 200 ) {
+						email_field.reset();
+						message_field.reset();
+
+						self.reset_categories();
+
+						Ext.Msg.alert( 'Awesome!', 'Kudo sent' );
+					} else {
+						Ext.Msg.alert( 'Uh oh!', obj.error.description );
+					}
+
 					email_field.enable();
-					message_field.reset();
 					message_field.enable();
-
-					self.reset_categories();
-
-					Ext.Msg.alert( 'Awesome!', 'Kudo sent' );
 				},
 				failure: function ( record, operation ) {
 					email_field.enable();
 					message_field.enable();
 
-					Ext.Msg.alert( 'Error', 'Unable to send Kudo' );
+					Ext.Msg.alert( 'Whoops!', 'Unable to contact server. Please try again.' );
 				}
 			});
 		}

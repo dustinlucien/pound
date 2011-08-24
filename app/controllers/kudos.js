@@ -55,7 +55,7 @@ KudoController.prototype._build_kudo = function ( req, res, fields, cb ) {
 	} else if ( fields.recipient_email ) {
 		User.find( { email: fields.recipient_email }, function ( err, docs ) {
 			if ( ! docs || docs.length < 1 ) {
-				self._respond( res, null, 404, 'No user by that email address' );
+				self._respond( res, fields, 404, 'No user by that email address' );
 			} else {
 				cb( null, new Kudo({
 					recipient: docs[ 0 ]._id,
