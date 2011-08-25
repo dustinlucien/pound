@@ -13,6 +13,8 @@ var express = require('express')
 	, request = require('request')
 // For connecting to MongoDB
 	, mongoose = require('mongoose')
+// For interacting directly with redis	
+	, redis = require('redis')
 // For storing sessions in Redis
   , RedisStore = require('connect-redis')( express )
 // For parsing and manipulating URL's
@@ -59,8 +61,7 @@ app.configure('production', function(){
 	console.log('connecting to Redis for sessions in production to ' + process.env.REDISTOGO_URL);
 	var redisUrl = url.parse(process.env.REDISTOGO_URL),
 	    redisAuth = redisUrl.auth.split(':');
-
-	console.log('redisUrl ' + process.env.REDISTOGO_URL);
+	
 	console.log('redisHost ' + redisUrl.hostname);
 	console.log('redisPort ' + redisUrl.port);
 	console.log('redisDb ' + redisAuth[0]);
@@ -70,6 +71,20 @@ app.configure('production', function(){
   app.set('redisPort', redisUrl.port);
   app.set('redisDb', redisAuth[0]);
   app.set('redisPass', redisAuth[1]);
+	
+	console.log('testing the redis connection ');
+	var rClient = redis.createClient(app.set('redisHost'), app.set('redisPort'));
+	
+	rClient.on("error", function (err) {
+	    console.log("Redis Error " + err);
+	});
+	
+	redis.auth(app.set('redisPass'), function(args) {
+		console.log('callback fired from redis auth');
+		console.log(args);
+	});
+	
+	client.set("string key", "string val", redis.print);
 	
   app.use(express.session({
       secret: 'super duper secret',
