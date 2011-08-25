@@ -29,23 +29,31 @@ Ext.regController( 'Login', {
 				password: password
 			},
 			success: function ( response, opts ) {
-				// slide on over to the app panel
-				kudos.views.viewport.setActiveItem( 2, {
-					type: 'slide',
-					direction: 'right',
-					reveal: true
-				});
+				var obj = Ext.decode( response.responseText );
 
-				// reset and enable the fields
-				email_field.reset();
+				if ( obj.meta.code === 404 ) {
+					Ext.Msg.alert( 'Uh oh!', 'Email or password invalid' );
+				} else if ( obj.meta.code !== 200 ) {
+					Ext.Msg.alert( 'Whoops!', 'Unknown error. Please try again' );
+				} else {
+					// slide on over to the app panel
+					kudos.views.viewport.setActiveItem( 2, {
+						type: 'slide',
+						direction: 'right',
+						reveal: true
+					});
+
+					// reset and enable the fields
+					email_field.reset();
+					password_field.reset();
+				}
+
 				email_field.enable();
-				password_field.reset();
 				password_field.enable();
 			},
 			failure: function ( response, opts ) {
 				email_field.enable();
 				password_field.enable();
-				// TODO better error messages
 				Ext.Msg.alert( 'Error', 'Could not contact server. Please try again' );
 			}
 		});

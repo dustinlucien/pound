@@ -28,7 +28,8 @@ var error_type = {
 };
 
 GenericController.prototype._respond = function ( res, docs, code, err ) {
-	var output = {};
+	var output = {},
+		success = true;
 
 	code = code || 200;
 	docs = docs || [];
@@ -37,8 +38,11 @@ GenericController.prototype._respond = function ( res, docs, code, err ) {
 		docs = [ docs ];
 	}
 
-	if ( code !== 200 && ! err ) {
-		err = error_message[ code ] || 'Unknown error';
+	if ( code !== 200 ) {
+		success = false;
+		if ( ! err ) {
+			err = error_message[ code ] || 'Unknown error';
+		}
 	}
 
 	if ( err ) {
@@ -48,12 +52,14 @@ GenericController.prototype._respond = function ( res, docs, code, err ) {
 		};
 	}
 
+	//output.success = success;
+
 	output.meta = { code: code };
 
 	output.response = {};
 	output.response[ this.label ] = { count: docs.length, items: docs };
 
-	res.send( JSON.stringify( output ), code );
+	res.send( JSON.stringify( output ) );
 };
 
 /**

@@ -60,6 +60,7 @@ kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
 			}
 		};
 
+		// TODO indicate that categories are loading
 		var body_panel = new kudos.views.KudosFormPanel({
 			items: [
 				html_email,
