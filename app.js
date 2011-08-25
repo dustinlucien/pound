@@ -79,22 +79,26 @@ app.configure('production', function(){
 	    console.log("Redis Error " + err);
 	});
 	
-	redis.auth(app.set('redisPass'), function(args) {
+	rClient.auth(app.set('redisPass'), function(args) {
 		console.log('callback fired from redis auth');
 		console.log(args);
 	});
 	
-	client.set("string key", "string val", redis.print);
+	rClient.set("string key", "string val", redis.print);
 	
-  app.use(express.session({
-      secret: 'super duper secret',
-      store: new RedisStore({
-          host: app.set('redisHost'),
-          port: app.set('redisPort'),
-          db: app.set('redisDb'),
-          pass: app.set('redisPass')
-      })
-  }));
+	var rStore = new RedisStore({
+      host: app.set('redisHost'),
+      port: app.set('redisPort'),
+      db: app.set('redisDb'),
+      pass: app.set('redisPass')});
+
+	rStore.client.on('error', function(err) {
+		console.log('error from connect-redis redis client connection');
+		console.log(err);
+	});
+	
+  app.use(express.session({secret: 'super duper secret', store: rStore}));
+
 	console.log('connecting to mongoose for production');
 	mongoose.connect('mongodb://testing_user:kud05@dbh15.mongolab.com:27157/heroku_app563134');
 });
