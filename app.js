@@ -73,7 +73,7 @@ app.configure('production', function(){
   app.set('redisPass', redisAuth[1]);
 	
 	console.log('testing the redis connection ');
-	var rClient = redis.createClient(app.set('redisHost'), app.set('redisPort'));
+	var rClient = redis.createClient(app.set('redisPort'), app.set('redisHost'));
 	
 	rClient.on("error", function (err) {
 	    console.log("Redis Error " + err);
