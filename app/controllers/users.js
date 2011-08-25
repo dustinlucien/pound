@@ -65,7 +65,8 @@ UserController.prototype.create = function( req, res ) {
 				self._respond( res, {}, 500, msg );
 			} else {
 				//I don't think this is necessarily true.  uid on session should only be set at login.
-				//req.session.uid = doc._id;
+				//FIXME
+				req.session.uid = doc._id;
 				self._respond( res, doc );
 			}
 		});
