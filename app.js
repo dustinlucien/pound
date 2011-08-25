@@ -54,8 +54,30 @@ app.configure('development', function(){
 // production config
 app.configure('production', function(){
 	app.use(express.errorHandler());
-	console.log('connecting to Redis for sessions in production');
-	app.use(express.session({store: new RedisStore({host: 'filefish.redistogo.com', port: '9623', db: '0', pass: '1fa9a5e3f75d1620ae83ebcf05dd884d'}), secret: 'mmmm javascript'}));
+	console.log('connecting to Redis for sessions in production to ' + process.env.REDISTOGO_URL);
+	var redisUrl = url.parse(process.env.REDISTOGO_URL),
+	    redisAuth = redisUrl.auth.split(':');
+
+	console.log('redisUrl ' + process.env.REDISTOGO_URL);
+	console.log('redisHost ' + redisUrl.hostname);
+	console.log('redisPort ' + redisUrl.port);
+	console.log('redisDb ' + redisAuth[0]);
+	console.log('redisPass ' + redisAuth[1]);
+	
+  app.set('redisHost', redisUrl.hostname);
+  app.set('redisPort', redisUrl.port);
+  app.set('redisDb', redisAuth[0]);
+  app.set('redisPass', redisAuth[1]);
+	
+  app.use(express.session({
+      secret: 'super duper secret',
+      store: new RedisStore({
+          host: app.set('redisHost'),
+          port: app.set('redisPort'),
+          db: app.set('redisDb'),
+          pass: app.set('redisPass')
+      })
+  }));
 	console.log('connecting to mongoose for production');
 	mongoose.connect('mongodb://testing_user:kud05@dbh15.mongolab.com:27157/heroku_app563134');
 });
