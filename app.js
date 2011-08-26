@@ -89,12 +89,16 @@ app.configure('production', function(){
 	var rStore = new RedisStore({
       host: app.set('redisHost'),
       port: app.set('redisPort'),
-      db: app.set('redisDb'),
+      //db: app.set('redisDb'),
       pass: app.set('redisPass')});
 
 	rStore.client.on('error', function(err) {
 		console.log('error from connect-redis redis client connection');
 		console.log(err);
+	});
+	
+	rStore.client.on('ready', function() {
+		console.log('RedisStore redis connection is ready');
 	});
 	
   app.use(express.session({secret: 'super duper secret', store: rStore}));
