@@ -43,7 +43,6 @@ app.configure(function(){
 	app.use(express.methodOverride());
 	app.use(express.static(__dirname + '/public'));
 	app.use(AuthMiddleware);
-	app.use(app.router);
 });
 
 // development config
@@ -53,6 +52,9 @@ app.configure('development', function(){
 	app.use(express.session({store: new RedisStore, secret: 'mmmm javascript'}));
 	console.log('connecting to mongoose for development');
 	mongoose.connect('mongodb://localhost:27017/test');
+	
+	//put it here so that the session shit works.
+	app.use(app.router);
 });
 
 // production config
@@ -66,11 +68,7 @@ app.configure('production', function(){
 	console.log('redisPort ' + redisUrl.port);
 	console.log('redisDb ' + redisAuth[0]);
 	console.log('redisPass ' + redisAuth[1]);
-	
-  app.set('redisHost', redisUrl.hostname);
-  app.set('redisPort', redisUrl.port);
-  app.set('redisDb', redisAuth[0]);
-  app.set('redisPass', redisAuth[1]);
+
 	/*
 	console.log('testing the redis connection ');
 	var rClient = redis.createClient(app.set('redisPort'), app.set('redisHost'));
@@ -105,6 +103,9 @@ app.configure('production', function(){
 
 	console.log('connecting to mongoose for production');
 	mongoose.connect('mongodb://testing_user:kud05@dbh15.mongolab.com:27157/heroku_app563134');
+	
+	//put it here so that the session shit works.
+	app.use(app.router);
 });
 
 // generic 404 message
