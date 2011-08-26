@@ -71,7 +71,7 @@ app.configure('production', function(){
   app.set('redisPort', redisUrl.port);
   app.set('redisDb', redisAuth[0]);
   app.set('redisPass', redisAuth[1]);
-	
+	/*
 	console.log('testing the redis connection ');
 	var rClient = redis.createClient(app.set('redisPort'), app.set('redisHost'));
 	
@@ -85,12 +85,12 @@ app.configure('production', function(){
 	});
 	
 	rClient.set("string key", "string val", redis.print);
-	
+	*/
 	var rStore = new RedisStore({
-      host: app.set('redisHost'),
-      port: app.set('redisPort'),
-      //db: app.set('redisDb'),
-      pass: app.set('redisPass')});
+      host: redisUrl.hostname,
+      port: redisUrl.port,
+      pass: redisAuth[1]
+	});
 
 	rStore.client.on('error', function(err) {
 		console.log('error from connect-redis redis client connection');
