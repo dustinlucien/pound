@@ -87,6 +87,7 @@ app.configure('production', function(){
 	var rStore = new RedisStore({
       host: redisUrl.hostname,
       port: redisUrl.port,
+			db: redisAuth[0],
       pass: redisAuth[1]
 	});
 
