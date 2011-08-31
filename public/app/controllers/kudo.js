@@ -62,6 +62,7 @@ Ext.regController( 'Kudo', {
 
 						Ext.Msg.alert( 'Awesome!', 'Kudo sent' );
 					} else {
+						// TODO on Android 2.1 this alert is impossible to close...
 						Ext.Msg.alert( 'Uh oh!', obj.error.description );
 					}
 

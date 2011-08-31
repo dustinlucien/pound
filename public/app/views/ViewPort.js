@@ -10,14 +10,15 @@ kudos.views.ViewPort = Ext.extend( Ext.Panel, {
 		// instantiate panels
 		kudos.views.login_panel = new kudos.views.LoginPanel();
 		kudos.views.register_panel = new kudos.views.RegisterPanel();
-		kudos.views.send_kudo_panel = new kudos.views.SendKudoPanel();
+		//kudos.views.send_kudo_panel = new kudos.views.SendKudoPanel();
+		kudos.views.app_panel = new kudos.views.AppPanel();
 
-		// add our view component to the viewport
+		// add our view components to the viewport
 		Ext.apply( this, {
 			items: [
 				kudos.views.login_panel,
 				kudos.views.register_panel,
-				kudos.views.send_kudo_panel
+				kudos.views.app_panel
 			]
 		});
 
