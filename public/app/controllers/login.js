@@ -82,6 +82,7 @@ Ext.regController( 'Login', {
 				// app panel itself
 				if ( obj.session && obj.session.uid ) {
 					activeItem = 2;
+					kudos.data.uid = obj.session.uid;
 				}
 
 				// instantiate the viewport with the appropriate activeItem

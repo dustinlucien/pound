@@ -5,13 +5,12 @@ kudos.models.Kudo = Ext.regModel( 'Kudo', {
 	fields: [
 		{ name: '_id', type: 'string' },
 		{ name: 'message', type: 'string' },
-		{ name: 'recipient_email', type: 'string' },
-		{ name: 'category', type: 'string' }
-	],
-
-	associations: [
-		{ type: 'belongsTo', model: 'User', name: 'sender' },
-		{ type: 'belongsTo', model: 'User', name: 'recipient' }
+		{ name: 'category', type: 'string' },
+		{ name: 'sender', type: 'string' },
+		{ name: 'sender_name', type: 'string' },
+		{ name: 'recipient', type: 'string' },
+		{ name: 'recipient_name', type: 'string' },
+		{ name: 'recipient_email', type: 'string' }
 	],
 
 	validations: [
@@ -48,22 +47,25 @@ kudos.stores.Kudo = new Ext.data.Store({
 	data: [
 		{
 			message: 'Blah blah',
-			category: '1234',
-			sender: {
-				name: 'Bean Head'
-			},
-			recipient: {
-				name: 'Rice Face'
-			}
+			category: '4e54dd8955b2fa9f05000001',
+			sender: '4e5f86e697883b4e05000007',
+			sender_name: 'Andrew Peace',
+			recipient: '',
+			recipient_name: 'Blah Dude'
 		}, {
-			message: 'Hallo',
-			category: '1234',
-			sender: {
-				name: 'Blah Dude'
-			},
-			recipient: {
-				name: 'Neat Guy'
-			}
+			message: 'Blah blah',
+			category: '4e54dd8955b2fa9f05000001',
+			recipient: '4e5f86e697883b4e05000007',
+			recipient_name: 'Andrew Peace',
+			sender: '',
+			sender_name: 'Blah Dude'
+		}, {
+			message: 'Blah blah',
+			category: '4e54dd8955b2fa9f05000001',
+			recipient: '',
+			recipient_name: 'Ron Paul',
+			sender: '',
+			sender_name: 'Blah Dude'
 		}
 	]
 });
