@@ -8,13 +8,18 @@ Ext.regController( 'Login', {
 		});
 	},
 
-	login: function () {
+	login: function ( interaction ) {
 		// nab the login values
 		var login_panel = kudos.views.login_panel,
 			email_field = login_panel.down( 'field[name="email"]' )
 			email = email_field.getValue(),
 			password_field = login_panel.down( 'field[name="password"]' )
 			password = password_field.getValue();
+
+		if ( interaction.args && interaction.args.length > 0 ) {
+			email = interaction.args[ 0 ];
+			password = interaction.args[ 1 ] || password;
+		}
 
 		// disable fields
 		email_field.disable();
@@ -36,6 +41,10 @@ Ext.regController( 'Login', {
 				} else if ( obj.meta.code !== 200 ) {
 					Ext.Msg.alert( 'Whoops!', 'Unknown error. Please try again' );
 				} else {
+
+					// store this user's id
+					kudos.data.uid = obj.uid;
+
 					// slide on over to the app panel
 					kudos.views.viewport.setActiveItem( 2, {
 						type: 'slide',

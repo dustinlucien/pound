@@ -1,7 +1,6 @@
-kudos.views.ActivityPanel = Ext.extend( Ext.Panel, {
+kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 
-	layout: 'fit',
-
-	html: 'Activity!'
+	store: 'Kudo',
+	itemTpl: '{message}'
 
 });

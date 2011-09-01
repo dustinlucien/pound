@@ -6,6 +6,9 @@ Ext.regApplication({
 
 	// this function is called when the app is ready to launch
 	launch: function () {
+		// create a namespace for miscellaneous data
+		Ext.namespace( 'kudos.data' );
+
 		// dispatch to the Login controller to check whether the user
 		// is logged in and determine which panel to load
 		Ext.dispatch({

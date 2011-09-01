@@ -24,7 +24,7 @@ function login ( req, res ) {
 		// and respond with a success code
 		if ( docs.length === 1 ) {
 			req.session.uid = docs[ 0 ]._id;
-			res.send( JSON.stringify( { meta: { code: 200 } } ) );
+			res.send( JSON.stringify( { meta: { code: 200 }, uid: docs[ 0 ]._id } ) );
 		// otherwise, respond with a 'not found' code
 		} else {
 			res.send( JSON.stringify( { meta: { code: 404 } } ) );

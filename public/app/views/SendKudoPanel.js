@@ -103,7 +103,7 @@ kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
 
 		var cat_buttons = this._cat_buttons = [];
 
-		kudos.stores.KudoCategoryStore.load({
+		kudos.stores.KudoCategory.load({
 			// TODO error handling...
 			callback: function ( records ) {
 				var current_row = Ext.apply( { items: [] }, cat_row ),

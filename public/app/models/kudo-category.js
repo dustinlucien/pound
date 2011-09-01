@@ -11,7 +11,7 @@ kudos.models.KudoCategory = Ext.regModel( 'KudoCategory', {
 
 });
 
-kudos.stores.KudoCategoryStore = new Ext.data.Store({
+kudos.stores.KudoCategory = new Ext.data.Store({
 	model: 'KudoCategory',
 	autoLoad: false,
 

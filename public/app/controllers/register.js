@@ -50,7 +50,11 @@ Ext.regController( 'Register', {
 				success: function ( record, operation ) {
 					var obj = Ext.decode( operation.response.responseText );
 					if ( obj.meta.code === 200 ) {
-						kudos.views.viewport.setActiveItem( 2 );
+						Ext.dispatch({
+							controller: 'Login',
+							action: 'login',
+							args: [ email, password ]
+						});
 					} else {
 						var msg = 'Unknown error. Please try again';
 						if ( obj.error && obj.error.description ) {

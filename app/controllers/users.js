@@ -64,7 +64,6 @@ UserController.prototype.create = function( req, res ) {
 				}
 				self._respond( res, {}, 500, msg );
 			} else {
-				req.session.uid = doc._id;
 				self._respond( res, doc );
 			}
 		});

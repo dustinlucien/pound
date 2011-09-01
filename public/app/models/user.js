@@ -9,6 +9,11 @@ kudos.models.User = Ext.regModel( 'User', {
 		{ name: 'password', type: 'string' }
 	],
 
+	associations: [
+		{ type: 'hasMany', model: 'Kudo', name: 'kudos_sent' },
+		{ type: 'hasMany', model: 'Kudo', name: 'kudos_recieved' }
+	],
+
 	validations: [
 		{ type: 'presence', field: 'name' },
 		{ type: 'presence', field: 'email' },
@@ -19,7 +24,6 @@ kudos.models.User = Ext.regModel( 'User', {
 	proxy: {
 		type: 'rest',
 		url: '/users',
-		//noCache: false,
 		reader: {
 			type: 'json',
 			root: 'response.users.items'
