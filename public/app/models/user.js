@@ -31,3 +31,9 @@ kudos.models.User = Ext.regModel( 'User', {
 	}
 
 });
+
+kudos.stores.User = new Ext.data.Store({
+	storeId: 'User',
+	model: 'User',
+	autoLoad: true
+});

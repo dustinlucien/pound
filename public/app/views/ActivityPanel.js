@@ -22,3 +22,5 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 	}
 
 });
+
+Ext.reg('kudosActivityPanel', kudos.views.ActivityPanel);

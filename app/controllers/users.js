@@ -25,7 +25,6 @@ module.exports = UserController;
 //GET /users  ->  index
 UserController.prototype.index = function( req, res ) {
 	var self = this;
-
 	// TODO filter users
 	User.find({}, function( err, docs ) {
 		if ( err ) {

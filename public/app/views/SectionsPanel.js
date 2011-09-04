@@ -49,16 +49,16 @@ kudos.views.SectionsPanel = Ext.extend( Ext.Panel, {
 			}]
 		}];
 
-		var empty1 = new kudos.views.EmptyPanel(),
-			empty2 = new kudos.views.EmptyPanel(),
-			empty3 = new kudos.views.EmptyPanel();
+		var empty1 = new kudos.views.EmptyPanel();
 
+		kudos.views.user_profile_panel = new kudos.views.UserProfilePanel();
 		kudos.views.activity_panel = new kudos.views.ActivityPanel();
+		kudos.views.people_list_panel = new kudos.views.PeopleListPanel();
 
 		Ext.apply( this, {
 			dockedItems: dockedItems,
 			activeItem: 1,
-			items: [ empty1, kudos.views.activity_panel, empty2, empty3 ]
+			items: [ kudos.views.user_profile_panel, kudos.views.activity_panel, kudos.views.people_list_panel, empty1 ]
 		});
 
 		// always call the super method...
