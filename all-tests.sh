@@ -1,3 +1,4 @@
+node test/integration/resources.js
 node test/integration/controllers/users.test.js
 node test/integration/controllers/kudos.test.js
 node test/integration/models/user.test.js
