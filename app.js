@@ -14,7 +14,7 @@ var express = require('express')
 // For connecting to MongoDB
 	, mongoose = require('mongoose')
 // For storing sessions in Redis
-    , RedisStore = require('connect-redis')( express )
+  , RedisStore = require('connect-redis')( express )
 
 // Controllers
 	, UserController = require( './app/controllers/users' )
@@ -22,39 +22,71 @@ var express = require('express')
 	, KudoController = require( './app/controllers/kudos' )
 
 // Middleware
-    , AuthMiddleware = require( './app/lib/auth' );
+  , AuthMiddleware = require( './app/lib/auth' );
 	
-
 /**
  * App configuration
  */
 var app = module.exports = express.createServer();
 
-// general config
-app.configure(function(){
-	app.set('views', __dirname + '/views');
-	app.set('view engine', 'jade');
-	app.use(express.cookieParser());
-	app.use(express.session({store: new RedisStore, secret: 'mmmm javascript'}));
-	app.use(express.bodyParser());
-	app.use(express.methodOverride());
-	app.use(express.static(__dirname + '/public'));
-	app.use(AuthMiddleware);
-	app.use(app.router);
-});
+function productionRedisSetup() {
+	console.log('connecting to Redis for sessions in production to ' + process.env.REDISTOGO_URL);
+	var redisUrl = url.parse(process.env.REDISTOGO_URL),
+	    redisAuth = redisUrl.auth.split(':');
+
+	console.log('redisHost ' + redisUrl.hostname);
+	console.log('redisPort ' + redisUrl.port);
+	console.log('redisDb ' + redisAuth[0]);
+	console.log('redisPass ' + redisAuth[1]);
+	
+	var rStore = new RedisStore({
+      host: redisUrl.hostname,
+      port: redisUrl.port,
+			db: redisAuth[0],
+      pass: redisAuth[1]
+	});
+
+	rStore.client.on('error', function(err) {
+		console.log('error from connect-redis redis client connection');
+		console.log(err);
+	});
+
+	rStore.client.on('ready', function() {
+		console.log('RedisStore redis connection is ready');
+	});
+	
+	return rStore;	
+}
 
 // development config
 app.configure('development', function(){
+	app.set('views', __dirname + '/views');
+	app.set('view engine', 'jade');
+	app.use(express.logger('dev'));
+	app.use(express.bodyParser());
+	app.use(express.cookieParser());
+	app.use(express.methodOverride());
+	app.use(express.session({store: new RedisStore, secret: 'mmmm javascript'}));
+	app.use(app.router);
+	app.use(express.static(__dirname + '/public'));
+	app.use(AuthMiddleware);
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-	console.log('connecting to mongoose for development');
-	mongoose.connect('mongodb://testing_user:kud05@dbh30.mongolab.com:27307/development');
-	//mongoose.connect('mongodb://localhost:27017/test');
+	mongoose.connect('mongodb://localhost:27017/test');
 });
 
 // production config
 app.configure('production', function(){
+	app.set('views', __dirname + '/views');
+	app.set('view engine', 'jade');
+	app.use(express.logger('tiny'));
+	app.use(express.bodyParser());
+	app.use(express.cookieParser());
+	app.use(express.methodOverride());
+  app.use(express.session({secret: 'super duper secret', store: productionRedisSetup()}));
+	app.use(app.router);
+	app.use(express.static(__dirname + '/public'));
+	app.use(AuthMiddleware);	
 	app.use(express.errorHandler());
-	console.log('connecting to mongoose for production');
 	mongoose.connect('mongodb://testing_user:kud05@dbh15.mongolab.com:27157/heroku_app563134');
 });
 

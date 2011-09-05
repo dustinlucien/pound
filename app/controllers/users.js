@@ -24,6 +24,9 @@ module.exports = UserController;
 
 //GET /users  ->  index
 UserController.prototype.index = function( req, res ) {
+	console.log(req.params);
+	console.log(req.query);
+	
 	var self = this;
 	// TODO filter users
 	User.find({}, function( err, docs ) {
@@ -71,8 +74,10 @@ UserController.prototype.create = function( req, res ) {
 
 //GET /users/:user -> show
 UserController.prototype.show = function( req, res ) {
+	console.log(req.params);
+	console.log(req.query);
+	
 	var self = this;
-
 	if ( ! req.params.user ) {
 		self._respond( res, {}, 400 );
 	} else {

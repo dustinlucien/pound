@@ -3,7 +3,7 @@ kudos.views.PeopleListPanel = Ext.extend( Ext.List, {
 	layout: 'fit',
 	
 	//Get the data from the User object
-	store: 'User',
+	store: 'usersStore',
 	cls: 'user-profile',
 	
 	initComponent: function() {
@@ -15,6 +15,10 @@ kudos.views.PeopleListPanel = Ext.extend( Ext.List, {
 			);
 
 			Ext.apply(this, {itemTpl: tpl});
+			
+			this.on('render', function() {
+				this.store.load();
+			});
 			
 			kudos.views.PeopleListPanel.superclass.initComponent.apply( this, arguments );
 	}

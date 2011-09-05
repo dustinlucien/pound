@@ -1,6 +1,6 @@
 kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 
-	store: 'Kudo',
+	store: 'kudosStore',
 	cls: 'kudo-list',
 
 	initComponent: function () {

@@ -66,3 +66,4 @@ kudos.views.SectionsPanel = Ext.extend( Ext.Panel, {
 	}
 });
 
+Ext.reg('kudosSectionsPanel', kudos.views.SectionsPanel);
