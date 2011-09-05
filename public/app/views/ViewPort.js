@@ -10,20 +10,15 @@ kudos.views.ViewPort = Ext.extend( Ext.Panel, {
 		// instantiate panels
 		kudos.views.login_panel = new kudos.views.LoginPanel();
 		kudos.views.register_panel = new kudos.views.RegisterPanel();
-		//kudos.views.send_kudo_panel = new kudos.views.SendKudoPanel();
-		kudos.views.app_panel = new kudos.views.AppPanel();
-
+		
 		// add our view components to the viewport
-		Ext.apply( this, {
-			items: [
+		this.items = [
 				kudos.views.login_panel,
-				kudos.views.register_panel,
-				kudos.views.app_panel
-			]
-		});
-
+				kudos.views.register_panel
+			];
+			
 		// call the init method of the "superclass" of this component
 		kudos.views.ViewPort.superclass.initComponent.apply( this, arguments );
 	}
-
+	
 });

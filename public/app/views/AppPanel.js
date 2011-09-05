@@ -34,7 +34,7 @@ Ext.override(Ext.data.RestProxy, {
 });
 
 kudos.views.AppPanel = Ext.extend( Ext.Panel, {
-
+	fullscreen: true,
 	layout: 'fit',
 
 	initComponent: function () {

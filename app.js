@@ -71,6 +71,7 @@ app.configure('development', function(){
 	app.use(express.static(__dirname + '/public'));
 	app.use(AuthMiddleware);
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+	//mongoose.connect('mongodb://testing_user:kud05@dbh30.mongolab.com:27307/development');
 	mongoose.connect('mongodb://localhost:27017/test');
 });
 

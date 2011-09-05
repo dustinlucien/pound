@@ -44,21 +44,13 @@ Ext.regController( 'Login', {
 
 					// store this user's id
 					kudos.data.uid = obj.uid;
-
-					// slide on over to the app panel
-					kudos.views.viewport.setActiveItem( 2, {
-						type: 'slide',
-						direction: 'right',
-						reveal: true
-					});
-
-					// reset and enable the fields
-					email_field.reset();
-					password_field.reset();
+					console.log("set kudos.data.uid " + kudos.data.uid);
+					
+					kudos.views.app = new kudos.views.AppPanel();
+					
+					//destroy the viewport					
+					kudos.views.viewport.destroy();
 				}
-
-				email_field.enable();
-				password_field.enable();
 			},
 			failure: function ( response, opts ) {
 				email_field.enable();
@@ -75,20 +67,19 @@ Ext.regController( 'Login', {
 			success: function ( response, opts ) {
 				// by default, the activeItem in the viewport will be
 				// the login screen
-				var obj = Ext.decode( response.responseText ),
-					activeItem = 0;
+				var obj = Ext.decode( response.responseText );
 
-				// if the user is logged in, make the activeItem the
-				// app panel itself
 				if ( obj.session && obj.session.uid ) {
-					activeItem = 2;
+					// if the user is logged in, build the app
 					kudos.data.uid = obj.session.uid;
+					console.log("set kudos.data.uid " + kudos.data.uid);
+					
+					kudos.views.app = new kudos.views.AppPanel();
+				} else {
+					//else, build the login panels
+					kudos.views.viewport = new kudos.views.ViewPort();	
 				}
-
-				// instantiate the viewport with the appropriate activeItem
-				kudos.views.viewport = new kudos.views.ViewPort({
-					activeItem: activeItem
-				});
+				
 			},
 			failure: function ( response, opts ) {
 				// TODO we may want a different action here

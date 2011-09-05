@@ -13,6 +13,7 @@ kudos.views.SectionsPanel = Ext.extend( Ext.Panel, {
 
 		current_item = 1,
 
+		selfargs = arguments;
 		self = this;
 
 		function section_button_handler ( button ) {
@@ -48,9 +49,8 @@ kudos.views.SectionsPanel = Ext.extend( Ext.Panel, {
 				}]
 			}]
 		}];
-
-		var empty1 = new kudos.views.EmptyPanel();
-
+		
+		empty = new kudos.views.EmptyPanel();
 		kudos.views.user_profile_panel = new kudos.views.UserProfilePanel();
 		kudos.views.activity_panel = new kudos.views.ActivityPanel();
 		kudos.views.people_list_panel = new kudos.views.PeopleListPanel();
@@ -58,9 +58,9 @@ kudos.views.SectionsPanel = Ext.extend( Ext.Panel, {
 		Ext.apply( this, {
 			dockedItems: dockedItems,
 			activeItem: 1,
-			items: [ kudos.views.user_profile_panel, kudos.views.activity_panel, kudos.views.people_list_panel, empty1 ]
+			items: [ kudos.views.user_profile_panel, kudos.views.activity_panel, kudos.views.people_list_panel, empty ]
 		});
-
+		
 		// always call the super method...
 		kudos.views.SectionsPanel.superclass.initComponent.apply( this, arguments );
 	}
