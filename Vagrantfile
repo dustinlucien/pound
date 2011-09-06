@@ -16,8 +16,9 @@ Vagrant::Config.run do |config|
 
     # Forward a port from the guest to the host, which allows for outside
     # computers to access the VM, whereas host only networking does not.
-    backend_config.vm.forward_port "http", 3000, 3000 
-
+    backend_config.vm.forward_port "http3000", 3000, 3000
+		backend_config.vm.forward_port "http8080", 8080, 8080
+		
     # Enable provisioning with chef solo, specifying a cookbooks path (relative
     # to this Vagrantfile), and adding some recipes and/or roles.
 

@@ -1,7 +1,7 @@
 kudos.stores.Kudo = new Ext.data.Store({
-	storeId: 'kudosStore',
+	storeId: 'kudoStore',
 	model: 'Kudo',
-	autoLoad: true,
+	autoLoad: false,
 	/*
 	data: [
 		{
@@ -28,12 +28,34 @@ kudos.stores.Kudo = new Ext.data.Store({
 		}
 	],
 	*/
+	/*
 	listeners: {
 		load: {
-			fn : function(data) {
+			fn : function(store, records) {
 				console.log('inside kudosStore load store call');
-				console.log(data);
+				var i;
+				for (i = 0; i < records.length; i++) {
+					var kudo = records[i].data;
+					//get the sender and recipient data we'll be interested in
+					if (kudo) {
+						User = Ext.ModelMgr.getModel('User');
+						User.load(kudo.sender, {
+							success: function(user) {
+								var k = store.findRecord('sender', user.getId());
+								k.data.sender = user.data;
+							}
+						});
+					
+						User.load(kudo.recipient, {
+							success: function(user) {
+								var k = store.findRecord('recipient', user.getId());
+								k.data.recipient = user.data;
+							}
+						});
+					}
+				}
 			}
 		}
 	}
+	*/
 });

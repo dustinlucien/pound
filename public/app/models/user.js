@@ -7,14 +7,16 @@ kudos.models.User = Ext.regModel( 'User', {
 		{ name: 'name', type: 'string' },
 		{ name: 'email', type: 'email' },
 		{ name: 'password', type: 'string' },
-		{ name: 'kudos.have', type: 'int' }
+		{ name: 'kudos', type: 'object' }
 	],
 
+	/*
 	associations: [
 		{ type: 'hasMany', model: 'Kudo', name: 'kudos.sent' },
 		{ type: 'hasMany', model: 'Kudo', name: 'kudos.received' }
 	],
-
+	*/
+	
 	validations: [
 		{ type: 'presence', field: 'name' },
 		{ type: 'presence', field: 'email' },
@@ -29,7 +31,9 @@ kudos.models.User = Ext.regModel( 'User', {
 		sortParam: 'sort',
 		reader: {
 			type: 'json',
-			root: 'response.users.items'
+			root: 'response.users.items',
+			totalProperty: 'response.users.count',
+			successProperty: 'success'
 		}
 	}
 });

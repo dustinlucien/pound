@@ -72,8 +72,6 @@ Ext.regController( 'Login', {
 				if ( obj.session && obj.session.uid ) {
 					// if the user is logged in, build the app
 					kudos.data.uid = obj.session.uid;
-					console.log("set kudos.data.uid " + kudos.data.uid);
-					
 					kudos.views.app = new kudos.views.AppPanel();
 				} else {
 					//else, build the login panels

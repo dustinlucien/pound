@@ -6,10 +6,7 @@ kudos.views.UserProfilePanel = Ext.extend( Ext.Panel, {
 	//this.user is a user record that has been passed in on creation
 	//this.card is a boolean signifying is this should be a navigable card, or a single panel.
 	
-	initComponent: function() {
-		console.log('user in profilepanel');
-		console.log(this.user);
-		
+	initComponent: function() {		
 		if ((this.user == undefined) || (this.user.getId() == kudos.data.uid)) {
 			this.me = true;
 		} else {
@@ -59,27 +56,28 @@ kudos.views.UserProfilePanel = Ext.extend( Ext.Panel, {
 					success: function(user) {
 						console.log('successful data load of logged in user');
 						self.user = user;
-						user_profile_cmp.update(self.user.raw);
+						user_profile_cmp.update(self.user.data);
 					}
 				});
 			});
 		}
 		
 		//maybe add a send a kudo button?
-		if (!this.me) {
-			console.log('adding a send kudos button');
-			
+		if (!this.me) {			
 			var send_kudos_button = {
 				xtype: 'button',
 				ui: 'decline',
 				text: 'Give ' + this.user.data.name + ' a Kudo',
 				margin: '20 0',
+				scope: this,
 				handler: function () {
-					console.log('button click');
+					var sendKudoPanel = new kudos.views.SendKudoPanel({ user : this.user });
 					
-					this.ownerCt.setActiveItem(this.prevCard, {
+					this.ownerCt.setActiveItem(sendKudoPanel, {
+							type: 'slide',
+							direction: 'up',
               scope: this,
-              after: function(){
+              after: function() {
                   this.destroy();
               }
           });

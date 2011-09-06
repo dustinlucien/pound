@@ -12,8 +12,6 @@ kudos.views.SectionsPanel = Ext.extend( Ext.Panel, {
 		},
 
 		current_item = 1,
-
-		selfargs = arguments;
 		self = this;
 
 		function section_button_handler ( button ) {
