@@ -154,7 +154,7 @@ UserController.prototype.destroy = function( req, res ) {
 // GET /users/:user/kudos/sent -> only sent kudos
 // GET /users/:user/kudos/received -> only received kudos
 // Tested as part of the Kudos controller.  Should probably be in Kudos controller
-/*
+
 UserController.prototype.kudos = function( req, res ) {
 	var self = this;
 	
@@ -163,15 +163,18 @@ UserController.prototype.kudos = function( req, res ) {
 	} else if (! req.params.kudos ) {
 		self._respond( res, null, 400 );
 	} else {
-		Kudo.find( { req.params.kudos: req.params.user }, function( err, docs ) {
-			if (err) {
-				self._respond(res, null, 500, err);
-			} else {
-				//use the kudos responder for this one
-				var kudosController = require('./kudos');
-				kudosController.respond(res, docs, 200);
-			}
-		} );
+		var field;
+		
+		if (req.params.kudos == 'sent') {
+			field = 'sent';
+			
+		} else {
+			field = 'received';
+		}
+		Kudo.find({ field: req.params.user }, function(err, docs) {
+			var kudosController = require('./kudos');
+			kudosController.respond(res, docs, 200);
+		});
 	}
 };
-*/
+
