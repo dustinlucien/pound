@@ -196,7 +196,7 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			assert.equal( kudo.message, 'Good job' ); 
 		}
 	},
-	
+	/*
 	'WHEN I list the Kudos the sender has sent': {
 		topic: function() {
 			api.get( '/users/' + user1._id + '/sent', COOKIE_HEADER, this.callback );
@@ -228,7 +228,7 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			assert.equal( kudo.message, 'Good job' ); 
 		}
 	},
-	
+	*/
 	'WHEN I update the Kudo I created': {
 		topic: function () {
 			var payload = JSON.stringify({

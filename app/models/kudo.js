@@ -2,6 +2,7 @@ var async = require( 'async' ),
 	mongoose = require('mongoose'),
 	Like = require( './like' ),
 	Comment = require( './comment' ),
+	User = require('./user'),
 	ObjectId = mongoose.Schema.ObjectId,
 	timestamper = require('./timestamper');
 
@@ -30,8 +31,6 @@ Kudo.pre( 'save', function ( next ) {
 	var self = this;
 	
 	if ( self.isNew ) {
-		var User = require( './user' );
-		
 		async.parallel({
 			sender: function ( callback ) {
 				User.findById( self.sender, function ( err, sender ) {

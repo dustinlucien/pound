@@ -2,8 +2,8 @@
  * Dependencies
  */
 
-var User = require( '../models/user' )
-	, Kudo = require( '../models/kudo' );
+var User = require( '../models/user' );
+/*	, Kudo = require( '../models/kudo' );*/
 
 /**
  * Class def
