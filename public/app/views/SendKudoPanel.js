@@ -35,7 +35,8 @@ kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
 					controller: 'Kudo',
 					action: 'send',
 					body_panel: this._body_panel,
-					cat_buttons: this._cat_buttons
+					cat_buttons: this._cat_buttons,
+					view: this
 				});
 			}
 		};

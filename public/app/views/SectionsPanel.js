@@ -61,6 +61,14 @@ kudos.views.SectionsPanel = Ext.extend( Ext.Panel, {
 		
 		// always call the super method...
 		kudos.views.SectionsPanel.superclass.initComponent.apply( this, arguments );
+	},
+	
+	reloadActivityStream: function() {
+		var self = this;
+		self.setActiveItem( 1, {
+			type: 'slide',
+			direction: 'left'
+		});
 	}
 });
 

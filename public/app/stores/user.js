@@ -1,8 +1,9 @@
 kudos.stores.User = new Ext.data.Store({
 	model: 'User',
 	storeId: 'usersStore',
-	pageSize: 10,
-	autoLoad: false,
+	pageSize: 25,
+	autoLoad: false
+	/*
 	listeners: {
 		load: {
 			fn : function(data) {
@@ -11,4 +12,5 @@ kudos.stores.User = new Ext.data.Store({
 			}
 		}
 	}
+	*/
 });

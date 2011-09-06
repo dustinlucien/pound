@@ -1,6 +1,7 @@
 kudos.stores.Kudo = new Ext.data.Store({
 	storeId: 'kudoStore',
 	model: 'Kudo',
+	pageSize: 25,
 	autoLoad: false,
 	/*
 	data: [
@@ -29,6 +30,7 @@ kudos.stores.Kudo = new Ext.data.Store({
 	],
 	*/
 	/*
+	Moved this effort to the server
 	listeners: {
 		load: {
 			fn : function(store, records) {

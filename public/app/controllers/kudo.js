@@ -55,15 +55,22 @@ Ext.regController( 'Kudo', {
 					var obj = Ext.decode( operation.response.responseText );
 
 					if ( obj.meta.code === 200 ) {
-						email_field.reset();
 						message_field.reset();
 
 						self.reset_categories(options);
 
-						Ext.Msg.alert( 'Awesome!', 'Kudo sent' );
+						Ext.Msg.alert( 'Awesome!', 'Kudo sent', function() {
+							Ext.dispatch({
+								controller: 'Kudo',
+								action: 'list',
+								view: options.view
+							});
+						} );
 					} else {
 						// TODO on Android 2.1 this alert is impossible to close...
-						Ext.Msg.alert( 'Uh oh!', obj.error.description );
+						Ext.Msg.alert( 'Uh oh!', obj.error.description, function() {
+							
+						} );
 					}
 					message_field.enable();
 				},
@@ -74,6 +81,21 @@ Ext.regController( 'Kudo', {
 				}
 			});
 		}
+	},
+	
+	list: function(options) {
+		var store = Ext.StoreMgr.lookup('kudoStore');
+		store.load(function(records, operation, success) {
+				console.log("reloaded the new kudos");
+				console.log("success? " + success);
+				kudos.views.sections_panel.setActiveItem(1, {
+					type: 'slide',
+					direction: 'left',
+					after: function() {
+						options.view.destroy();
+					}
+				});
+			});
 	}
 
 });
