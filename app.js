@@ -99,6 +99,10 @@ app.configure('production', function(){
 	app.use(AuthMiddleware);	
 	app.use(express.errorHandler());
 	mongoose.connect('mongodb://testing_user:kud05@dbh15.mongolab.com:27157/heroku_app563134');
+	//Avoid crashes on Heroku
+	process.on('uncaughtException', function (err) {
+  		console.log('Caught exception: ' + err);
+	});
 });
 
 // generic 404 message
