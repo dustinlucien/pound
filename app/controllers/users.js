@@ -2,7 +2,8 @@
  * Dependencies
  */
 
-var User = require( '../models/user' );
+var User = require( '../models/user' )
+	, Kudo = require( '../models/kudo' );
 
 /**
  * Class def
@@ -122,7 +123,7 @@ UserController.prototype.update = function ( req, res ) {
 };
 
 //DELETE /users/:user -> delete
-UserController.prototype.destroy = function(req, res) {
+UserController.prototype.destroy = function( req, res ) {
 	// TODO also delete related stuff? maybe mark as inactive, instead...
 	var self = this;
 
@@ -144,9 +145,33 @@ UserController.prototype.destroy = function(req, res) {
 						// TODO only show certain fields
 						self._respond( res, doc );
 					}
-				});
+				} );
 			}
-		});
+		} );
 	}
 };
 
+// GET /users/:user/kudos/sent -> only sent kudos
+// GET /users/:user/kudos/received -> only received kudos
+// Tested as part of the Kudos controller.  Should probably be in Kudos controller
+/*
+UserController.prototype.kudos = function( req, res ) {
+	var self = this;
+	
+	if (! req.params.user ) {
+		self._respond( res, null, 400 );
+	} else if (! req.params.kudos ) {
+		self._respond( res, null, 400 );
+	} else {
+		Kudo.find( { req.params.kudos: req.params.user }, function( err, docs ) {
+			if (err) {
+				self._respond(res, null, 500, err);
+			} else {
+				//use the kudos responder for this one
+				var kudosController = require('./kudos');
+				kudosController.respond(res, docs, 200);
+			}
+		} );
+	}
+};
+*/

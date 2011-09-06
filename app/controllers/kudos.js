@@ -44,24 +44,13 @@ function collectUserData(doc, cb) {
 		if (err) {
 			cb(err, null);
 		} else {
-			doc.sender = trimUserObject(results.sender.toObject());
-			doc.recipient = trimUserObject(results.recipient.toObject());
-			doc.category = trimCategoryObject(results.category.toObject());
+			doc.sender = results.sender.toObject();
+			doc.recipient = results.recipient.toObject();
+			doc.category = results.category.toObject();
 			
 			cb(null, doc);	
 		}
 	});
-}
-
-function trimUserObject(user) {
-	user.kudos.sent = user.kudos.sent.length;
-	user.kudos.received = user.kudos.received.length;
-	
-	return user;
-}
-
-function trimCategoryObject(category) {
-	return category;
 }
 
 /*

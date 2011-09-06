@@ -45,60 +45,45 @@ vows.describe( 'Kudo Model Integration Tests' ).addBatch({
 				kudo.recipient = user2._id;
 				kudo.category = cats[ 0 ]._id;
 				kudo.message = 'Good job';
-				kudo.save( callback );
-			} );
-		},
-		'THEN the fields should be set correctly': function ( err, kudo ) {
-			assert.isNull( err );
-			assert.isNotNull( kudo._id );
-			assert.equal( String( kudo.sender ), String( user1._id ) );
-			assert.equal( String( kudo.recipient ), String( user2._id ) );
-			assert.equal( String( kudo.category ), String( cats[ 0 ]._id ) );
-			assert.equal( kudo.message, 'Good job' );
-
-			assert.isNotNull( kudo.created );
-			assert.isNotNull( kudo.updated );
-			
-			assert.isTrue( kudo.created.getTime() === kudo.updated.getTime() );
-		}
-	}
-}).addBatch({
-	
-	'WHEN I create a new Kudo with valid data': {
-		topic: function () {
-			var callback = this.callback;
-			setup( function () {
-				var kudo = new Kudo();
-				kudo.sender = user1._id;
-				kudo.recipient = user2._id;
-				kudo.category = cats[ 0 ]._id;
-				kudo.message = 'Good job';
 				kudo.save( function( err ) {
 					assert.isNull(err);
-					User.findById( user1._id, function ( err, sender ) {
-						assert.isNull( err );
-						User.findById( user2._id, function( err, recipient ) {
-							assert.isNull( err );
-							callback( kudo._id, sender, recipient );
+					User.findById( user1, function ( err, sender ) {
+						assert.isNull(err);
+						User.findById( user2, function( err, recipient ) {
+							assert.isNull(err);
+							callback( null, { kudo: kudo, sender: sender, recipient: recipient } );
 						} );
 					} );
 				} );
 			} );
 		},
-		'THEN the Users involved should have correct associations': function ( id, sender, recipient ) {
-			assert.isTrue( user1.equals( sender ) );
-			assert.isTrue( sender.sent.contains( id ) );
-			assert.isTrue( user2.equals( recipient ) );
-			assert.isTrue( recipient.received.contains( id ) );
+		'THEN the fields should be set correctly': function ( err, results ) {
+			assert.isNull( err );
+			assert.isNotNull( results.kudo._id );
+			assert.equal( String( results.kudo.sender ), String( user1._id ) );
+			assert.equal( String( results.kudo.recipient ), String( user2._id ) );
+			assert.equal( String( results.kudo.category ), String( cats[ 0 ]._id ) );
+			assert.equal( results.kudo.message, 'Good job' );
+
+			assert.isNotNull( results.kudo.created );
+			assert.isNotNull( results.kudo.updated );
+			
+			assert.isTrue( results.kudo.created.getTime() === results.kudo.updated.getTime() );
 		},
-		'AND the created and updated times should be properly set': function( id, sender, recipient ) {
-			//FIXME : move these checks to a timestamper unit test later
-			assert.isTrue( user1.created.getTime(), sender.created.getTime() );
-			assert.isTrue( sender.updated.getTime() > sender.created.getTime() );
+		'AND the Users involved should have correct kudos counts': function ( err, results ) {			
+			assert.deepEqual( user1._id, results.sender._id );
+			assert.equal( results.sender.kudos.sent, 1 );
+			assert.deepEqual( user2._id, results.recipient._id );
+			assert.equal( results.recipient.kudos.received, 1 );
+		},
+		'AND the created and updated times should be properly set': function( err, results ) {
+			//FIXME : move these checks to a timestamper unit test late
+			assert.isTrue( user1.created.getTime() === results.sender.created.getTime() );
+			assert.isTrue( results.sender.updated.getTime() > results.sender.created.getTime() );
 
 			//FIXME : move these checks to a timestamper unit test later
-			assert.isTrue( user2.created.getTime(), recipient.created.getTime() );
-			assert.isTrue( recipient.updated.getTime() > recipient.created.getTime() );		
+			assert.isTrue( user2.created.getTime() === results.recipient.created.getTime() );
+			assert.isTrue( results.recipient.updated.getTime() > results.recipient.created.getTime() );
 		}
 	}
 }).addBatch({
@@ -113,7 +98,7 @@ vows.describe( 'Kudo Model Integration Tests' ).addBatch({
 			assert.equal( kudo, undefined );
 		}
 	},
-
+	
 	teardown: teardown
 
 }).export( module );

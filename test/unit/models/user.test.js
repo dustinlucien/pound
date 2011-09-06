@@ -17,18 +17,19 @@ vows.describe( 'User Model Unit Tests' ).addBatch({
 			topic.db.model( 'User' ).modelName.should.equal( 'User' );
 		},
 		'and all the properties should be undefined': function ( topic ) {
+			
 			should.equal( undefined, topic.get( 'email' ) );
 			should.equal( undefined, topic.get( 'name' ) );
 			should.equal( undefined, topic.get( 'password' ) );
 			should.equal( undefined, topic.get( 'created' ) );
 			should.equal( undefined, topic.get( 'updated' ) );
 			
-			topic.get( 'have' ).should.be.an.instanceof( Number );
-			topic.get( 'sent' ).should.be.an.instanceof( MongooseArray );
-			topic.get( 'received' ).should.be.an.instanceof( MongooseArray );
+			topic.get( 'kudos.have' ).should.be.an.instanceof( Number );
+			topic.get( 'kudos.sent' ).should.be.an.instanceof( Number );
+			topic.get( 'kudos.received' ).should.be.an.instanceof( Number );
 		},
 		'Users should default to 5 kudos': function ( topic ) {
-			should.equal( 5, topic.get( 'have' ) );
+			should.equal( 5, topic.get( 'kudos.have' ) );
 		}
 	},
 	teardown: teardown

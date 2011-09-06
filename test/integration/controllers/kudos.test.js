@@ -196,7 +196,39 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			assert.equal( kudo.message, 'Good job' ); 
 		}
 	},
-
+	
+	'WHEN I list the Kudos the sender has sent': {
+		topic: function() {
+			api.get( '/users/' + user1._id + '/sent', COOKIE_HEADER, this.callback );
+		},
+		'THEN I should get back a 200 code': function ( err, res, body ) {
+		},
+		'THEN I should get the same Kudo back': function (err, res, body ) {
+			var kudo = JSON.parse( body ).response.kudos.items[ 0 ];
+			assert.isNotNull( kudo._id );
+			assert.equal( kudo.sender._id, String( user1._id ) );
+			assert.equal( kudo.recipient._id, String( user2._id ) );
+			assert.equal( kudo.category._id, String( cats[ 0 ]._id ) );
+			assert.equal( kudo.message, 'Good job' ); 
+		}
+	},
+	
+	'WHEN I list the Kudos the sender has received': {
+		topic: function() {
+			api.get( '/users/' + user2._id + '/received', COOKIE_HEADER, this.callback );
+		},
+		'THEN I should get back a 200 code': function ( err, res, body ) {
+		},
+		'THEN I should get the same Kudo back': function (err, res, body ) {
+			var kudo = JSON.parse( body ).response.kudos.items[ 0 ];
+			assert.isNotNull( kudo._id );
+			assert.equal( kudo.sender._id, String( user1._id ) );
+			assert.equal( kudo.recipient._id, String( user2._id ) );
+			assert.equal( kudo.category._id, String( cats[ 0 ]._id ) );
+			assert.equal( kudo.message, 'Good job' ); 
+		}
+	},
+	
 	'WHEN I update the Kudo I created': {
 		topic: function () {
 			var payload = JSON.stringify({

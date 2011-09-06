@@ -1,6 +1,5 @@
 var mongoose = require( 'mongoose' ),
 	ObjectId = mongoose.Schema.ObjectId,
-	Kudo = require( './kudo' ),
 	timestamper = require('./timestamper');;
 
 var crypto = require( 'crypto' );
@@ -28,13 +27,23 @@ var User = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	have: {
-		type: Number,
-		min: 0,
-		"default": 5
-	},
-	sent: [ ObjectId ],
-	received: [ ObjectId ]
+	kudos: {
+		have: {
+			type: Number,
+			min: 0,
+			default: 5
+		},
+		sent: {
+			type: Number, 
+			min: 0,
+			default: 0
+		},
+		received: {
+			type: Number, 
+			min: 0,
+			default: 0
+		}
+	}
 });
 
 User.plugin( timestamper );

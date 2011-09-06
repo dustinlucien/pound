@@ -4,8 +4,8 @@ var async = require( 'async' ),
 var User = require( '../../app/models/user' ),
 	Kudo = require( '../../app/models/kudo' );
 
-var mongo_uri = exports.mongo_uri = 'mongo://127.0.0.1:27017/test';
-	//mongo_uri = exports.mongo_uri = 'mongodb://testing_user:kud05@dbh30.mongolab.com:27307/development';
+var //mongo_uri = exports.mongo_uri = 'mongo://127.0.0.1:27017/test';
+	mongo_uri = exports.mongo_uri = 'mongodb://testing_user:kud05@dbh30.mongolab.com:27307/development';
 
 mongoose.connect( mongo_uri );
 

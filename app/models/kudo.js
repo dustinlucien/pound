@@ -26,34 +26,37 @@ var Kudo = new mongoose.Schema({
 	comments: [ Comment ]
 });
 
-Kudo.post( 'save', function ( next ) {
+Kudo.pre( 'save', function ( next ) {
 	var self = this;
-
-	if ( this.created.getTime() ===  this.updated.getTime() ) {
+	
+	if ( self.isNew ) {
 		var User = require( './user' );
-
-		async.parallel([
-			function ( callback ) {
+		
+		async.parallel({
+			sender: function ( callback ) {
 				User.findById( self.sender, function ( err, sender ) {
 					if ( err ) {
 						callback( err );
 					} else {
-						sender.sent.push( self._id );
+						sender.kudos.have -= 1;
+						sender.kudos.sent += 1;
 						sender.save( callback );
 					}
 				});
 			},
-			function ( callback ) {
+			recipient: function ( callback ) {
 				User.findById( self.recipient, function ( err, recipient ) {
 					if ( err ) {
 						callback( err );
 					} else {
-						recipient.received.push( self._id );
+						recipient.kudos.received += 1;
 						recipient.save( callback );
 					}
 				});
 			}
-			]);
+		}, function(err, results) {
+			next();
+		});
 	}
 });
 
