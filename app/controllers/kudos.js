@@ -72,7 +72,7 @@ function trimCategoryObject(category) {
 KudoController.prototype.respond = function ( res, docs, code, err ) {
 	var self = this;
 	
-	if (err) {
+	if (err || (docs == null)) {
 		self._respond(res, null, code, err);
 	} else {
 		if ( ! ( docs instanceof Array ) ) {
