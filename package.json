@@ -3,7 +3,7 @@
   , "version": "0.0.1"
   , "private": true
   , "dependencies": {
-		, "async": ">=0.1.9"
+      "async": ">=0.1.9"
     , "express": ">= 2.3.11"
     , "express-resource": ">= 0.2.1"
     , "jade": ">= 0.0.1"
