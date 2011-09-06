@@ -89,7 +89,7 @@ app.configure('development', function(){
 app.configure('production', function(){
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'jade');
-	app.use(express.logger());
+	app.use(express.logger(':method :url :status :res[content-length] - :response-time ms'));
 	app.use(express.bodyParser());
 	app.use(express.cookieParser());
 	app.use(express.methodOverride());
