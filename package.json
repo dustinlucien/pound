@@ -1,21 +1,21 @@
 {
-    "name": "kudos-restful-service"
-  , "version": "0.0.1"
-  , "private": true
-  , "dependencies": {
-      "async": ">=0.1.9"
-    , "express": ">= 2.3.11"
-    , "express-resource": ">= 0.2.1"
-    , "jade": ">= 0.0.1"
-    , "request": ">= 1.9.5"
-    , "mongoose": ">= 1.5.0"
-    , "hiredis": ">= 0.1.12"
-    , "redis": ">= 0.6.4"
-    , "connect-redis": ">= 1.0.7"
-    , "natural": ">= 0.0.32"
+	"name": "kudos-restful-service"
+	, "version": "0.0.1"
+	, "private": true
+	, "dependencies": {
+		"async": ">=0.1.9"
+		, "express": ">= 2.3.11"
+		, "express-resource": ">= 0.2.1"
+		, "jade": ">= 0.0.1"
+		, "request": ">= 1.9.5"
+		, "mongoose": ">= 1.5.0"
+		, "hiredis": ">= 0.1.12"
+		, "redis": ">= 0.6.4"
+		, "connect-redis": ">= 1.0.7"
+		, "natural": ">= 0.0.32"
 		, "should": ">= 0.2.1"
-  }
-  , "devDependencies": {
-    "vows": ">= 0.5.9"
-  }
+	}
+	, "devDependencies": {
+		"vows": ">= 0.5.9"
+	}
 }

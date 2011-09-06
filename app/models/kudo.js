@@ -35,9 +35,7 @@ Kudo.post('save', function(next) {
 						next(err);
 					} else {
 						user.kudos.sent.push(this);
-						user.save(function(err) {
-							callback(err, null);
-						});
+						user.save(callback);
 					}
 				});
 			},
@@ -47,9 +45,7 @@ Kudo.post('save', function(next) {
 						callback(err, null);
 					} else {
 						user.kudos.received.push(this);
-						user.save(function(err) {
-							callback(err, null);
-						});
+						user.save(callback);
 					}
 				});
 			}
