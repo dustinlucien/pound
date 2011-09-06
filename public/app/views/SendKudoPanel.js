@@ -1,31 +1,8 @@
 kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
-	// let items take up all available with and their required height
+	// let items take up all available width and their required height
 	layout: 'fit',
 
-	// dock a toolbar that displays a title
-	dockedItems: [{
-		xtype: 'toolbar',
-		title: 'Kudos',
-		// left-align the toolbar text
-		titleCls: 'x-toolbar-title toolbar-title-left'
-	}],
-
 	initComponent: function () {
-
-		var html_email = {
-			html: 'Enter an email address to receive the Kudo',
-			padding: '10 0 0 5'
-		};
-
-		var fieldset_email = {
-			xtype: 'fieldset',
-			margin: '10 0 10 0',
-			items: [{
-				xtype: 'emailfield',
-				name: 'recipient_email',
-				placeHolder: 'email'
-			}]
-		};
 
 		var html_message = {
 			html: 'This is a Kudo for',
@@ -52,23 +29,31 @@ kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
 			ui: 'decline',
 			text: 'Send this Kudo',
 			margin: '20 0',
+			scope: this,
 			handler: function () {
 				Ext.dispatch({
 					controller: 'Kudo',
-					action: 'send'
+					action: 'send',
+					body_panel: this._body_panel,
+					cat_buttons: this._cat_buttons
 				});
 			}
 		};
 
+		var hidden_recipient = {
+			xtype: 'hiddenfield',
+			name: 'recipient',
+			value: this.user.getId()
+		};
+		
 		// TODO indicate that categories are loading
 		var body_panel = new kudos.views.KudosFormPanel({
 			items: [
-				html_email,
-				fieldset_email,
 				html_message,
 				fieldset_message,
 				html_category,
-				send_button
+				send_button,
+				hidden_recipient
 			]
 		});
 
@@ -85,7 +70,9 @@ kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
 			Ext.dispatch({
 				controller: 'Kudo',
 				action: 'select_category',
-				args: [ button ]
+				args: [ button ],
+				body_panel: this._body_panel,
+				cat_buttons: this._cat_buttons
 			});
 		};
 
@@ -103,7 +90,9 @@ kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
 
 		var cat_buttons = this._cat_buttons = [];
 
-		kudos.stores.KudoCategoryStore.load({
+		var kudoCategoryStore = Ext.StoreMgr.lookup('kudoCategoryStore');
+		
+		kudoCategoryStore.load({
 			// TODO error handling...
 			callback: function ( records ) {
 				var current_row = Ext.apply( { items: [] }, cat_row ),

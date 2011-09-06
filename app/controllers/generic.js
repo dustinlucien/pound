@@ -52,7 +52,7 @@ GenericController.prototype._respond = function ( res, docs, code, err ) {
 		};
 	}
 
-	//output.success = success;
+	output.success = success;
 
 	output.meta = { code: code };
 

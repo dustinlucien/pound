@@ -25,7 +25,6 @@ module.exports = UserController;
 //GET /users  ->  index
 UserController.prototype.index = function( req, res ) {
 	var self = this;
-
 	// TODO filter users
 	User.find({}, function( err, docs ) {
 		if ( err ) {
@@ -64,9 +63,6 @@ UserController.prototype.create = function( req, res ) {
 				}
 				self._respond( res, {}, 500, msg );
 			} else {
-				//I don't think this is necessarily true.  uid on session should only be set at login.
-				//FIXME
-				req.session.uid = doc._id;
 				self._respond( res, doc );
 			}
 		});
@@ -76,7 +72,6 @@ UserController.prototype.create = function( req, res ) {
 //GET /users/:user -> show
 UserController.prototype.show = function( req, res ) {
 	var self = this;
-
 	if ( ! req.params.user ) {
 		self._respond( res, {}, 400 );
 	} else {

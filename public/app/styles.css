@@ -23,3 +23,28 @@
 .small-text {
 	font-size: small;
 }
+
+/* For text links */
+.link-text {
+	color: #3f94ff;
+	font-weight: bold;
+}
+
+/* Activity feed */
+.kudo-item {
+	line-height: 1.5em;
+	min-height: 60px;
+	padding: 10px 15px;
+}
+
+.kudo-item.odd {
+	background: #e9f5ff;
+}
+
+.kudo-item.even {
+	background: #ffebeb;
+}
+
+.x-list.kudo-list .x-list-item {
+	padding: 0;
+}

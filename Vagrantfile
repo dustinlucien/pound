@@ -12,12 +12,13 @@ Vagrant::Config.run do |config|
 
     # Assign this VM to a host only network IP, allowing you to access it
     # via the IP.
-    backend_config.vm.network "192.168.2.10"
+    backend_config.vm.network "192.168.3.10"
 
     # Forward a port from the guest to the host, which allows for outside
     # computers to access the VM, whereas host only networking does not.
-    backend_config.vm.forward_port "http", 3000, 3000 
-
+    backend_config.vm.forward_port "http3000", 3000, 3000
+		backend_config.vm.forward_port "http8080", 8080, 8080
+		
     # Enable provisioning with chef solo, specifying a cookbooks path (relative
     # to this Vagrantfile), and adding some recipes and/or roles.
 

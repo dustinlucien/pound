@@ -10,17 +10,3 @@ kudos.models.KudoCategory = Ext.regModel( 'KudoCategory', {
 	]
 
 });
-
-kudos.stores.KudoCategoryStore = new Ext.data.Store({
-	model: 'KudoCategory',
-	autoLoad: false,
-
-	proxy: {
-		type: 'rest',
-		url: '/kudo_categories',
-		reader: {
-			type: 'json',
-			root: 'response.categories.items'
-		}
-	}
-});
