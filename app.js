@@ -15,9 +15,11 @@ var express = require('express')
 	, mongoose = require('mongoose')
 // For interacting directly with redis	
 	, redis = require('redis')
+	
+//url for manipulating urls	
+	, url = require('url')
 // For storing sessions in Redis
   , RedisStore = require('connect-redis')( express )
-
 // Controllers
 	, UserController = require( './app/controllers/users' )
 	, KudoCategoryController = require( './app/controllers/kudo-categories' )
