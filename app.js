@@ -35,8 +35,14 @@ var app = module.exports = express.createServer();
 
 function productionRedisSetup() {
 	console.log('connecting to Redis for sessions in production to ' + process.env.REDISTOGO_URL);
-	var redisUrl = url.parse(process.env.REDISTOGO_URL),
-	    redisAuth = redisUrl.auth.split(':');
+	var redisUrl = process.env.REDISTOGO_URL;
+	
+	if (!redisUrl) {
+		redisUrl = "redis://redistogo:1fa9a5e3f75d1620ae83ebcf05dd884d@filefish.redistogo.com:9623/"
+	}
+	
+	redisUrl = url.parse(redisUrl);
+	var redisAuth = redisUrl.auth.split(':');
 
 	console.log('redisHost ' + redisUrl.hostname);
 	console.log('redisPort ' + redisUrl.port);
