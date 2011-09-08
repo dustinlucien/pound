@@ -24,8 +24,8 @@ vows.describe( 'User Model Unit Tests' ).addBatch({
 			topic.get( 'kudos.sent' ).should.be.an.instanceof( MongooseArray );
 			topic.get( 'kudos.received' ).should.be.an.instanceof( MongooseArray );
 		},
-		'Users should default to 25 kudos': function ( topic ) {
-			should.equal( 25, topic.get( 'kudos.have' ) );
+		'Users should default to 5 kudos': function ( topic ) {
+			should.equal( 5, topic.get( 'kudos.have' ) );
 		}
 	}
 }).export( module );

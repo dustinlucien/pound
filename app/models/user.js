@@ -31,7 +31,7 @@ var User = new mongoose.Schema({
 		have: {
 			type: Number,
 			min: 0,
-			"default": 4
+			"default": 5
 		},
 		sent: [ Kudo ],
 		received: [ Kudo ]
