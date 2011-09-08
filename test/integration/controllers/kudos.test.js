@@ -30,8 +30,8 @@ function setup ( cb ) {
 				password: '1234'
 			});
 			user2 = new User({
-				email: 'user1@user.com',
-				name: 'User 1',
+				email: 'user2@user.com',
+				name: 'User 2',
 				password: '1234'
 			});
 			user1.save( function () {
@@ -153,9 +153,9 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			var kudo = JSON.parse( body ).response.kudos.items[ 0 ];
 
 			assert.isNotNull( kudo._id );
-			assert.equal( kudo.sender, String( user1._id ) );
-			assert.equal( kudo.recipient, String( user2._id ) );
-			assert.equal( kudo.category, String( cats[ 0 ]._id ) );
+			assert.equal( kudo.sender._id, String( user1._id ) );
+			assert.equal( kudo.recipient._id, String( user2._id ) );
+			assert.equal( kudo.category._id, String( cats[ 0 ]._id ) );
 			assert.equal( kudo.message, 'Good job' ); 
 
 			KUDO = kudo._id;
@@ -190,9 +190,9 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			var kudo = JSON.parse( body ).response.kudos.items[ 0 ];
 
 			assert.isNotNull( kudo._id );
-			assert.equal( kudo.sender, String( user1._id ) );
-			assert.equal( kudo.recipient, String( user2._id ) );
-			assert.equal( kudo.category, String( cats[ 0 ]._id ) );
+			assert.equal( kudo.sender._id, String( user1._id ) );
+			assert.equal( kudo.recipient._id, String( user2._id ) );
+			assert.equal( kudo.category._id, String( cats[ 0 ]._id ) );
 			assert.equal( kudo.message, 'Good job' ); 
 		}
 	},

@@ -77,12 +77,12 @@ app.configure('development', function(){
 	app.use(express.cookieParser());
 	app.use(express.methodOverride());
 	app.use(express.session({store: new RedisStore, secret: 'mmmm javascript'}));
+	app.use(AuthMiddleware);
 	app.use(app.router);
 	app.use(express.static(__dirname + '/public'));
-	app.use(AuthMiddleware);
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-	//mongoose.connect('mongodb://testing_user:kud05@dbh30.mongolab.com:27307/development');
-	mongoose.connect('mongodb://localhost:27017/test');
+	mongoose.connect('mongodb://testing_user:kud05@dbh30.mongolab.com:27307/development');
+	//mongoose.connect('mongodb://localhost:27017/test');
 });
 
 // production config
@@ -94,9 +94,9 @@ app.configure('production', function(){
 	app.use(express.cookieParser());
 	app.use(express.methodOverride());
   app.use(express.session({store: productionRedisSetup(), secret: 'super duper secret'}));
+	app.use(AuthMiddleware);	
 	app.use(app.router);
 	app.use(express.static(__dirname + '/public'));
-	app.use(AuthMiddleware);	
 	app.use(express.errorHandler());
 	mongoose.connect('mongodb://testing_user:kud05@dbh15.mongolab.com:27157/heroku_app563134');
 	//Avoid crashes on Heroku
