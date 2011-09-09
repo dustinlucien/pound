@@ -25,44 +25,42 @@ var Kudo = new mongoose.Schema({
 	comments: [ Comment ]
 });
 
-Kudo.plugin(timestamper);
-
 Kudo.post('save', function(next) {
-	User = require('./user');
-	async.parallel([
-		function(callback) {
-			User.findById(this.sender, function(err, user) {
-				if (err) {
-					next(err);
-				} else {
-					if (user.kudos.sent.updated === user.kudos.sent.created) {
+	if (this.isNew) {
+		User = require('./user');
+		async.parallel([
+			function(callback) {
+				User.findById(this.sender, function(err, user) {
+					if (err) {
+						next(err);
+					} else {
 						user.kudos.sent.push(this);
 						user.save(function(err) {
 							callback(err, null);
 						});
 					}
-				}
-			});
-		},
-		function(callback) {
-			User.findById(this.recipient, function(err, user) {
-				if (err) {
-					callback(err, null);
-				} else {
-					if (user.kudos.received.updated === user.kudos.received.created) {
+				});
+			},
+			function(callback) {
+				User.findById(this.recipient, function(err, user) {
+					if (err) {
+						callback(err, null);
+					} else {
 						user.kudos.received.push(this);
 						user.save(function(err) {
 							callback(err, null);
 						});
 					}
-				}
-			});
-		}
-		], function(err, results) {
-			next(err);
-		}
-	);
+				});
+			}
+			], function(err, results) {
+				next(err);
+			}
+		);
+	}
 });
+
+Kudo.plugin(timestamper);
 
 mongoose.model( 'Kudo', Kudo );
 
