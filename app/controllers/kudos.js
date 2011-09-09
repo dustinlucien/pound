@@ -54,8 +54,6 @@ function collectUserData(doc, cb) {
 }
 
 function trimUserObject(user) {
-	delete user.likes;
-	delete user.comments;
 	user.kudos.sent = user.kudos.sent.length;
 	user.kudos.received = user.kudos.received.length;
 	
@@ -168,7 +166,40 @@ KudoController.prototype.create = function( req, res ) {
 					if ( err ) {
 						self.respond( res, {}, 500, 'Unknown error' );
 					} else {
-						self.respond( res, doc );
+						async.parallel([
+							sender: function(callback) {
+								User.findById(this.sender, function(err, user) {
+									if (err) {
+										callback(err, null);
+									} else {
+										user.kudos.sent.push(this);
+										user.save(function(err) {
+											callback(err, null);
+										});
+									}
+								});
+							},
+							recipient: function(callback) {
+								User.findById(this.recipient, function(err, user) {
+									if (err) {
+										callback(err, null);
+									} else {
+										user.kudos.received.push(this);
+										user.save(function(err) {
+											callback(err, null);
+										});
+									}
+								});
+							}
+							], function(err, results) {
+								if (err) {
+									console.log(err);
+									self.respond( res, {}, 500, 'Unable to save Kudos associations with User' );
+								} else {
+									self.respond( res, doc );
+								}
+							});
+						}
 					}
 				});
 			}
