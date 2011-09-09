@@ -8,6 +8,9 @@ kudos.views.UserProfilePanel = Ext.extend( Ext.Panel, {
 	//this.card is a boolean signifying is this should be a navigable card, or a single panel.
 	
 	initComponent: function() {		
+
+		var self = this;
+
 		// determine whether this panel is for the
 		// current user
 		if ( ( this.user == undefined ) || ( this.user.getId() == kudos.data.uid ) ) {
@@ -56,7 +59,6 @@ kudos.views.UserProfilePanel = Ext.extend( Ext.Panel, {
 		if ( this.user ) {
 			user_profile_cmp.data = this.user.raw;
 		} else {
-			var self = this;
 			this.on( 'render', function () {
 				User = Ext.ModelMgr.getModel( 'User' );
 				User.load( kudos.data.uid, {
@@ -78,7 +80,10 @@ kudos.views.UserProfilePanel = Ext.extend( Ext.Panel, {
 				margin: '20 0',
 				scope: this,
 				handler: function () {
-					var sendKudoPanel = new kudos.views.SendKudoPanel({ user : this.user });
+
+					var sendKudoPanel = new kudos.views.SendKudoPanel({
+						user : this.user
+					});
 					
 					this.ownerCt.setActiveItem( sendKudoPanel, {
 						type: 'slide',

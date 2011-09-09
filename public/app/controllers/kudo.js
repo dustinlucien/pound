@@ -57,15 +57,17 @@ Ext.regController( 'Kudo', {
 					if ( obj.meta.code === 200 ) {
 						message_field.reset();
 
-						self.reset_categories(options);
+						self.reset_categories( options );
 
 						Ext.Msg.alert( 'Awesome!', 'Kudo sent', function() {
 							Ext.dispatch({
 								controller: 'Kudo',
 								action: 'list',
 								scope: options.scope,
-								callback: options.callback
-								//view: options.view
+								callback: function () {
+									kudos.views.people_list_panel.setActiveItem( 0 );
+									options.callback();
+								}
 							});
 						} );
 					} else {
