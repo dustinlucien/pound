@@ -40,7 +40,7 @@ kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
 					cat_buttons: this._cat_buttons,
 					callback: function () {
 						self.destroy();
-						console.log( self );
+						kudos.views.people_list_panel.setActiveItem( 0 );
 					}
 				});
 			}
