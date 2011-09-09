@@ -27,25 +27,26 @@ kudos.views.SectionsPanel = Ext.extend( Ext.Panel, {
 			}
 		}
 
+		var buttons = this.buttons = new Ext.SegmentedButton({
+			allowPress: true,
+			width: '100%',
+			defaults: { handler: section_button_handler, flex: 1 },
+			items: [{
+				text: 'You'
+			},{
+				text: 'Activity',
+				pressed: true
+			},{
+				text: 'People'
+			},{
+				text: 'Settings'
+			}]
+		});
+
 		var dockedItems = [{
 			xtype: 'toolbar',
 			dock: 'bottom',
-			items: [{
-				xtype: 'segmentedbutton',
-				allowPress: true,
-				width: '100%',
-				defaults: { handler: section_button_handler, flex: 1 },
-				items: [{
-					text: 'You'
-				},{
-					text: 'Activity',
-					pressed: true
-				},{
-					text: 'People'
-				},{
-					text: 'Settings'
-				}]
-			}]
+			items: [ buttons ]
 		}];
 		
 		empty = new kudos.views.EmptyPanel();

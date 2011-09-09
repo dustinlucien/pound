@@ -66,6 +66,7 @@ Ext.regController( 'Kudo', {
 								scope: options.scope,
 								callback: function () {
 									kudos.views.people_list_panel.setActiveItem( 0 );
+									kudos.views.sections_panel.buttons.setPressed( 1, true );
 									options.callback();
 								}
 							});
