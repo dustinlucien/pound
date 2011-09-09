@@ -1,6 +1,10 @@
 var assert = require( 'assert' ),
+	async = require( 'async' ),
 	request = require( 'request' ),
 	mongoose = require( 'mongoose' );
+
+var User = require( '../app/models/user' ),
+	Kudo = require( '../app/models/kudo' );
 
 var api_uri = exports.api_uri = 'http://localhost:' + ( process.env[ 'PORT' ] || 3000 ) + '/',
 	//mongo_uri = exports.mongo_uri = 'mongo://127.0.0.1:27017/test';
@@ -18,7 +22,7 @@ var merge = exports.merge = function ( header1, header2 ) {
 }
 
 function checkResponse ( err, res, body, callback ) {
-	//assert.isNull( err );
+	assert.isNull( err );
 	assert.isNotNull( res );
 	callback( err, res, body );
 }
@@ -65,5 +69,14 @@ var api = exports.api = {
 mongoose.connect( mongo_uri );
 
 var teardown = exports.teardown = function () {
-	mongoose.connections[ 0 ].close();
+	async.parallel({
+		user: function ( callback ) {
+			User.remove( {}, callback );
+		},
+		kudo: function ( callback ) {
+			Kudo.remove( {}, callback );
+		}
+	}, function ( err, result ) {
+		mongoose.connections[ 0 ].close();
+	});
 };
