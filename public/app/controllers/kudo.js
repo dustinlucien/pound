@@ -1,6 +1,6 @@
 Ext.regController( 'Kudo', {
 
-	reset_categories: function (options) {
+	reset_categories: function ( options ) {
 		var cat_buttons = options.cat_buttons;
 		Ext.each( cat_buttons, function ( button ) {
 			button.removeCls( 'bright-green' );
@@ -21,7 +21,7 @@ Ext.regController( 'Kudo', {
 		cat_button.removeCls( 'bright-blue' );
 	},
 
-	send: function (options) {
+	send: function ( options ) {
 		var self = this,
 			panel = options.body_panel,
 			message_field = panel.down( 'field[name="message"]' ),
@@ -69,7 +69,7 @@ Ext.regController( 'Kudo', {
 					} else {
 						// TODO on Android 2.1 this alert is impossible to close...
 						Ext.Msg.alert( 'Uh oh!', obj.error.description, function() {
-							
+							// TODO why is this callback given?
 						} );
 					}
 					message_field.enable();
