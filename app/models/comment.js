@@ -4,7 +4,17 @@ var mongoose = require('mongoose'),
 var Comment = new mongoose.Schema({
 	sender: ObjectId,
 	message: String,
-	created: Date
+	created: { type: Date, default: Date.now },
+	updated: Date
+});
+
+Comment.pre('save', function(next) {
+	if (this.updated == undefined) {
+		this.updated = this.created;
+	} else {
+		this.updated = Date.now;
+	}
+	next();
 });
 
 mongoose.model( 'Comment', Comment );

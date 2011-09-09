@@ -7,7 +7,18 @@ var KudoCategory = new mongoose.Schema({
 		unique: true
 	},
 	shoutout: String,
-	description: String
+	description: String,
+	created: { type: Date, default: Date.now },
+	updated: Date
+});
+
+KudoCategory.pre('save', function(next) {
+	if (this.updated == undefined) {
+		this.updated = this.created;
+	} else {
+		this.updated = Date.now;
+	}
+	next();
 });
 
 mongoose.model( 'KudoCategory', KudoCategory );

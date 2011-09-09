@@ -35,7 +35,18 @@ var User = new mongoose.Schema({
 		},
 		sent: [ Kudo ],
 		received: [ Kudo ]
+	},
+	created: { type : Date, default: Date.now },
+	updated: Date
+});
+
+User.pre('save', function(next) {
+	if (this.updated == undefined) {
+		this.updated = this.created;
+	} else {
+		this.updated = Date.now;
 	}
+	next();
 });
 
 User.static( 'encrypt_pass', function ( v ) {

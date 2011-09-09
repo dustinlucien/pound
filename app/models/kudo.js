@@ -22,7 +22,17 @@ var Kudo = new mongoose.Schema({
 	},
 	likes: [ Like ],
 	comments: [ Comment ],
-	created: Date
+	created: { type: Date, default: Date.now },
+	updated: Date
+});
+
+Kudo.pre('save', function(next) {
+	if (this.updated == undefined) {
+		this.updated = this.created;
+	} else {
+		this.updated = Date.now;
+	}
+	next();
 });
 
 Kudo.post('save', function(next) {
