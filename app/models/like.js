@@ -1,12 +1,12 @@
 var mongoose = require('mongoose'),
 	ObjectId = mongoose.Schema.ObjectId,
-	createdAndUpdated = require('./createdAndUpdatedPlugin');;
+	timestamper = require('./timestamper');;
 
 var Like = new mongoose.Schema({
 	sender: ObjectId
 });
 
-Like.plugin(createdAndUpdated);
+Like.plugin(timestamper);
 
 mongoose.model( 'Like', Like );
 

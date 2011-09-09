@@ -1,6 +1,6 @@
 var mongoose = require('mongoose'),
 	ObjectId = mongoose.Schema.ObjectId,
-	createdAndUpdated = require('./createdAndUpdatedPlugin');;
+	timestamper = require('./timestamper');;
 
 var KudoCategory = new mongoose.Schema({
 	name: {
@@ -11,7 +11,7 @@ var KudoCategory = new mongoose.Schema({
 	description: String
 });
 
-KudoCategory.plugin(createdAndUpdated);
+KudoCategory.plugin(timestamper);
 
 mongoose.model( 'KudoCategory', KudoCategory );
 

@@ -2,7 +2,7 @@ var mongoose = require('mongoose'),
 	Like = require( './like' ),
 	Comment = require( './comment' ),
 	ObjectId = mongoose.Schema.ObjectId,
-	createdAndUpdated = require('./createdAndUpdatedPlugin');
+	timestamper = require('./timestamper');
 
 var Kudo = new mongoose.Schema({
 	message: {
@@ -25,7 +25,7 @@ var Kudo = new mongoose.Schema({
 	comments: [ Comment ]
 });
 
-Kudo.plugin(createdAndUpdated);
+Kudo.plugin(timestamper);
 
 Kudo.post('save', function(next) {
 	User = require('./user');
@@ -35,7 +35,7 @@ Kudo.post('save', function(next) {
 				if (err) {
 					next(err);
 				} else {
-					if (user.kudos.sent.indexOf(this) === -1) {
+					if (user.kudos.sent.updated === user.kudos.sent.created) {
 						user.kudos.sent.push(this);
 						user.save(function(err) {
 							callback(err, null);
@@ -49,7 +49,7 @@ Kudo.post('save', function(next) {
 				if (err) {
 					callback(err, null);
 				} else {
-					if (user.kudos.received.indexOf(this) === -1) {
+					if (user.kudos.received.updated === user.kudos.received.created) {
 						user.kudos.received.push(this);
 						user.save(function(err) {
 							callback(err, null);

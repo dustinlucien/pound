@@ -1,13 +1,13 @@
 var mongoose = require('mongoose'),
 	ObjectId = mongoose.Schema.ObjectId,
-	createdAndUpdated = require('./createdAndUpdatedPlugin');
+	timestamper = require('./timestamper');
 
 var Comment = new mongoose.Schema({
 	sender: ObjectId,
 	message: String
 });
 
-Comment.plugin(createdAndUpdated);
+Comment.plugin(timestamper);
 
 mongoose.model( 'Comment', Comment );
 
