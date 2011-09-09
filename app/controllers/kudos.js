@@ -72,33 +72,37 @@ function trimCategoryObject(category) {
 KudoController.prototype.respond = function ( res, docs, code, err ) {
 	var self = this;
 	
-	if (err || (docs == null)) {
-		self._respond(res, null, code, err);
+	if ( err || ( docs == null ) ) {
+		self._respond( res, null, code, err );
 	} else {
 		if ( ! ( docs instanceof Array ) ) {
 			docs = [ docs ];
 		}
-		
-		var i
-			, total = 0;
-			
-		for (i = 0; i < docs.length; i++) {
-			(function(i) {
-				collectUserData(docs[i].toObject(), function(err, doc) {
-					if (err) {
-						self._respond(res, null, 500, err);
-					} else {
-						docs[i] = doc;
-						total++;
-						if (total == docs.length) {
-							self._respond(res, docs, 200);
+
+		if ( docs.length === 0 ) {
+			self._respond( res, [], 200 );
+		} else {
+			var i,
+				total = 0;
+
+			for ( i = 0; i < docs.length; i++ ) {
+				(function ( i ) {
+					collectUserData( docs[i].toObject(), function( err, doc ) {
+						if ( err ) {
+							self._respond( res, null, 500, err );
+						} else {
+							docs[ i ] = doc;
+							total++;
+							if ( total === docs.length ) {
+								self._respond( res, docs, 200 );
+							}
 						}
-					}
-				});
-			})(i);
+					});
+				})( i );
+			}
 		}
 	}
-}
+};
 
 //GET /kudos  ->  index
 KudoController.prototype.index = function( req, res ) {
@@ -109,7 +113,7 @@ KudoController.prototype.index = function( req, res ) {
 		if ( err ) {
 			self.respond( res, null, 500, err );
 		} else {
-			self.respond(res, docs, 200);
+			self.respond( res, docs, 200 );
 		}
 	});
 };
