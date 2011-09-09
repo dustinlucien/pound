@@ -4,6 +4,8 @@ kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
 
 	initComponent: function () {
 
+		var self = this;
+
 		var html_message = {
 			html: 'This is a Kudo for',
 			padding: '0 0 0 5'
@@ -29,14 +31,17 @@ kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
 			ui: 'decline',
 			text: 'Send this Kudo',
 			margin: '20 0',
-			scope: this,
+			scope: self,
 			handler: function () {
 				Ext.dispatch({
 					controller: 'Kudo',
 					action: 'send',
 					body_panel: this._body_panel,
 					cat_buttons: this._cat_buttons,
-					view: this
+					callback: function () {
+						self.destroy();
+						console.log( self );
+					}
 				});
 			}
 		};

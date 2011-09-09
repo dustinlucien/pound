@@ -63,7 +63,9 @@ Ext.regController( 'Kudo', {
 							Ext.dispatch({
 								controller: 'Kudo',
 								action: 'list',
-								view: options.view
+								scope: options.scope,
+								callback: options.callback
+								//view: options.view
 							});
 						} );
 					} else {
@@ -83,19 +85,17 @@ Ext.regController( 'Kudo', {
 		}
 	},
 	
-	list: function(options) {
-		var store = Ext.StoreMgr.lookup('kudoStore');
-		store.load(function(records, operation, success) {
-				console.log("reloaded the new kudos");
-				console.log("success? " + success);
-				kudos.views.sections_panel.setActiveItem(1, {
-					type: 'slide',
-					direction: 'left',
-					after: function() {
-						options.view.destroy();
-					}
-				});
+	list: function ( options ) {
+		var store = Ext.StoreMgr.lookup( 'kudoStore' );
+		store.load( function ( records, operation, success ) {
+			console.log( "reloaded the new kudos" );
+			console.log( "success? " + success );
+			kudos.views.sections_panel.setActiveItem( 1, {
+				type: 'slide',
+				direction: 'left',
+				after: function () { options.callback.apply( options.scope ); }
 			});
+		});
 	}
 
 });
