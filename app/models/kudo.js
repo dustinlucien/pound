@@ -1,7 +1,8 @@
 var mongoose = require('mongoose'),
 	Like = require( './like' ),
 	Comment = require( './comment' ),
-	ObjectId = mongoose.Schema.ObjectId;
+	ObjectId = mongoose.Schema.ObjectId,
+	createdAndUpdated = require('./createdAndUpdatedPlugin');
 
 var Kudo = new mongoose.Schema({
 	message: {
@@ -21,19 +22,10 @@ var Kudo = new mongoose.Schema({
 		required: true
 	},
 	likes: [ Like ],
-	comments: [ Comment ],
-	created: { type: Date, default: Date.now },
-	updated: Date
+	comments: [ Comment ]
 });
 
-Kudo.pre('save', function(next) {
-	if (this.updated == undefined) {
-		this.updated = this.created;
-	} else {
-		this.updated = Date.now;
-	}
-	next();
-});
+Kudo.plugin(createdAndUpdated);
 
 Kudo.post('save', function(next) {
 	User = require('./user');

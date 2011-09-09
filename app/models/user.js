@@ -1,6 +1,7 @@
 var mongoose = require( 'mongoose' ),
 	ObjectId = mongoose.Schema.ObjectId,
-	Kudo = require( './kudo' );
+	Kudo = require( './kudo' ),
+	createdAndUpdated = require('./createdAndUpdatedPlugin');;
 
 var crypto = require( 'crypto' );
 function md5 ( str ) {
@@ -35,19 +36,10 @@ var User = new mongoose.Schema({
 		},
 		sent: [ Kudo ],
 		received: [ Kudo ]
-	},
-	created: { type : Date, default: Date.now },
-	updated: Date
+	}
 });
 
-User.pre('save', function(next) {
-	if (this.updated == undefined) {
-		this.updated = this.created;
-	} else {
-		this.updated = Date.now;
-	}
-	next();
-});
+User.plugin(createdAndUpdated);
 
 User.static( 'encrypt_pass', function ( v ) {
 	return md5( v + 'some salt 1234 ya!' );

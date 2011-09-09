@@ -1,20 +1,12 @@
 var mongoose = require('mongoose'),
-	ObjectId = mongoose.Schema.ObjectId;
+	ObjectId = mongoose.Schema.ObjectId,
+	createdAndUpdated = require('./createdAndUpdatedPlugin');;
 
 var Like = new mongoose.Schema({
-	sender: ObjectId,
-	created: { type:Date, default: Date.now },
-	updated: Date
+	sender: ObjectId
 });
 
-Like.pre('save', function(next) {
-	if (this.updated == undefined) {
-		this.updated = this.created;
-	} else {
-		this.updated = Date.now;
-	}
-	next();
-});
+Like.plugin(createdAndUpdated);
 
 mongoose.model( 'Like', Like );
 

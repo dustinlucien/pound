@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
-	ObjectId = mongoose.Schema.ObjectId;
+	ObjectId = mongoose.Schema.ObjectId,
+	createdAndUpdated = require('./createdAndUpdatedPlugin');;
 
 var KudoCategory = new mongoose.Schema({
 	name: {
@@ -7,19 +8,10 @@ var KudoCategory = new mongoose.Schema({
 		unique: true
 	},
 	shoutout: String,
-	description: String,
-	created: { type: Date, default: Date.now },
-	updated: Date
+	description: String
 });
 
-KudoCategory.pre('save', function(next) {
-	if (this.updated == undefined) {
-		this.updated = this.created;
-	} else {
-		this.updated = Date.now;
-	}
-	next();
-});
+KudoCategory.plugin(createdAndUpdated);
 
 mongoose.model( 'KudoCategory', KudoCategory );
 
