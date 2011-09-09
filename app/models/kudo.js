@@ -27,13 +27,13 @@ var Kudo = new mongoose.Schema({
 
 Kudo.post('save', function(next) {
 	User = require('./user');
-	async.parallel({
-		sender: function(callback) {
+	async.parallel([
+		function(callback) {
 			User.findById(this.sender, function(err, user) {
 				if (err) {
 					next(err);
 				} else {
-					if (user.kudos.sent.indexOf(this) == -1) {
+					if (user.kudos.sent.indexOf(this) === -1) {
 						user.kudos.sent.push(this);
 						user.save(function(err) {
 							callback(err, null);
@@ -42,12 +42,12 @@ Kudo.post('save', function(next) {
 				}
 			});
 		},
-		recipient: function(callback) {
+		function(callback) {
 			User.findById(this.recipient, function(err, user) {
 				if (err) {
 					callback(err, null);
 				} else {
-					if (user.kudos.received.indexOf(this) == -1) {
+					if (user.kudos.received.indexOf(this) === -1) {
 						user.kudos.received.push(this);
 						user.save(function(err) {
 							callback(err, null);
@@ -56,7 +56,7 @@ Kudo.post('save', function(next) {
 				}
 			});
 		}
-		}, function(err, results) {
+		], function(err, results) {
 			next(err);
 		}
 	);
