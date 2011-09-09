@@ -166,42 +166,9 @@ KudoController.prototype.create = function( req, res ) {
 					if ( err ) {
 						self.respond( res, {}, 500, 'Unknown error' );
 					} else {
-						async.parallel([
-							sender: function(callback) {
-								User.findById(this.sender, function(err, user) {
-									if (err) {
-										callback(err, null);
-									} else {
-										user.kudos.sent.push(this);
-										user.save(function(err) {
-											callback(err, null);
-										});
-									}
-								});
-							},
-							recipient: function(callback) {
-								User.findById(this.recipient, function(err, user) {
-									if (err) {
-										callback(err, null);
-									} else {
-										user.kudos.received.push(this);
-										user.save(function(err) {
-											callback(err, null);
-										});
-									}
-								});
-							}
-							], function(err, results) {
-								if (err) {
-									console.log(err);
-									self.respond( res, {}, 500, 'Unable to save Kudos associations with User' );
-								} else {
-									self.respond( res, doc );
-								}
-							});
-						}
+						self.respond( res, doc );
 					}
-				});
+				}
 			}
 		});
 	}

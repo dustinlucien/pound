@@ -25,6 +25,43 @@ var Kudo = new mongoose.Schema({
 	created: Date
 });
 
+Kudo.post('save', function(next) {
+	User = require('./user');
+	async.parallel({
+		sender: function(callback) {
+			User.findById(this.sender, function(err, user) {
+				if (err) {
+					next(err);
+				} else {
+					if (user.kudos.sent.indexOf(this) == -1) {
+						user.kudos.sent.push(this);
+						user.save(function(err) {
+							callback(err, null);
+						});
+					}
+				}
+			});
+		},
+		recipient: function(callback) {
+			User.findById(this.recipient, function(err, user) {
+				if (err) {
+					callback(err, null);
+				} else {
+					if (user.kudos.received.indexOf(this) == -1) {
+						user.kudos.received.push(this);
+						user.save(function(err) {
+							callback(err, null);
+						});
+					}
+				}
+			});
+		}
+		}, function(err, results) {
+			next(err);
+		}
+	);
+});
+
 mongoose.model( 'Kudo', Kudo );
 
 module.exports = mongoose.model( 'Kudo' );
