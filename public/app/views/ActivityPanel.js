@@ -18,13 +18,35 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 			itemTpl: tpl
 		});
 
+		// on render, load activity
 		this.on('render', function() {
 			this.store.load();
 		});
+
+		// register the selection handler
+		this.on( 'selectionchange', this.onSelect, this );
 		
 		kudos.views.ActivityPanel.superclass.initComponent.apply( this, arguments );
+	},
+
+	// when an item is pressed
+	onSelect: function ( selectionmodel, records ) {
+		if ( records[ 0 ] ) {
+			var self = this;
+
+			var kudoDetailCard = new kudos.views.KudoDetailPanel({
+				kudo: records[ 0 ],
+				back: function () {
+					self.ownerCt.setActiveItem( self );
+					kudoDetailCard.destroy();
+				}
+			});
+
+			this.ownerCt.setActiveItem( kudoDetailCard );
+		}
 	}
 
 });
 
 Ext.reg('kudosActivityPanel', kudos.views.ActivityPanel);
+
