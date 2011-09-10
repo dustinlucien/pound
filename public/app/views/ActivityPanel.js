@@ -36,15 +36,8 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 
 			var kudoDetailCard = new kudos.views.KudoDetailPanel({
 				kudo: records[ 0 ],
-				back: function () {
-					self.ownerCt.setActiveItem( self, {
-						type: 'slide',
-						direction: 'right',
-						after: function () {
-							kudoDetailCard.destroy();
-						}
-					});
-				}
+				card: true,
+				prevCard: self
 			});
 
 			this.ownerCt.setActiveItem( kudoDetailCard, {

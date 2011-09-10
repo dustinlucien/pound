@@ -1,4 +1,4 @@
-kudos.views.UserProfilePanel = Ext.extend( Ext.Panel, {
+kudos.views.UserProfilePanel = Ext.extend( kudos.views.KudoCardPanel, {
 	layout: 'vbox',
 	cls: 'user-profile',
 	card: false,
@@ -17,31 +17,6 @@ kudos.views.UserProfilePanel = Ext.extend( Ext.Panel, {
 			this.me = true;
 		} else {
 			this.me = false;
-		}
-		
-		// if this panel is being used as a card, include
-		// a toolbar with a back button
-		if ( this.card ) {
-			this.dockedItems = [{
-				xtype: 'toolbar',
-				items: [{
-					ui: 'back',
-					text: 'Back',
-					scope: this,
-					handler: function () {
-						// slide back to the previous card and destroy
-						// this panel
-						this.ownerCt.setActiveItem( this.prevCard, {
-							type: 'slide',
-							reverse: true,
-							scope: this,
-							after: function(){
-								this.destroy();
-							}
-						});
-					}
-				}]
-			}]; 
 		}
 		
 		var user_profile_cmp = new Ext.Component({

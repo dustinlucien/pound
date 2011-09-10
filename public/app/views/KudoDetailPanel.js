@@ -1,4 +1,4 @@
-kudos.views.KudoDetailPanel = Ext.extend( Ext.Panel, {
+kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 	layout: 'vbox',
 	cls: 'kudo-detail',
 	card: false,
@@ -11,42 +11,7 @@ kudos.views.KudoDetailPanel = Ext.extend( Ext.Panel, {
 
 		var self = this;
 
-		// if this panel is being used as a card, include
-		// a toolbar with a back button
-		if ( this.card ) {
-			this.dockedItems = [{
-				xtype: 'toolbar',
-				items: [{
-					ui: 'back',
-					text: 'Back',
-					scope: this,
-					handler: function () {
-						// slide back to the previous card and destroy
-						// this panel
-						this.ownerCt.setActiveItem( this.prevCard, {
-							type: 'slide',
-							reverse: true,
-							scope: this,
-							after: function(){
-								this.destroy();
-							}
-						});
-					}
-				}]
-			}]; 
-		}
-
-		var toolbar = {
-			xtype: 'toolbar',
-			items: [{
-				text: 'Back',
-				ui: 'back',
-				handler: this.back
-			}]
-		};
-
 		Ext.apply( this, {
-			dockedItems: [ toolbar ],
 			items: [{
 				html: this.kudo.raw.message
 			}]
