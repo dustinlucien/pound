@@ -57,3 +57,10 @@
 		width: 192px;
 		height: 184px;
 	}
+
+/* Kudo Detail page */
+.cat-box {
+	background: #fbdd5f;
+	padding: 20px 0 20px 100px;
+	width: 100%;
+}

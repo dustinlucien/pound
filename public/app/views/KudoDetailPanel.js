@@ -12,12 +12,23 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 		var self = this,
 			message = 'This is a Kudo for ' + this.kudo.raw.message;
 
+		var cat_box = [ '<div class="cat-box">',
+						this.kudo.raw.category.name,
+						'<br />',
+						'+1',
+						'</div>' ].join( '' );
+
 		Ext.apply( this, {
 			items: [{
 				html: '<div class="big suitcase"></div>',
 				margin: '10 0 10 0'
 			},{
-				html: message
+				html: message,
+				padding: '5'
+			},{
+				html: cat_box,
+				margin: '10',
+				width: '100%'
 			}]
 		});
 		
