@@ -20,7 +20,7 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 
 		Ext.apply( this, {
 			items: [{
-				html: '<div class="big suitcase"></div>',
+				html: '<div class="big glow-suitcase"></div>',
 				margin: '10 0 10 0'
 			},{
 				html: message,

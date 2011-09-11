@@ -19,20 +19,20 @@ kudos.views.UserProfilePanel = Ext.extend( kudos.views.KudoCardPanel, {
 			this.me = false;
 		}
 		
-		var user_profile_cmp = new Ext.Component({
+		var user_header = new Ext.Component({
 			tpl: new Ext.XTemplate(
 				'<div>',
-					'<h2 class="user-name">My name is {name}</h2>',
-					'<p>Kudos Sent: {kudos.sent.length} Kudos Received : {kudos.received.length}</p>',
-					'<p>The beginning of the User profile page</p>',
+					'<h2 class="user-name link-text">{name}</h2>',
+					'<p>Kudos Sent: {kudos.sent.length} <span class="count-spacer">Kudos Received : {kudos.received.length}</span></p>',
 				'</div>'
 			),
-			styleHtmlContent: true
+			width: '100%',
+			margin: '10'
 		});
 		
 		//TODO: fix up the parsing of the User JSON so that kudos.sent and kudos.received are correct
 		if ( this.user ) {
-			user_profile_cmp.data = this.user.raw;
+			user_header.data = this.user.raw;
 		} else {
 			this.on( 'render', function () {
 				User = Ext.ModelMgr.getModel( 'User' );
@@ -40,7 +40,7 @@ kudos.views.UserProfilePanel = Ext.extend( kudos.views.KudoCardPanel, {
 					success: function ( user ) {
 						console.log( 'successful data load of logged in user' );
 						self.user = user;
-						user_profile_cmp.update( self.user.data );
+						user_header.update( self.user.data );
 					}
 				});
 			});
@@ -71,9 +71,9 @@ kudos.views.UserProfilePanel = Ext.extend( kudos.views.KudoCardPanel, {
 				}
 			};
 			
-			Ext.apply(this, {items : [ user_profile_cmp, send_kudos_button ]});
+			Ext.apply(this, {items : [ user_header, send_kudos_button ]});
 		} else {
-			Ext.apply(this, {items : [ user_profile_cmp ]});
+			Ext.apply(this, {items : [ user_header ]});
 		}
 		
 		kudos.views.UserProfilePanel.superclass.initComponent.apply( this, arguments );

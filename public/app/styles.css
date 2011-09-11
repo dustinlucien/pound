@@ -49,11 +49,11 @@
 	padding: 0;
 }
 
-/* Suitcase background */
-.suitcase {
+/* glowing suitcase background */
+.glow-suitcase {
 	background: url( 'images/suitcase2.png' );
 }
-	.big.suitcase {
+	.big.glow-suitcase {
 		width: 192px;
 		height: 184px;
 	}
@@ -69,3 +69,13 @@
 	width: 100%;
 }
 
+/* User profile page */
+.user-profile .user-name {
+	font-size: 1.4em;
+	font-weight: normal;
+	margin-bottom: 7px;
+}
+
+.user-profile .count-spacer {
+	margin-left: 20px;
+}
