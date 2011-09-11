@@ -60,7 +60,12 @@
 
 /* Kudo Detail page */
 .cat-box {
-	background: #fbdd5f;
+	background-color: #fbdd5f;
+	background-image: url( 'images/face1.png' );
+	background-repeat: no-repeat;
+	background-size: 75px 30px;
+	background-position: 9px 27px;
 	padding: 20px 0 20px 100px;
 	width: 100%;
 }
+
