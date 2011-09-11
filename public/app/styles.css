@@ -48,3 +48,12 @@
 .x-list.kudo-list .x-list-item {
 	padding: 0;
 }
+
+/* Suitcase background */
+.suitcase {
+	background: url( 'images/suitcase2.png' );
+}
+	.big.suitcase {
+		width: 192px;
+		height: 184px;
+	}

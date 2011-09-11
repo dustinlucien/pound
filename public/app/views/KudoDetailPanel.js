@@ -9,11 +9,15 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 	
 	initComponent: function() {		
 
-		var self = this;
+		var self = this,
+			message = 'This is a Kudo for ' + this.kudo.raw.message;
 
 		Ext.apply( this, {
 			items: [{
-				html: this.kudo.raw.message
+				html: '<div class="big suitcase"></div>',
+				margin: '10 0 10 0'
+			},{
+				html: message
 			}]
 		});
 		
