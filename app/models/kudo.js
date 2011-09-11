@@ -26,10 +26,10 @@ var Kudo = new mongoose.Schema({
 	comments: [ Comment ]
 });
 
-Kudo.pre( 'save', function ( next, done ) {
+Kudo.post( 'save', function ( next ) {
 	var self = this;
 
-	if ( this.isNew ) {
+	if ( this.updated === this.created ) {
 		var User = require( './user' );
 
 		async.parallel([
@@ -38,8 +38,7 @@ Kudo.pre( 'save', function ( next, done ) {
 					if ( err ) {
 						callback( err );
 					} else {
-						// FIXME : this breaks
-						// user.kudos.sent.push( self );
+						user.kudos.sent.push( self );
 						user.save( callback );
 					}
 				});
@@ -49,8 +48,7 @@ Kudo.pre( 'save', function ( next, done ) {
 					if ( err ) {
 						callback( err );
 					} else {
-						// FIXME : this breaks
-						// user.kudos.received.push( self );
+						user.kudos.received.push( self );
 						user.save( callback );
 					}
 				});
