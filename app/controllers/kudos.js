@@ -172,7 +172,7 @@ KudoController.prototype.create = function( req, res ) {
 					} else {
 						self.respond( res, doc );
 					}
-				}
+				});
 			}
 		});
 	}
