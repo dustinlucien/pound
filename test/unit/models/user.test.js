@@ -1,4 +1,5 @@
 var vows = require( 'vows' ),
+	teardown = require( '../../test-lib' ).teardown,
 	assert = require( 'assert' ),
 	should = require( 'should' ),
 	User = require( '../../../app/models/user.js' ),
@@ -29,5 +30,6 @@ vows.describe( 'User Model Unit Tests' ).addBatch({
 		'Users should default to 5 kudos': function ( topic ) {
 			should.equal( 5, topic.get( 'kudos.have' ) );
 		}
-	}
+	},
+	teardown: teardown
 }).export( module );

@@ -1,4 +1,5 @@
 var vows = require( 'vows' ),
+	teardown = require( '../../test-lib' ).teardown,
 	assert = require( 'assert' ),
 	should = require( 'should' ),
 	Kudo = require( '../../../app/models/kudo.js' ),
@@ -26,5 +27,7 @@ vows.describe( 'Kudo Model Unit Tests' ).addBatch({
 			topic.get( 'comments' ).should.be.an.instanceof( MongooseArray );
 			topic.get( 'likes' ).should.be.an.instanceof( MongooseArray );
 		}
-	}
+	},
+
+	teardown: teardown
 }).export( module );
