@@ -28,8 +28,8 @@ var Kudo = new mongoose.Schema({
 
 Kudo.post( 'save', function ( next ) {
 	var self = this;
-
-	if ( this.updated === this.created ) {
+	
+	if ( this.created.getTime() ==  this.updated.getTime() ) {
 		var User = require( './user' );
 
 		async.parallel([
