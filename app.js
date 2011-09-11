@@ -38,7 +38,7 @@ function productionRedisSetup() {
 	var redisUrl = process.env.REDISTOGO_URL;
 	
 	if (!redisUrl) {
-		redisUrl = "redis://redistogo:1fa9a5e3f75d1620ae83ebcf05dd884d@filefish.redistogo.com:9623/"
+		redisUrl = "redis://redistogo:1fa9a5e3f75d1620ae83ebcf05dd884d@filefish.redistogo.com:9623/";
 	}
 	
 	redisUrl = url.parse(redisUrl);

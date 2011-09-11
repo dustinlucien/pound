@@ -54,8 +54,6 @@ function collectUserData(doc, cb) {
 }
 
 function trimUserObject(user) {
-	delete user.likes;
-	delete user.comments;
 	user.kudos.sent = user.kudos.sent.length;
 	user.kudos.received = user.kudos.received.length;
 	
@@ -174,7 +172,7 @@ KudoController.prototype.create = function( req, res ) {
 					} else {
 						self.respond( res, doc );
 					}
-				});
+				}
 			}
 		});
 	}

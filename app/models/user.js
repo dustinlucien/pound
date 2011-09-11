@@ -1,6 +1,7 @@
 var mongoose = require( 'mongoose' ),
 	ObjectId = mongoose.Schema.ObjectId,
-	Kudo = require( './kudo' );
+	Kudo = require( './kudo' ),
+	timestamper = require('./timestamper');;
 
 var crypto = require( 'crypto' );
 function md5 ( str ) {
@@ -37,6 +38,8 @@ var User = new mongoose.Schema({
 		received: [ Kudo ]
 	}
 });
+
+User.plugin(timestamper);
 
 User.static( 'encrypt_pass', function ( v ) {
 	return md5( v + 'some salt 1234 ya!' );
