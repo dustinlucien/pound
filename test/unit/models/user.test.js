@@ -19,7 +19,9 @@ vows.describe( 'User Model Unit Tests' ).addBatch({
 			should.equal( undefined, topic.get( 'email' ) );
 			should.equal( undefined, topic.get( 'name' ) );
 			should.equal( undefined, topic.get( 'password' ) );
-
+			should.equal( undefined, topic.get( 'created' ) );
+			should.equal( undefined, topic.get( 'updated' ) );
+			
 			topic.get( 'kudos' ).should.be.a( 'object' );
 			topic.get( 'kudos.sent' ).should.be.an.instanceof( MongooseArray );
 			topic.get( 'kudos.received' ).should.be.an.instanceof( MongooseArray );

@@ -21,7 +21,8 @@ vows.describe( 'Kudo Model Unit Tests' ).addBatch({
 			should.equal( undefined, topic.get( 'recipient' ) );
 			should.equal( undefined, topic.get( 'category' ) );
 			should.equal( undefined, topic.get( 'created' ) );
-
+			should.equal( undefined, topic.get( 'updated' ) );
+			
 			topic.get( 'comments' ).should.be.an.instanceof( MongooseArray );
 			topic.get( 'likes' ).should.be.an.instanceof( MongooseArray );
 		}

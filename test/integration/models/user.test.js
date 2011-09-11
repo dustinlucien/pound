@@ -21,6 +21,9 @@ vows.describe( 'User Model Integration Tests' ).addBatch({
 			assert.isNull( err );
 			assert.isNotNull( user._id );
 			assert.notEqual( user.password, '1234' );
+			assert.isNotNull( user.created );
+			assert.isNotNull( user.updated );
+			assert.deepEqual( user.created, user.updated );
 		}
 	}
 
