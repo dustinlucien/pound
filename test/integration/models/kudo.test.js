@@ -55,31 +55,31 @@ vows.describe( 'Kudo Model Integration Tests' ).addBatch({
 			assert.equal( String( kudo.recipient ), String( user2._id ) );
 			assert.equal( String( kudo.category ), String( cats[ 0 ]._id ) );
 			assert.equal( kudo.message, 'Good job' );
+
 			assert.isNotNull( kudo.created );
 			assert.isNotNull( kudo.updated );
-			assert.deepEqual( kudo.created, kudo.updated );
+			
+			assert.isTrue( kudo.created.getTime() == kudo.updated.getTime() );
+			
 			User.findById( user1._id, function ( err, sender ) {
 				if ( !err ) {
-					//FIXME : they's broked
-/*
 					assert.isTrue( user1.equals( sender ) );
 					assert.isTrue( sender.kudos.sent.contains( kudo ) );
 
 					//FIXME : move these checks to a timestamper unit test later
-					assert.deepEqual( user1.created, sender.created );
-					assert.isTrue( sender.updated > sender.created );
+					assert.isTrue( user1.created.getTime(), sender.created.getTime() );
+					assert.isTrue( sender.updated.getTime() > sender.created.getTime() );
 					
-					User.findById( user2._id, function(err, recipient) {
+					User.findById( user2._id, function( err, recipient ) {
 						if (!err) {
-							assert.isTrue(user2.equals(recipient));
-							assert.isTrue(recipient.kudos.received.contains(kudo));
+							assert.isTrue( user2.equals( recipient ) );
+							assert.isTrue( recipient.kudos.received.contains( kudo ) );
 
 							//FIXME : move these checks to a timestamper unit test later
-							assert.deepEqual(user2.created, recipient.created);
-							assert.isTrue(recipient.updated > recipient.created);
+							assert.isTrue( user2.created.getTime(), recipient.created.getTime() );
+							assert.isTrue( recipient.updated > recipient.created );
 						}
 					} );
-*/
 				}
 			} );
 		}
