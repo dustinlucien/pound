@@ -46,7 +46,7 @@ vows.describe( 'Kudo Model Integration Tests' ).addBatch({
 				kudo.category = cats[ 0 ]._id;
 				kudo.message = 'Good job';
 				kudo.save( callback );
-			});
+			} );
 		},
 		'THEN the fields should be set correctly': function ( err, kudo ) {
 			assert.isNull( err );
@@ -55,9 +55,32 @@ vows.describe( 'Kudo Model Integration Tests' ).addBatch({
 			assert.equal( String( kudo.recipient ), String( user2._id ) );
 			assert.equal( String( kudo.category ), String( cats[ 0 ]._id ) );
 			assert.equal( kudo.message, 'Good job' );
+			assert.isNotNull( kudo.created );
+			assert.isNotNull( kudo.updated );
+			assert.deepEqual( kudo.created, kudo.updated );
+			User.findById( user1._id, function ( err, sender ) {
+				if ( !err ) {
+					assert.isTrue( user1.equals( sender ) );
+					assert.isTrue( sender.kudos.sent.contains( kudo ) );
+
+					//FIXME : move these checks to a timestamper unit test later
+					assert.deepEqual( user1.created, sender.created );
+					assert.isTrue( sender.updated > sender.created );
+					
+					User.findById( user2._id, function(err, recipient) {
+						if (!err) {
+							assert.isTrue(user2.equals(recipient));
+							assert.isTrue(recipient.kudos.received.contains(kudo));
+
+							//FIXME : move these checks to a timestamper unit test later
+							assert.deepEqual(user2.created, recipient.created);
+							assert.isTrue(recipient.updated > recipient.created);
+						}
+					} );
+				}
+			} );
 		}
 	}
-
 }).addBatch({
 
 	'WHEN I create a new Kudo with invalid data': {
