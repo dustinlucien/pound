@@ -1,4 +1,5 @@
-var mongoose = require('mongoose'),
+var async = require( 'async' ),
+	mongoose = require('mongoose'),
 	Like = require( './like' ),
 	Comment = require( './comment' ),
 	ObjectId = mongoose.Schema.ObjectId,
@@ -25,38 +26,43 @@ var Kudo = new mongoose.Schema({
 	comments: [ Comment ]
 });
 
-Kudo.post('save', function(next) {
-	if (this.isNew) {
-		User = require('./user');
+Kudo.pre( 'save', function ( next, done ) {
+	var self = this;
+
+	if ( this.isNew ) {
+		var User = require( './user' );
+
 		async.parallel([
-			function(callback) {
-				User.findById(this.sender, function(err, user) {
-					if (err) {
-						next(err);
+			function ( callback ) {
+				User.findById( self.sender, function ( err, user ) {
+					if ( err ) {
+						callback( err );
 					} else {
-						user.kudos.sent.push(this);
-						user.save(callback);
+						// FIXME : this breaks
+						// user.kudos.sent.push( self );
+						user.save( callback );
 					}
 				});
 			},
-			function(callback) {
-				User.findById(this.recipient, function(err, user) {
-					if (err) {
-						callback(err, null);
+			function ( callback ) {
+				User.findById( self.recipient, function ( err, user ) {
+					if ( err ) {
+						callback( err );
 					} else {
-						user.kudos.received.push(this);
-						user.save(callback);
+						// FIXME : this breaks
+						// user.kudos.received.push( self );
+						user.save( callback );
 					}
 				});
 			}
-			], function(err, results) {
-				next(err);
+			], function ( err, results ) {
+				next( err );
 			}
 		);
 	}
 });
 
-Kudo.plugin(timestamper);
+Kudo.plugin( timestamper );
 
 mongoose.model( 'Kudo', Kudo );
 

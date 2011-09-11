@@ -51,10 +51,14 @@ Ext.regController( 'Login', {
 					//destroy the viewport					
 					kudos.views.viewport.destroy();
 				}
+
+				email_field.enable();
+				password_field.enable();
 			},
 			failure: function ( response, opts ) {
 				email_field.enable();
 				password_field.enable();
+
 				Ext.Msg.alert( 'Error', 'Could not contact server. Please try again' );
 			}
 		});

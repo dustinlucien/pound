@@ -39,7 +39,7 @@ var User = new mongoose.Schema({
 	}
 });
 
-User.plugin(timestamper);
+User.plugin( timestamper );
 
 User.static( 'encrypt_pass', function ( v ) {
 	return md5( v + 'some salt 1234 ya!' );
