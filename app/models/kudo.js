@@ -28,28 +28,28 @@ var Kudo = new mongoose.Schema({
 
 Kudo.post( 'save', function ( next ) {
 	var self = this;
-	
-	if ( this.created.getTime() ==  this.updated.getTime() ) {
+
+	if ( this.created.getTime() ===  this.updated.getTime() ) {
 		var User = require( './user' );
 
 		async.parallel([
 			function ( callback ) {
-				User.findById( self.sender, function ( err, user ) {
+				User.findById( self.sender, function ( err, sender ) {
 					if ( err ) {
 						callback( err );
 					} else {
-						user.kudos.sent.push( self );
-						user.save( callback );
+						sender.kudos.sent.push( self );
+						sender.save( callback );
 					}
 				});
 			},
 			function ( callback ) {
-				User.findById( self.recipient, function ( err, user ) {
+				User.findById( self.recipient, function ( err, recipient ) {
 					if ( err ) {
 						callback( err );
 					} else {
-						user.kudos.received.push( self );
-						user.save( callback );
+						recipient.kudos.received.push( self );
+						recipient.save( callback );
 					}
 				});
 			}
