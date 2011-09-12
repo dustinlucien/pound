@@ -79,3 +79,18 @@
 .user-profile .count-spacer {
 	margin-left: 20px;
 }
+
+.user-profile .feedback {
+	background: #ccc;
+}
+
+.user-profile .feedback .category {
+	float: left;
+	width: 50%;
+}
+
+.user-profile .feedback .category .total {
+	font-weight: bold;
+	font-size: 1.2em;
+	margin-right: 5px;
+}

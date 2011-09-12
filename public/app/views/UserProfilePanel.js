@@ -9,7 +9,14 @@ kudos.views.UserProfilePanel = Ext.extend( kudos.views.KudoCardPanel, {
 	
 	initComponent: function() {		
 
-		var self = this;
+		var self = this,
+
+			items = [],
+
+			defaults = {
+				width: '98%',
+				margin: '10 0'
+			};
 
 		// determine whether this panel is for the
 		// current user
@@ -25,10 +32,10 @@ kudos.views.UserProfilePanel = Ext.extend( kudos.views.KudoCardPanel, {
 					'<h2 class="user-name link-text">{name}</h2>',
 					'<p>Kudos Sent: {kudos.sent.length} <span class="count-spacer">Kudos Received : {kudos.received.length}</span></p>',
 				'</div>'
-			),
-			width: '100%',
-			margin: '10'
+			)
 		});
+
+		items.push( user_header );
 		
 		//TODO: fix up the parsing of the User JSON so that kudos.sent and kudos.received are correct
 		if ( this.user ) {
@@ -52,8 +59,8 @@ kudos.views.UserProfilePanel = Ext.extend( kudos.views.KudoCardPanel, {
 				xtype: 'button',
 				ui: 'decline',
 				text: 'Give ' + this.user.data.name + ' a Kudo',
-				margin: '20 0',
 				scope: this,
+				width: '98%',
 				handler: function () {
 
 					var sendKudoPanel = new kudos.views.SendKudoPanel({
@@ -71,11 +78,38 @@ kudos.views.UserProfilePanel = Ext.extend( kudos.views.KudoCardPanel, {
 				}
 			};
 			
-			Ext.apply(this, {items : [ user_header, send_kudos_button ]});
-		} else {
-			Ext.apply(this, {items : [ user_header ]});
+			items.push( send_kudos_button );
 		}
-		
+
+		items.push({
+			html: 'Feedback received',
+			margin: '10 0 0 0'
+		});
+
+		var feedback_panel = new Ext.Component({
+			tpl: new Ext.XTemplate(
+				'<tpl for="categories">',
+					'<div class="category">',
+						'<span class="total">+0</span>',
+						'{data.name}',
+					'</div>',
+				'</tpl>'
+			),
+			cls: 'feedback',
+			margin: '0 0 10 0'
+		});
+
+		kudos.stores.KudoCategory.load( function ( records, operation, success ) {
+			feedback_panel.update( { categories: records } );
+		});
+
+		items.push( feedback_panel );
+
+		Ext.apply( this, {
+			items: items,
+			defaults: defaults
+		});
+
 		kudos.views.UserProfilePanel.superclass.initComponent.apply( this, arguments );
 	}
 });
