@@ -38,7 +38,7 @@ Kudo.post( 'save', function ( next ) {
 					if ( err ) {
 						callback( err );
 					} else {
-						sender.kudos.sent.push( self );
+						sender.sent.push( self._id );
 						sender.save( callback );
 					}
 				});
@@ -48,15 +48,12 @@ Kudo.post( 'save', function ( next ) {
 					if ( err ) {
 						callback( err );
 					} else {
-						recipient.kudos.received.push( self );
+						recipient.received.push( self._id );
 						recipient.save( callback );
 					}
 				});
 			}
-			], function ( err, results ) {
-				next( err );
-			}
-		);
+			]);
 	}
 });
 

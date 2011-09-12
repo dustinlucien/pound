@@ -79,24 +79,26 @@ vows.describe( 'Kudo Model Integration Tests' ).addBatch({
 						assert.isNull( err );
 						User.findById( user2._id, function( err, recipient ) {
 							assert.isNull( err );
-							callback( sender, recipient );
+							callback( kudo._id, sender, recipient );
 						} );
 					} );
 				} );
 			} );
 		},
-		'THEN the Users involved should have correct associations': function ( sender, recipient ) {
+		'THEN the Users involved should have correct associations': function ( id, sender, recipient ) {
 			assert.isTrue( user1.equals( sender ) );
-			assert.isTrue( sender.kudos.sent.contains( kudo ) );
+			assert.isTrue( sender.sent.contains( id ) );
+			assert.isTrue( user2.equals( recipient ) );
+			assert.isTrue( recipient.received.contains( id ) );
+		},
+		'AND the created and updated times should be properly set': function( id, sender, recipient ) {
 			//FIXME : move these checks to a timestamper unit test later
 			assert.isTrue( user1.created.getTime(), sender.created.getTime() );
 			assert.isTrue( sender.updated.getTime() > sender.created.getTime() );
 
-			assert.isTrue( user2.equals( recipient ) );
-			assert.isTrue( recipient.kudos.received.contains( kudo ) );
 			//FIXME : move these checks to a timestamper unit test later
 			assert.isTrue( user2.created.getTime(), recipient.created.getTime() );
-			assert.isTrue( recipient.updated.getTime() > recipient.created.getTime() );
+			assert.isTrue( recipient.updated.getTime() > recipient.created.getTime() );		
 		}
 	}
 }).addBatch({

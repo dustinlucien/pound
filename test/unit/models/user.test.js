@@ -23,12 +23,12 @@ vows.describe( 'User Model Unit Tests' ).addBatch({
 			should.equal( undefined, topic.get( 'created' ) );
 			should.equal( undefined, topic.get( 'updated' ) );
 			
-			topic.get( 'kudos' ).should.be.a( 'object' );
-			topic.get( 'kudos.sent' ).should.be.an.instanceof( MongooseArray );
-			topic.get( 'kudos.received' ).should.be.an.instanceof( MongooseArray );
+			topic.get( 'have' ).should.be.an.instanceof( Number );
+			topic.get( 'sent' ).should.be.an.instanceof( MongooseArray );
+			topic.get( 'received' ).should.be.an.instanceof( MongooseArray );
 		},
 		'Users should default to 5 kudos': function ( topic ) {
-			should.equal( 5, topic.get( 'kudos.have' ) );
+			should.equal( 5, topic.get( 'have' ) );
 		}
 	},
 	teardown: teardown

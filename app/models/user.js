@@ -28,15 +28,13 @@ var User = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	kudos: {
-		have: {
-			type: Number,
-			min: 0,
-			"default": 5
-		},
-		sent: [ Kudo ],
-		received: [ Kudo ]
-	}
+	have: {
+		type: Number,
+		min: 0,
+		"default": 5
+	},
+	sent: [ ObjectId ],
+	received: [ ObjectId ]
 });
 
 User.plugin( timestamper );
