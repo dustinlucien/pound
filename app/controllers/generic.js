@@ -62,6 +62,33 @@ GenericController.prototype._respond = function ( res, docs, code, err ) {
 	res.send( JSON.stringify( output ) );
 };
 
+GenericController.prototype._paginate = function( req, query, cb ) {
+	var sort = 'created'
+		, order = -1,
+		, start = 0,
+		, limit = 25;
+		
+	if ( 'sort' in req.query ) {
+		if ( 'order' in req.query ) {
+			if ( req.query.order.toLowerCase() === 'asc') {
+				order = 1;
+			}
+		}
+	}
+	
+	if ( 'start' in req.query ) {
+		start = parseInt( req.query.start );
+	}
+	
+	if ( 'limit' in req.query ) {
+		limit = parseInt( req.query.limit );
+	}
+	
+	query.sort( sort, order )
+			 .skip( start )
+			 .limit( limit )
+			 .exec(cb);
+};
 /**
  * "Public" methods
  */

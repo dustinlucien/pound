@@ -21,7 +21,7 @@ KudoController.prototype.__proto__ = GenericController.prototype;
 // export the KudoController class
 module.exports = KudoController;
 
-function collectUserData(doc, cb) {
+function _collectUserData(doc, cb) {
 	async.parallel({
 		sender: function(callback) {
 			User.findById( doc.sender, function(err, user) {
@@ -74,7 +74,7 @@ KudoController.prototype.respond = function ( res, docs, code, err ) {
 
 			for ( i = 0; i < docs.length; i++ ) {
 				(function ( i ) {
-					collectUserData( docs[i].toObject(), function( err, doc ) {
+					_collectUserData( docs[i].toObject(), function( err, doc ) {
 						if ( err ) {
 							self._respond( res, null, 500, err );
 						} else {
@@ -122,7 +122,9 @@ KudoController.prototype._build_kudo = function ( req, res, fields, cb ) {
 		}));
 	} else if ( fields.recipient_email ) {
 		User.find( { email: fields.recipient_email }, function ( err, docs ) {
-			if ( ! docs || docs.length < 1 ) {
+			if (err) {
+				self.respond( res, {}, 500, err );
+			} else if ( ! docs || docs.length < 1 ) {
 				self.respond( res, {}, 404, 'No user by that email address' );
 			} else {
 				cb( null, new Kudo({
@@ -148,18 +150,26 @@ KudoController.prototype.create = function( req, res ) {
 		self.respond( res, {}, 400, 'Only one record may be created at a time' );
 	// otherwise, create the kudo
 	} else {
-		self._build_kudo( req, res, req.body.records[ 0 ], function ( err, kudo ) {
-			if ( String( kudo.sender ) !== String( req.session.uid ) ) {
-				self.respond( res, {}, 403, 'Cannot send Kudo as another user' );
-			} else if ( String( kudo.sender ) === String( kudo.recipient ) ) {
-				self.respond( res, {}, 403, 'Cannot send Kudo to yourself' );
-			} else {
-				kudo.save( function ( err, doc ) {
-					// TODO better error response
-					if ( err ) {
-						self.respond( res, {}, 500, 'Unknown error' );
+		User.findById( req.session.uid, function ( err, user ) {
+			if (err) {
+				self.respond( res, {}, 500, err);
+			} else if (user.kudos.have > 0) {
+				self._build_kudo( req, res, req.body.records[ 0 ], function ( err, kudo ) {
+					if (err) {
+						self.respond( res, {}, 500, err );
+					} else if ( String( kudo.sender ) !== String( req.session.uid ) ) {
+						self.respond( res, {}, 403, 'Cannot send Kudo as another user' );
+					} else if ( String( kudo.sender ) === String( kudo.recipient ) ) {
+						self.respond( res, {}, 403, 'Cannot send Kudo to yourself' );
 					} else {
-						self.respond( res, doc );
+						kudo.save( function ( err, doc ) {
+							// TODO better error response
+							if ( err ) {
+								self.respond( res, {}, 500, 'Unknown error' );
+							} else {
+								self.respond( res, doc );
+							}
+						});
 					}
 				});
 			}
