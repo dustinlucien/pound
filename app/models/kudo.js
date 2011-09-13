@@ -54,6 +54,7 @@ Kudo.pre( 'save', function ( next ) {
 						}
 						var cat_total = ( recipient.kudos.totals[ self.category ] || 0 );
 						recipient.kudos.totals[ self.category ] = cat_total + 1;
+						// FIXME doesn't appear to be saving totals correctly
 						recipient.save( callback );
 					}
 				});
