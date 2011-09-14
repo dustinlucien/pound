@@ -75,6 +75,7 @@ vows.describe( 'Kudo Model Integration Tests' ).addBatch({
 			assert.equal( results.sender.kudos.sent, 1 );
 			assert.deepEqual( user2._id, results.recipient._id );
 			assert.equal( results.recipient.kudos.received, 1 );
+			assert.deepEqual( results.recipient.kudos.totals[ cats[ 0 ]._id ], 1 );
 		},
 		'AND the created and updated times should be properly set': function( err, results ) {
 			//FIXME : move these checks to a timestamper unit test late

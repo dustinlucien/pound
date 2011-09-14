@@ -27,6 +27,7 @@ vows.describe( 'User Model Unit Tests' ).addBatch({
 			topic.get( 'kudos.have' ).should.be.an.instanceof( Number );
 			topic.get( 'kudos.sent' ).should.be.an.instanceof( Number );
 			topic.get( 'kudos.received' ).should.be.an.instanceof( Number );
+			should.equal( undefined, topic.get( 'kudos.totals' ) );
 		},
 		'Users should default to 5 kudos': function ( topic ) {
 			should.equal( 5, topic.get( 'kudos.have' ) );
