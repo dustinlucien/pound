@@ -52,9 +52,11 @@ kudos.views.UserProfilePanel = Ext.extend( kudos.views.KudoCardPanel, {
 			var send_kudos_button = {
 				xtype: 'button',
 				ui: 'decline',
-				text: 'Give ' + this.user.data.name + ' a Kudo',
+				html: '<div class="suitcase"></div><span class="x-button-label">Give ' + this.user.data.name + ' a Kudo</span>',
 				scope: this,
 				width: '98%',
+				height: 43,
+				cls: 'send-kudo',
 				handler: function () {
 
 					var sendKudoPanel = new kudos.views.SendKudoPanel({
