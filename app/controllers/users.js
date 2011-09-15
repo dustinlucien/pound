@@ -26,6 +26,8 @@ module.exports = UserController;
 //GET /users  ->  index
 UserController.prototype.index = function( req, res ) {
 	var self = this;
+
+	console.log(self);
 	// TODO filter users
 	User.find({}, function( err, docs ) {
 		if ( err ) {
@@ -98,7 +100,6 @@ UserController.prototype.update = function ( req, res ) {
 	} else if ( req.params.user !== req.session.uid ) {
 		self._respond( res, null, 403, 'Forbidden to update this user' );
 	} else {
-		var self = this;
 		User.findById( req.params.user, function ( err, doc ) {
 			if ( err ) {
 				self._respond( res, null, 500, err );
@@ -158,24 +159,27 @@ UserController.prototype.destroy = function( req, res ) {
 UserController.prototype.kudos = function( req, res ) {
 	var self = this;
 	
-	console.log(req.params);
-	
+	console.log(self);
+
 	if (! req.params.user ) {
 		self._respond( res, null, 400 );
 	} else if (! req.params.stream ) {
 		self._respond( res, null, 400 );
 	} else {
-		var field;
-		
-		if (req.params.kudos == 'sent') {
-			field = 'sent';
-			
+		var query;
+
+		if (req.params.stream == 'sent') {
+			query = { 'sender': req.params.user };
 		} else {
-			field = 'received';
+			query = { 'recipient': req.params.user };
 		}
-		Kudo.find({ field: req.params.user }, function(err, docs) {
-			var kudosController = require('./kudos');
-			kudosController.respond(res, docs, 200);
+
+		Kudo.findOne(query, function(err, doc) {
+			if (err) {
+				self._respond( res, null, 403, err );
+			} else {
+				self._respond( res, doc );
+			}
 		});
 	}
 };
