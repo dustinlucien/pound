@@ -99,7 +99,6 @@ KudoController.prototype.index = function( req, res ) {
 	Kudo.find({})
 		.sort( 'created', 'descending' )
 		.execFind( function( err, docs ) {
-console.log( arguments );
 		if ( err ) {
 			self.respond( res, null, 500, err );
 		} else {
