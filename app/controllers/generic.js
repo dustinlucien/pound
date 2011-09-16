@@ -91,6 +91,8 @@ GenericController.prototype._respond = function ( res, docs, code, err ) {
 };
 
 GenericController.prototype._paginate = function( req, query ) {
+	query = query || {};
+	
 	var sort = 'created'
 		, order = 'descending'
 		, start = 0

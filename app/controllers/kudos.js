@@ -26,7 +26,7 @@ KudoController.prototype.index = function( req, res ) {
 	var self = this;
 
 	// TODO filter kudos
-	self._paginate( Kudo.find( {} ) )
+	self._paginate( req, Kudo.find( {} ) )
 		.execFind( function( err, docs ) {
 			if ( err ) {
 				self._respond( res, null, 500, err );
