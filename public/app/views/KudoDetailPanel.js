@@ -2,7 +2,7 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 	layout: 'vbox',
 	cls: 'kudo-detail',
 	card: false,
-
+	scroll: 'vertical',
 	// two variables used in this class.
 	// `this.kudo` is a kudo record that has been passed in on creation
 	// `this.card` is a boolean signifying is this should be a navigable card, or a single panel.

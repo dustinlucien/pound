@@ -3,7 +3,8 @@
 Ext.regApplication({
 	// the name of the app
 	name: 'kudos',
-
+	glossOnIcon: true,
+	fullscreen: true,
 	// this function is called when the app is ready to launch
 	launch: function () {
 		// create a namespace for miscellaneous data

@@ -1,3 +1,4 @@
+var plural = require('../util/pluralize');
 /**
  * Class def
  */
@@ -28,8 +29,8 @@ var error_type = {
 };
 
 GenericController.prototype._respond = function ( res, docs, code, err ) {
-	var output = {},
-		success = true;
+	var output = {}
+		, success = true;
 
 	code = code || 200;
 	docs = docs || [];
@@ -44,24 +45,79 @@ GenericController.prototype._respond = function ( res, docs, code, err ) {
 			err = error_message[ code ] || 'Unknown error';
 		}
 	}
+	output.success = success;
+	output.meta = { code: code };
 
 	if ( err ) {
 		output.error = {
 			type: error_type[ code ] || 'unknown',
 			description: err
 		};
+		
+		res.send( JSON.stringify( output ) );
+	} else {
+		output.response = {};
+
+		var populated = []
+			, total = 0
+			, i;
+
+		var self = this;
+
+		if (docs.length > 0) {
+			//try to take the label from the type of the model, not the controller
+			var label = plural.pluralize( docs[0].constructor.modelName.toLowerCase() );
+			for ( i = 0; i < docs.length; i++ ) {
+				(function ( i ) {
+					docs[i].populateResponse(function( err, out ) {
+						if ( err ) {
+							self._respond( res, null, 500, err );
+						} else {
+							populated.push( out );
+							total++;
+							if ( total === docs.length ) {
+								output.response[ label ] = { count: populated.length, items: populated };
+								res.send( JSON.stringify( output ) );
+							}
+						}
+					});
+				})( i );
+			}
+		} else {
+			output.response[ self.label ] = { count: 0, items: [] };
+			res.send( JSON.stringify( output ) );
+		}
 	}
-
-	output.success = success;
-
-	output.meta = { code: code };
-
-	output.response = {};
-	output.response[ this.label ] = { count: docs.length, items: docs };
-
-	res.send( JSON.stringify( output ) );
 };
 
+GenericController.prototype._paginate = function( req, query ) {
+	var sort = 'created'
+		, order = 'descending'
+		, start = 0
+		, limit = 25;
+		
+	if ( 'sort' in req.query ) {
+		if ( 'order' in req.query ) {
+			if ( req.query.order.toLowerCase() === 'asc') {
+				order = 'ascending';
+			}
+		}
+	}
+	
+	if ( 'start' in req.query ) {
+		start = parseInt( req.query.start );
+	}
+	
+	if ( 'limit' in req.query ) {
+		limit = parseInt( req.query.limit );
+	}
+	
+	query.sort( sort, order )
+			 .skip( start )
+			 .limit( limit );
+
+	return query;
+};
 /**
  * "Public" methods
  */

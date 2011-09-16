@@ -2,7 +2,6 @@ var async = require( 'async' ),
 	mongoose = require('mongoose'),
 	Like = require( './like' ),
 	Comment = require( './comment' ),
-	User = require('./user'),
 	ObjectId = mongoose.Schema.ObjectId,
 	timestamper = require('./timestamper');
 
@@ -33,6 +32,7 @@ Kudo.pre( 'save', function ( next ) {
 	if ( self.isNew ) {
 		async.parallel({
 			sender: function ( callback ) {
+				var User = self.model('User');
 				User.findById( self.sender, function ( err, sender ) {
 					if ( err ) {
 						callback( err );
@@ -44,6 +44,7 @@ Kudo.pre( 'save', function ( next ) {
 				});
 			},
 			recipient: function ( callback ) {
+				var User = self.model('User');
 				User.findById( self.recipient, function ( err, recipient ) {
 					if ( err ) {
 						callback( err );
@@ -66,6 +67,44 @@ Kudo.pre( 'save', function ( next ) {
 });
 
 Kudo.plugin( timestamper );
+
+Kudo.methods.populateResponse = function ( cb ) {
+	var self = this;
+	async.parallel({
+		sender: function(callback) {
+			var User = self.model('User');
+			User.findById( self.sender, function(err, user) {
+				user.populateResponse( callback );
+			});
+		},
+
+		recipient: function(callback) {
+			var User = self.model('User');
+			User.findById( self.recipient, function(err, user) {
+				user.populateResponse( callback );
+			});
+		},
+		
+		category: function(callback) {
+			var KudoCategory = self.model('KudoCategory');
+			KudoCategory.findById( self.category, function(err, category) {
+				category.populateResponse( callback );
+			});
+		}
+	}, function(err, results) {
+		if (err) {
+			cb(err, null);
+		} else {
+			var out = self.toObject();
+			
+			out.sender = results.sender;
+			out.recipient = results.recipient;
+			out.category = results.category;
+			
+			cb(null, out);	
+		}
+	});
+}
 
 mongoose.model( 'Kudo', Kudo );
 

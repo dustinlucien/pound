@@ -196,12 +196,13 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			assert.equal( kudo.message, 'Good job' ); 
 		}
 	},
-	/*
+
 	'WHEN I list the Kudos the sender has sent': {
 		topic: function() {
-			api.get( '/users/' + user1._id + '/kudos/sent', COOKIE_HEADER, this.callback );
+			api.get( 'users/' + user1._id + '/kudos/sent', COOKIE_HEADER, this.callback );
 		},
 		'THEN I should get back a 200 code': function ( err, res, body ) {
+			assert.equal( JSON.parse( body ).meta.code, 200 );
 		},
 		'THEN I should get the same Kudo back': function (err, res, body ) {
 			var kudo = JSON.parse( body ).response.kudos.items[ 0 ];
@@ -215,9 +216,10 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 	
 	'WHEN I list the Kudos the sender has received': {
 		topic: function() {
-			api.get( '/users/' + user2._id + '/kudos/received', COOKIE_HEADER, this.callback );
+			api.get( 'users/' + user2._id + '/kudos/received', COOKIE_HEADER, this.callback );
 		},
 		'THEN I should get back a 200 code': function ( err, res, body ) {
+			assert.equal( JSON.parse( body ).meta.code, 200 );
 		},
 		'THEN I should get the same Kudo back': function (err, res, body ) {
 			var kudo = JSON.parse( body ).response.kudos.items[ 0 ];
@@ -228,7 +230,7 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			assert.equal( kudo.message, 'Good job' ); 
 		}
 	},
-	*/
+
 	'WHEN I update the Kudo I created': {
 		topic: function () {
 			var payload = JSON.stringify({

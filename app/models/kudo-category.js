@@ -13,6 +13,10 @@ var KudoCategory = new mongoose.Schema({
 
 KudoCategory.plugin(timestamper);
 
+KudoCategory.methods.populateResponse = function ( cb ) {
+	cb( null, this.toObject() );
+}
+
 mongoose.model( 'KudoCategory', KudoCategory );
 
 module.exports = mongoose.model( 'KudoCategory' );

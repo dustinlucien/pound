@@ -6,6 +6,7 @@ var User = require( '../../app/models/user' ),
 
 var //mongo_uri = exports.mongo_uri = 'mongo://127.0.0.1:27017/test';
 	mongo_uri = exports.mongo_uri = 'mongodb://testing_user:kud05@dbh30.mongolab.com:27307/development';
+	//mongo_uri = exports.mongo_uri = 'mongodb://testing_user:kud05@dbh30.mongolab.com:27157/heroku_app563134';
 
 mongoose.connect( mongo_uri );
 
