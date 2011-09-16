@@ -9,6 +9,7 @@ var KudoCategory = require( '../models/kudo-category' );
  */
 function KudoCategoryController () {
 	this.label = 'categories';
+	this.overrideModelName = true;
 }
 
 // extend the GenericController class

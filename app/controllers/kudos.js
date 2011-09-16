@@ -2,10 +2,10 @@
  * Dependencies
  */
 
-var async = require('async')
-	, Kudo = require( '../models/kudo' )
-	, User = require( '../models/user' )
-	, KudoCategory = require( '../models/kudo-category');
+var async = require('async'),
+		Kudo = require( '../models/kudo' ),
+		User = require( '../models/user' ),
+		KudoCategory = require( '../models/kudo-category');
 
 /**
  * Class def

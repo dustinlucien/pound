@@ -2,8 +2,8 @@
  * Dependencies
  */
 
-var User = require( '../models/user' )
-	, Kudo = require( '../models/kudo' );
+var User = require( '../models/user' ),
+		Kudo = require( '../models/kudo' );
 
 /**
  * Class def
@@ -27,8 +27,6 @@ module.exports = UserController;
 UserController.prototype.index = function( req, res ) {
 	var self = this;
 
-	console.log(self);
-	// TODO filter users
 	User.find({}, function( err, docs ) {
 		if ( err ) {
 			// TODO log
@@ -159,8 +157,6 @@ UserController.prototype.destroy = function( req, res ) {
 UserController.prototype.kudos = function( req, res ) {
 	var self = this;
 	
-	console.log(self);
-
 	if (! req.params.user ) {
 		self._respond( res, null, 400 );
 	} else if (! req.params.stream ) {

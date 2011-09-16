@@ -66,7 +66,13 @@ GenericController.prototype._respond = function ( res, docs, code, err ) {
 
 		if (docs.length > 0) {
 			//try to take the label from the type of the model, not the controller
-			var label = plural.pluralize( docs[0].constructor.modelName.toLowerCase() );
+			var label;
+			if (self.overrideModelName) {
+				label = self.label;
+			} else {
+				label = plural.pluralize( docs[0].constructor.modelName.toLowerCase() );	
+			}
+			
 			for ( i = 0; i < docs.length; i++ ) {
 				(function ( i ) {
 					docs[i].populateResponse(function( err, out ) {
@@ -96,7 +102,7 @@ GenericController.prototype._paginate = function( req, query ) {
 	var sort = 'created'
 		, order = 'descending'
 		, start = 0
-		, limit = 25;
+		, limit = 50;
 		
 	if ( 'sort' in req.query ) {
 		if ( 'order' in req.query ) {
@@ -114,10 +120,8 @@ GenericController.prototype._paginate = function( req, query ) {
 		limit = parseInt( req.query.limit );
 	}
 	
-	query = query.sort( sort, order )
-								.skip( start )
-								.limit( limit );
-								
+	query = query.sort( sort, order ).skip( start ).limit( limit );
+	
 	return query;
 };
 /**
