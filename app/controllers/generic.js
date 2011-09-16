@@ -114,10 +114,10 @@ GenericController.prototype._paginate = function( req, query ) {
 		limit = parseInt( req.query.limit );
 	}
 	
-	query.sort( sort, order )
-			 .skip( start )
-			 .limit( limit );
-
+	query = query.sort( sort, order )
+								.skip( start )
+								.limit( limit );
+								
 	return query;
 };
 /**
