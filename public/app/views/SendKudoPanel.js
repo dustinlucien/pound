@@ -1,7 +1,7 @@
 kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
+
 	// ensure panel takes up all the space it needs (don't cut
 	// off the bottom) and allow the user to scroll vertically
-	fullscreen: true,
 	scroll: 'vertical',
 
 	initComponent: function () {
@@ -32,7 +32,7 @@ kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
 			xtype: 'button',
 			ui: 'decline',
 			text: 'Send this Kudo',
-			margin: '20 0',
+			margin: '20 0 20 0',
 			scope: self,
 			handler: function () {
 				Ext.dispatch({
@@ -60,7 +60,11 @@ kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
 				fieldset_message,
 				html_category,
 				send_button,
-				hidden_recipient
+				hidden_recipient,
+				// a spacer
+				{
+					height: 20
+				}
 			]
 		});
 
@@ -104,7 +108,7 @@ kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
 			callback: function ( records ) {
 				var current_row = Ext.apply( { items: [] }, cat_row ),
 					current_cat,
-					index = 5;
+					index = 3;
 
 				// TODO only works on even # of categories...
 				for ( var i = 0, l = records.length; i < l; i++ ) {
