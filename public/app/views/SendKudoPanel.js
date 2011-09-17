@@ -1,13 +1,8 @@
 kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
-	// let items take up all available width and their required height
-	// layout: 'fit',
+	// ensure panel takes up all the space it needs (don't cut
+	// off the bottom) and allow the user to scroll vertically
 	fullscreen: true,
 	scroll: 'vertical',
-
-	listeners: {
-		afterRender: function () {
-		}
-	},
 
 	initComponent: function () {
 
