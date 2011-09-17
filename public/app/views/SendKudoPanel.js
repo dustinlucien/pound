@@ -1,6 +1,13 @@
 kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
 	// let items take up all available width and their required height
-	layout: 'fit',
+	// layout: 'fit',
+	fullscreen: true,
+	scroll: 'vertical',
+
+	listeners: {
+		afterRender: function () {
+		}
+	},
 
 	initComponent: function () {
 
@@ -129,67 +136,6 @@ kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
 			}
 		});
 	}
-
-
-/*
-					xtype: 'panel',
-					layout: 'hbox',
-					margin: '0 0 10 0',
-					items: [{
-						xtype: 'button',
-						text: 'is a braniac',
-						cls: 'bright-blue white-text',
-						flex: 1
-					},{
-						xtype: 'spacer',
-						width: 10
-					},{
-						xtype: 'button',
-						text: 'kept us calm',
-						cls: 'bright-blue white-text',
-						flex: 1
-					}]
-				},{
-					xtype: 'panel',
-					layout: 'hbox',
-					margin: '0 0 10 0',
-					items: [{
-						xtype: 'button',
-						text: 'closed the deal',
-						cls: 'bright-blue white-text',
-						flex: 1
-					},{
-						xtype: 'spacer',
-						width: 10
-					},{
-						xtype: 'button',
-						text: 'had the answer',
-						cls: 'bright-blue white-text',
-						flex: 1
-					}]
-				},{
-					xtype: 'panel',
-					layout: 'hbox',
-					margin: '0 0 10 0',
-					items: [{
-						xtype: 'button',
-						text: 'knew what to say',
-						cls: 'bright-blue white-text',
-						flex: 1
-					},{
-						xtype: 'spacer',
-						width: 10
-					},{
-						xtype: 'button',
-						text: 'chipped in',
-						cls: 'bright-blue white-text',
-						flex: 1
-					}]
-				}
-			]
-		})
-	]
-*/
 	
 });
 
