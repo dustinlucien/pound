@@ -41,6 +41,7 @@ kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
 					body_panel: this._body_panel,
 					cat_buttons: this._cat_buttons,
 					callback: function () {
+						kudos.views.app.dockedItems.get( 0 ).removeAll( true );
 						self.destroy();
 					}
 				});
