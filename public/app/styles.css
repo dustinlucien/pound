@@ -86,6 +86,7 @@
 
 .user-profile .feedback .category {
 	float: left;
+	font-size: .8em;
 	width: 50%;
 }
 

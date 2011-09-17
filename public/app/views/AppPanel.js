@@ -40,7 +40,7 @@ kudos.views.AppPanel = Ext.extend( Ext.Panel, {
 	initComponent: function () {
 		kudos.views.app_toolbar = new Ext.Toolbar({
 			title: 'Kudos',
-			titleCls: 'x-toolbar-title toolbar-title-left'
+			titleCls: 'x-toolbar-title'
 		});
 
 		kudos.views.sections_panel = new kudos.views.SectionsPanel();

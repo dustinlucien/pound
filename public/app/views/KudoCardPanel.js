@@ -5,26 +5,35 @@ kudos.views.KudoCardPanel = Ext.extend( Ext.Panel, {
 		// if this panel is being used as a card, include
 		// a toolbar with a back button
 		if ( this.card ) {
-			this.dockedItems = [{
+
+			var self = this,
+				toolBar = kudos.views.app.dockedItems.get( 0 );
+
+			toolBar.add({
 				xtype: 'toolbar',
 				items: [{
 					ui: 'back',
 					text: 'Back',
-					scope: this,
+					scope: self,
 					handler: function () {
+
+						toolBar.removeAll( true );
+
 						// slide back to the previous card and destroy
 						// this panel
-						this.ownerCt.setActiveItem( this.prevCard, {
+						self.ownerCt.setActiveItem( self.prevCard, {
 							type: 'slide',
 							reverse: true,
-							scope: this,
+							scope: self,
 							after: function(){
-								this.destroy();
+								self.destroy();
 							}
 						});
 					}
 				}]
-			}]; 
+			}); 
+
+			toolBar.doLayout();
 		}
 	
 		kudos.views.KudoCardPanel.superclass.initComponent.apply( this, arguments );

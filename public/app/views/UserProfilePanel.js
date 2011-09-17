@@ -69,10 +69,7 @@ kudos.views.UserProfilePanel = Ext.extend( kudos.views.KudoCardPanel, {
 					this.ownerCt.setActiveItem( sendKudoPanel, {
 						type: 'slide',
 						direction: 'up',
-						scope: this,
-						after: function() {
-							this.destroy();
-						}
+						scope: this
 					});
 				}
 			};
