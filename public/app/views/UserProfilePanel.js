@@ -49,10 +49,11 @@ kudos.views.UserProfilePanel = Ext.extend( kudos.views.KudoCardPanel, {
 		
 		// add a Send Kudo button if this is not the current user
 		if ( !this.me ) {			
+			var first_name = this.user.data.name.substring( 0, this.user.data.name.indexOf( ' ' ) );
 			var send_kudos_button = {
 				xtype: 'button',
 				ui: 'decline',
-				html: '<div class="suitcase"></div><span class="x-button-label">Give ' + this.user.data.name + ' a Kudo</span>',
+				html: '<div class="suitcase"></div><span class="x-button-label">Give ' + first_name + ' a Kudo</span>',
 				scope: this,
 				width: '98%',
 				height: 43,
