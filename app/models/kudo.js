@@ -12,19 +12,25 @@ var Kudo = new mongoose.Schema({
 	},
 	sender: {
 		type: ObjectId,
+		ref: 'User',
 		required: true,
 	},
 	recipient: {
 		type: ObjectId,
+		ref: 'User',
 		required: true
 	},
 	category: {
 		type: ObjectId,
+		ref: 'KudoCategory',
 		required: true
 	},
+	parent: {
+		type: ObjectId,
+		ref: 'Kudo'
+	},
 	likes: [ Like ],
-	comments: [ Comment ],
-	gloms: [ ObjectId ]
+	comments: [ Comment ]
 });
 
 Kudo.pre( 'save', function ( next ) {
@@ -105,7 +111,14 @@ Kudo.methods.populateResponse = function ( cb ) {
 			cb(null, out);	
 		}
 	});
-}
+};
+
+Kudo.methods.findGloms = function ( cb ) {
+	var Kudo = mongoose.model( 'Kudo' );
+	Kudo.find({ parent: this })
+		.sort( 'date', 'descending' )
+		.run( cb );
+};
 
 mongoose.model( 'Kudo', Kudo );
 

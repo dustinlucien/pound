@@ -111,46 +111,23 @@ vows.describe( 'Kudo Model Integration Tests' ).addBatch({
 			async.parallel({
 				glom: function ( callback ) {
 					var glom = new Kudo();
-
+					glom.message = 'Good job again!';
 					glom.sender = user1._id;
 					glom.recipient = user2._id;
 					glom.category = cats[ 0 ]._id;
-					glom.message = 'Good job again!';
-
+					glom.parent = created_id;
 					glom.save( callback );
 				},
 				original: function ( callback ) {
-					var kudo = new Kudo();
-					kudo.message = 'Good job again!';
-					kudo.recipient = user1._id;
-					kudo.sender = user2._id;
-					kudo.category = cats[ 0 ]._id;
-
-					kudo.save( callback );
+					Kudo.findById( created_id, callback );
 				}
 			}, function ( err, results ) {
-				results.original.message = 'new message';
-				results.original.save( function () {
-					// Still not saving
-					console.log( 'It saved!' );
-				});
+				results.original.findGloms( self.callback );
 			});
-
-/*
-			glom.save( function ( err, glom ) {
-				Kudo.findById( created_id, function ( err, kudo ) {
-					kudo.gloms.push( glom._id );
-
-					kudo.save( function ( err, kudo ) {
-						// Why isn't this saving?
-						console.log( 'It saved!' );
-					});
-				});
-			});
-*/
 		},
-		'THEN the fields should be set correctly': function ( err, kudo ) {
-			assert.equal( kudo.gloms.length, 1 );
+		'THEN it should be returned in findGloms()': function ( err, gloms ) {
+			assert.equal( gloms.length, 1 );
+			assert.equal( gloms[ 0 ].message, 'Good job again!' );
 		}
 	},
 
