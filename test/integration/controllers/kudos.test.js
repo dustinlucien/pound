@@ -269,11 +269,11 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			var headers = merge( COOKIE_HEADER, JSON_HEADER );
 			var payload = JSON.stringify({
 				records: [{
-					message: 'Blah blah',
+					message: 'blah blah',
 					sender: user1._id,
 					recipient: user3._id,
 					category: cats[ 0 ]._id,
-					parent: KUDO
+					parent: KUDO 
 				}]
 			});
 			api.post( 'kudos/', payload, headers, this.callback );
@@ -282,6 +282,38 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			body = JSON.parse( body );
 
 			assert.equal( body.meta.code, 403 );
+		}
+	},
+
+	'WHEN I create a glom': {
+		topic: function () {
+			var headers = merge( COOKIE_HEADER, JSON_HEADER );
+			var payload = JSON.stringify({
+				records: [{
+					message: 'blah blah',
+					sender: user1._id,
+					recipient: user2._id,
+					category: cats[ 0 ]._id,
+					parent: KUDO 
+				}]
+			});
+			api.post( 'kudos/', payload, headers, this.callback );
+		},
+		'THEN I should get a 200': function ( err, res, body ) {
+			body = JSON.parse( body );
+
+			assert.equal( body.meta.code, 200 );
+		},
+		'THEN I should get the glom back': function ( err, res, body ) {
+			body = JSON.parse( body );
+			var kudo = body.response.kudos.items[ 0 ];
+
+			assert.isNotNull( kudo._id );
+			assert.equal( kudo.message, 'blah blah' );
+			assert.equal( kudo.sender._id, String( user1._id ) );
+			assert.equal( kudo.recipient._id, String( user2._id ) );
+			assert.equal( kudo.category._id, String( cats[ 0 ]._id ) );
+			assert.equal( kudo.parent, KUDO );
 		}
 	},
 
