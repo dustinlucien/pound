@@ -35,6 +35,24 @@ var Kudo = new mongoose.Schema({
 
 Kudo.pre( 'save', function ( next ) {
 	var self = this;
+	if ( ! self.parent ) {
+		next();
+	} else {
+		var Kudo = mongoose.model( 'Kudo' );
+		Kudo.findById( self.parent, function ( err, parent ) {
+			if ( err ) {
+				next( err );
+			} else if ( String( parent.recipient ) !== String( self.recipient ) ) {
+				next( new Error( 'Gloms must have the same recipient as their parent' ) );
+			} else {
+				next();
+			}
+		});
+	}
+});
+
+Kudo.pre( 'save', function ( next ) {
+	var self = this;
 	
 	if ( self.isNew ) {
 		async.parallel({

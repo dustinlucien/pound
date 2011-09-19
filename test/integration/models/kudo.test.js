@@ -9,7 +9,7 @@ var vows = require( 'vows' ),
 	User = require('../../../app/models/user.js'),
 	KudoCategory = require('../../../app/models/kudo-category.js');
 
-var user1, user2, cats, created_id;
+var user1, user2, user3, cats, created_id;
 
 function setup ( cb ) {
 	ensure_categories( false, function () {
@@ -27,9 +27,17 @@ function setup ( cb ) {
 				name: 'User 2',
 				password: '3456'
 			});
-			user1.save( function () {
-				user2.save( cb );
+			user3 = new User({
+				email: 'user3@user.com',
+				name: 'User 3',
+				password: '5678'
 			});
+
+			async.parallel([
+				function ( callback ) { user1.save( callback ); },
+				function ( callback ) { user2.save( callback ); },
+				function ( callback ) { user3.save( callback ); }
+			], cb );
 		});
 		});
 	});
@@ -128,6 +136,23 @@ vows.describe( 'Kudo Model Integration Tests' ).addBatch({
 		'THEN it should be returned in findGloms()': function ( err, gloms ) {
 			assert.equal( gloms.length, 1 );
 			assert.equal( gloms[ 0 ].message, 'Good job again!' );
+		}
+	}
+
+}).addBatch({
+
+	'WHEN I add a glom with a different recipient than the parent': {
+		topic: function () {
+			var glom = new Kudo();
+			glom.message = 'Good job again!';
+			glom.sender = user3._id;
+			glom.recipient = user1._id;
+			glom.category = cats[ 0 ]._id;
+			glom.parent = created_id;
+			glom.save( this.callback );
+		},
+		'THEN the model should not validate': function ( err, gloms ) {
+			assert.isNotNull( err );
 		}
 	},
 
