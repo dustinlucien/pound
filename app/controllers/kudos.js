@@ -44,6 +44,10 @@ KudoController.prototype._build_kudo = function ( req, res, fields, cb ) {
 		fields.sender = req.session.uid;
 	}
 
+	if ( fields.parent === '' ) {
+		delete fields.parent;
+	}
+
 	if ( fields.recipient ) {
 		cb( null, new Kudo({
 			recipient: fields.recipient,
