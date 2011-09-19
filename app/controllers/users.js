@@ -23,6 +23,21 @@ module.exports = UserController;
  * Class methods
  */
 
+//Will set req.user for every request with :user
+UserController.prototype.load = function( req, id, callback ) {
+	// TODO only show certain fields
+	User.findById( id, function ( err, doc ) {
+		if ( err ) {
+			console.log( callback );
+			callback ( err, null );
+		} else if ( !doc ) {
+			callback( new Error( 'unable to find user' ) , null );
+		} else {
+			callback( null, doc );
+		}
+	});
+}
+
 //GET /users  ->  index
 UserController.prototype.index = function( req, res ) {
 	var self = this;
@@ -72,21 +87,7 @@ UserController.prototype.create = function( req, res ) {
 
 //GET /users/:user -> show
 UserController.prototype.show = function( req, res ) {
-	var self = this;
-	if ( ! req.params.user ) {
-		self._respond( res, {}, 400 );
-	} else {
-		// TODO only show certain fields
-		User.findById( req.params.user, function ( err, doc ) {
-			if ( err ) {
-				self._respond( res, {}, 500, err );
-			} else if ( ! doc ) {
-				self._respond( res, {}, 404 );
-			} else {
-				self._respond( res, doc );
-			}
-		});
-	}
+	this._respond( res, req.user );
 };
 
 //PUT /users/:user -> update
@@ -126,25 +127,15 @@ UserController.prototype.destroy = function( req, res ) {
 	// TODO also delete related stuff? maybe mark as inactive, instead...
 	var self = this;
 
-	if ( ! req.params.user ) {
-		self._respond( res, null, 400 );
-	} else if ( req.params.user !== req.session.uid ) {
+	if ( req.user._id != req.session.uid ) {
 		self._respond( res, null, 403, 'Forbidden to delete this user' );
 	} else {
-		User.findById( req.params.user, function ( err, doc ) {
+		req.user.remove ( function ( err, doc ) {
 			if ( err ) {
 				self._respond( res, null, 500, err );
-			} else if ( ! doc ) {
-				self._respond( res, null, 404 );
 			} else {
-				doc.remove( function ( err, doc ) {
-					if ( err ) {
-						self._respond( res, null, 500, err );
-					} else {
-						// TODO only show certain fields
-						self._respond( res, doc );
-					}
-				} );
+				// TODO only show certain fields
+				self._respond( res, doc );
 			}
 		} );
 	}

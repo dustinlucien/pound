@@ -135,9 +135,7 @@ GenericController.prototype.router = function () {
 	return {
 		index: function () { self.index.apply( self, arguments ); },
 		show: function () { self.show.apply( self, arguments ); },
-		new: function () { self.new.apply( self, arguments ); },
 		create: function () { self.create.apply( self, arguments ); },
-		edit: function () { self.edit.apply( self, arguments ); },
 		update: function () { self.update.apply( self, arguments ); },
 		destroy: function () { self.destroy.apply( self, arguments ); }
 	};

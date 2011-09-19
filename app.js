@@ -116,14 +116,18 @@ require( './app/util/ensure-categories' )( true, function () {} );
 /**
  * Controllers
  */
-
 var user_controller = new UserController();
+
+//Map the default routes
 var user_resource = app.resource( 'users', user_controller.router() );
 
 //Looks weird, seems awkward.  Easier way? -- Dustin
 user_resource.map('get', 'kudos/:stream', function () {
 	user_controller.kudos.apply( user_controller, arguments );
 });
+
+//Temporary until i get it working
+user_resource.load( function() { user_controller.load.apply( user_controller, arguments ) } );
 
 var kudo_category_controller = new KudoCategoryController();
 app.resource( 'kudo_categories', kudo_category_controller.router() );

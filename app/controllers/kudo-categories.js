@@ -69,4 +69,3 @@ KudoCategoryController.prototype.update = function ( req, res ) {
 KudoCategoryController.prototype.destroy = function(req, res) {
 	this._respond( res, null, 403 );
 };
-

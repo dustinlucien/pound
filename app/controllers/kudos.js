@@ -133,7 +133,11 @@ KudoController.prototype.update = function ( req, res ) {
 };
 
 //DELETE /kudos/:kudo -> delete
-KudoController.prototype.destroy = function(req, res) {
+KudoController.prototype.destroy = function( req, res ) {
 	this._respond( res, null, 403 );
 };
 
+//POST /kudos/:kudo/like -> create a like on the kudo
+KudoController.prototype.like = function( req, res ) {
+	
+}
