@@ -7,7 +7,8 @@ kudos.models.Kudo = Ext.regModel( 'Kudo', {
 		{ name: 'message', type: 'string' },
 		{ name: 'category', type: 'string' },
 		{ name: 'sender', type: 'object'},
-		{ name: 'recipient', type: 'object'}
+		{ name: 'recipient', type: 'object'},
+		{ name: 'parent', type: 'string' }
 	],
 	/*
 	associations: [

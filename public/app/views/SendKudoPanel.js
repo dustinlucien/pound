@@ -53,6 +53,12 @@ kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
 			name: 'recipient',
 			value: this.user.getId()
 		};
+
+		var hidden_parent = {
+			xtype: 'hiddenfield',
+			name: 'parent',
+			value: ( this.parent && this.parent.getId() ) || ''
+		};
 		
 		// TODO indicate that categories are loading
 		var body_panel = new kudos.views.KudosFormPanel({
@@ -62,6 +68,7 @@ kudos.views.SendKudoPanel = Ext.extend( Ext.Panel, {
 				html_category,
 				send_button,
 				hidden_recipient,
+				hidden_parent,
 				// a spacer
 				{
 					height: 20

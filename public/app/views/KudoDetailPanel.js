@@ -20,6 +20,28 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 						'+1',
 						'</div>' ].join( '' );
 
+		var user = new kudos.models.User( self.kudo.get( 'recipient' ) );
+		var add_button = {
+			xtype: 'button',
+			ui: 'decline',
+			html: '<div class="suitcase"></div><span class="x-button-label">Add your Kudo</span>',
+			width: '98%',
+			height: 43,
+			cls: 'send-kudo',
+			handler: function () {
+				var sendKudoPanel = new kudos.views.SendKudoPanel({
+					user : user,
+					parent: self.kudo
+				});
+
+				self.ownerCt.setActiveItem( sendKudoPanel, {
+					type: 'slide',
+					direction: 'up',
+					scope: self
+				});
+			}
+		};
+
 		Ext.apply( this, {
 			items: [{
 				html: '<div class="big glow-suitcase"></div>',
@@ -31,13 +53,19 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 				html: cat_box,
 				margin: '10',
 				width: '100%'
+			},
 			// a spacer
-			},{
+			{
 				height: 20
 			}]
 		});
-		
+
 		kudos.views.KudoDetailPanel.superclass.initComponent.apply( this, arguments );
+
+		if (  ( this.kudo.get( 'sender' )._id !== kudos.data.uid ) &&
+			  ( this.kudo.get( 'recipient' )._id !== kudos.data.uid ) ) {
+			this.insert( 3, add_button );
+		}
 	}
 });
 

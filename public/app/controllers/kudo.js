@@ -28,6 +28,8 @@ Ext.regController( 'Kudo', {
 			message = message_field.getValue(),
 			recipient_field = panel.down( 'field[name="recipient"]'),
 			recipient = recipient_field.getValue(),
+			parent_field = panel.down( 'field[name="parent"]'),
+			parent = parent_field.getValue(),
 			category;
 
 		// TODO make less hacky...
@@ -41,7 +43,8 @@ Ext.regController( 'Kudo', {
 			sender: kudos.data.uid,
 			recipient: recipient,
 			message: message,
-			category: category
+			category: category,
+			parent: parent
 		});
 
 		// TODO better errors
