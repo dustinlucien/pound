@@ -49,7 +49,8 @@ KudoController.prototype._build_kudo = function ( req, res, fields, cb ) {
 			recipient: fields.recipient,
 			sender: fields.sender,
 			message: fields.message,
-			category: fields.category
+			category: fields.category,
+			parent: fields.parent
 		}));
 	} else if ( fields.recipient_email ) {
 		User.find( { email: fields.recipient_email }, function ( err, docs ) {
@@ -62,7 +63,8 @@ KudoController.prototype._build_kudo = function ( req, res, fields, cb ) {
 					recipient: docs[ 0 ]._id,
 					sender: fields.sender,
 					message: fields.message,
-					category: fields.category
+					category: fields.category,
+					parent: fields.parent
 				}));
 			}
 		});
@@ -94,9 +96,11 @@ KudoController.prototype.create = function( req, res ) {
 						self._respond( res, {}, 403, 'Cannot send Kudo to yourself' );
 					} else {
 						kudo.save( function ( err, doc ) {
-							// TODO better error response
 							if ( err ) {
-								self._respond( res, {}, 500, 'Unknown error' );
+								var err_message = err.message || 'Unknown error',
+									err_code = ( err.message && 403 ) || 500;
+
+								self._respond( res, {}, err_code, err_message );
 							} else {
 								self._respond( res, doc );
 							}

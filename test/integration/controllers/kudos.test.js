@@ -1,5 +1,6 @@
 var vows = require( 'vows' ),
 	assert = require( 'assert' ),
+	async = require( 'async' ),
 	should = require( 'should' ),
 	request = require( 'request' ),
 	lib = require( '../../test-lib' ),
@@ -16,7 +17,7 @@ var User = require( '../../../app/models/user' ),
 	Kudo = require( '../../../app/models/kudo' ),
 	KudoCategory = require( '../../../app/models/kudo-category' );
 
-var user1, user2, cats, KUDO;
+var user1, user2, user3, cats, KUDO;
 
 function setup ( cb ) {
 	ensure_categories( false, function () {
@@ -34,9 +35,17 @@ function setup ( cb ) {
 				name: 'User 2',
 				password: '1234'
 			});
-			user1.save( function () {
-				user2.save( cb );
+			user3 = new User({
+				email: 'user3@user.com',
+				name: 'User 3',
+				password: '5678'
 			});
+
+			async.parallel([
+				function ( callback ) { user1.save( callback ); },
+				function ( callback ) { user2.save( callback ); },
+				function ( callback ) { user3.save( callback ); }
+			], cb );
 		});
 		});
 	});
@@ -252,6 +261,27 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 		},
 		'THEN I should get a 403 status code': function ( err, res, body ) {
 			assert.equal( JSON.parse( body ).meta.code, 403 );
+		}
+	},
+
+	'WHEN I create a glom with an invalid recipient': {
+		topic: function () {
+			var headers = merge( COOKIE_HEADER, JSON_HEADER );
+			var payload = JSON.stringify({
+				records: [{
+					message: 'Blah blah',
+					sender: user1._id,
+					recipient: user3._id,
+					category: cats[ 0 ]._id,
+					parent: KUDO
+				}]
+			});
+			api.post( 'kudos/', payload, headers, this.callback );
+		},
+		'THEN I should get a 403': function ( err, res, body ) {
+			body = JSON.parse( body );
+
+			assert.equal( body.meta.code, 403 );
 		}
 	},
 
