@@ -53,7 +53,11 @@ User.plugin( timestamper );
 
 User.methods.populateResponse = function ( cb ) {
 	var out = this.toObject();
+	
 	delete out.password;
+	delete out.created;
+	delete out.updated;
+	
 	cb( null, out );
 }
 

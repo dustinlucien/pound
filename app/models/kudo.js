@@ -104,6 +104,9 @@ Kudo.methods.populateResponse = function ( cb ) {
 		} else {
 			var out = self.toObject();
 			
+			delete out.created;
+			delete out.updated;
+			
 			out.sender = results.sender;
 			out.recipient = results.recipient;
 			out.category = results.category;

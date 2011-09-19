@@ -14,6 +14,11 @@ var KudoCategory = new mongoose.Schema({
 KudoCategory.plugin(timestamper);
 
 KudoCategory.methods.populateResponse = function ( cb ) {
+	var out = this.toObject();
+	
+	delete out.created;
+	delete out.updated;
+	
 	cb( null, this.toObject() );
 }
 
