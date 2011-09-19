@@ -23,7 +23,8 @@ var Kudo = new mongoose.Schema({
 		required: true
 	},
 	likes: [ Like ],
-	comments: [ Comment ]
+	comments: [ Comment ],
+	gloms: [ ObjectId ]
 });
 
 Kudo.pre( 'save', function ( next ) {

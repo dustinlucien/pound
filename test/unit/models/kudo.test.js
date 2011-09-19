@@ -26,6 +26,7 @@ vows.describe( 'Kudo Model Unit Tests' ).addBatch({
 			
 			topic.get( 'comments' ).should.be.an.instanceof( MongooseArray );
 			topic.get( 'likes' ).should.be.an.instanceof( MongooseArray );
+			topic.get( 'gloms' ).should.be.an.instanceof( MongooseArray );
 		}
 	},
 

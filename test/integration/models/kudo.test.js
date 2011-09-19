@@ -7,7 +7,7 @@ var vows = require( 'vows' ),
 	User = require('../../../app/models/user.js'),
 	KudoCategory = require('../../../app/models/kudo-category.js');
 
-var user1, user2, cats;
+var user1, user2, cats, created_id;
 
 function setup ( cb ) {
 	ensure_categories( false, function () {
@@ -45,7 +45,8 @@ vows.describe( 'Kudo Model Integration Tests' ).addBatch({
 				kudo.recipient = user2._id;
 				kudo.category = cats[ 0 ]._id;
 				kudo.message = 'Good job';
-				kudo.save( function( err ) {
+				kudo.save( function( err, kudo ) {
+					created_id = kudo._id;
 					assert.isNull(err);
 					User.findById( user1, function ( err, sender ) {
 						assert.isNull(err);
@@ -86,20 +87,46 @@ vows.describe( 'Kudo Model Integration Tests' ).addBatch({
 			assert.isTrue( user2.created.getTime() === results.recipient.created.getTime() );
 			assert.isTrue( results.recipient.updated.getTime() > results.recipient.created.getTime() );
 		}
-	}
-}).addBatch({
+	},
 
 	'WHEN I create a new Kudo with invalid data': {
 		topic: function () {
-			var kudo = new Kudo();
-			kudo.save( this.callback );
+			var bad_kudo = new Kudo();
+			bad_kudo.save( this.callback );
 		},
-		'THEN there should be validation errors': function ( err, kudo ) {
+		'THEN there should be validation errors': function ( err, bad_kudo ) {
 			assert.isNotNull( err );
-			assert.equal( kudo, undefined );
+			assert.equal( bad_kudo, undefined );
+		}
+	}
+
+}).addBatch({
+
+	'WHEN I add a glom Kudo to an existing Kudo': {
+		topic: function () {
+			var glom = new Kudo();
+
+			glom.sender = user1._id;
+			glom.recipient = user2._id;
+			glom.category = cats[ 0 ]._id;
+			glom.message = 'Good job again!';
+
+			glom.save( function ( err, glom ) {
+				Kudo.findById( created_id, function ( err, kudo ) {
+					kudo.gloms.push( glom._id );
+
+					kudo.save( function ( err, kudo ) {
+						// Why isn't this saving?
+						console.log( 'It saved!' );
+					});
+				});
+			});
+		},
+		'THEN the fields should be set correctly': function ( err, kudo ) {
+			assert.equal( kudo.gloms.length, 1 );
 		}
 	},
-	
+
 	teardown: teardown
 
 }).export( module );
