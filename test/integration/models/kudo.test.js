@@ -1,8 +1,10 @@
 var vows = require( 'vows' ),
+	async = require( 'async' ),
 	assert = require( 'assert' ),
 	ensure_categories = require( '../../../app/util/ensure-categories' ),
 	lib = require( '../../test-lib' ),
 	teardown = lib.teardown,
+
 	Kudo = require('../../../app/models/kudo.js'),
 	User = require('../../../app/models/user.js'),
 	KudoCategory = require('../../../app/models/kudo-category.js');
@@ -104,13 +106,37 @@ vows.describe( 'Kudo Model Integration Tests' ).addBatch({
 
 	'WHEN I add a glom Kudo to an existing Kudo': {
 		topic: function () {
-			var glom = new Kudo();
+			var self = this;
 
-			glom.sender = user1._id;
-			glom.recipient = user2._id;
-			glom.category = cats[ 0 ]._id;
-			glom.message = 'Good job again!';
+			async.parallel({
+				glom: function ( callback ) {
+					var glom = new Kudo();
 
+					glom.sender = user1._id;
+					glom.recipient = user2._id;
+					glom.category = cats[ 0 ]._id;
+					glom.message = 'Good job again!';
+
+					glom.save( callback );
+				},
+				original: function ( callback ) {
+					var kudo = new Kudo();
+					kudo.message = 'Good job again!';
+					kudo.recipient = user1._id;
+					kudo.sender = user2._id;
+					kudo.category = cats[ 0 ]._id;
+
+					kudo.save( callback );
+				}
+			}, function ( err, results ) {
+				results.original.message = 'new message';
+				results.original.save( function () {
+					// Still not saving
+					console.log( 'It saved!' );
+				});
+			});
+
+/*
 			glom.save( function ( err, glom ) {
 				Kudo.findById( created_id, function ( err, kudo ) {
 					kudo.gloms.push( glom._id );
@@ -121,6 +147,7 @@ vows.describe( 'Kudo Model Integration Tests' ).addBatch({
 					});
 				});
 			});
+*/
 		},
 		'THEN the fields should be set correctly': function ( err, kudo ) {
 			assert.equal( kudo.gloms.length, 1 );
