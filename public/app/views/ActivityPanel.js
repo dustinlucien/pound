@@ -22,8 +22,10 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 			}
 		});
 
-		// register the selection handler
-		this.on( 'selectionchange', this.onSelect, this );
+		if ( ! this.no_select ) {
+			// register the selection handler
+			this.on( 'selectionchange', this.onSelect, this );
+		}
 
 		// on item tap
 		this.on( 'itemtap', this.onTap, this );

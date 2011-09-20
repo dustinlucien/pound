@@ -71,7 +71,7 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 			url: '/kudos/' + this.kudo.getId() + '/gloms',
 			success: function ( response ) {
 				var body = Ext.decode( response.responseText );
-				if ( body.success ) {
+				if ( body.success && body.response.kudos.count > 0 ) {
 					var glomStore = new Ext.data.Store({
 						model: kudos.models.Kudo,
 						data: body.response.kudos.items
@@ -81,11 +81,20 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 						cls: 'kudo-list',
 						store: glomStore,
 						no_load: true,
+						no_select: true,
 						width: '98%',
 						margin: '10 0 10 0',
 						scroll: false
 					});
-					self.insert( 3, activity );
+
+					var msg = {
+						html: 'Other Kudos in this spree',
+						margin: '10 0 10 0',
+						width: '98%'
+					};
+
+					self.insert( 3, msg );
+					self.insert( 4, activity );
 					self.doLayout();
 				}
 			}
