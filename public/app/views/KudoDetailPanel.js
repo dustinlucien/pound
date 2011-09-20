@@ -87,6 +87,7 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 						store: glomStore,
 						no_load: true,
 						no_select: true,
+						no_tap: true,
 						width: '98%',
 						margin: '10 0 10 0',
 						scroll: false

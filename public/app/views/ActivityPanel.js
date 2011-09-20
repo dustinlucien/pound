@@ -1,5 +1,7 @@
 kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 
+	selectedItemCls: undefined,
+
 	initComponent: function () {
 
 		var tpl = new Ext.XTemplate(
@@ -22,21 +24,18 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 			}
 		});
 
-		if ( ! this.no_select ) {
-			// register the selection handler
-			this.on( 'selectionchange', this.onSelect, this );
-		}
+		this.on( 'selectionchange', this.onSelect, this );
 
-		// on item tap
-		this.on( 'itemtap', this.onTap, this );
-		
 		kudos.views.ActivityPanel.superclass.initComponent.apply( this, arguments );
 	},
 
 	onTap: function ( eventObj ) {
 		var target = eventObj.getTarget(),
 			self = this;
-		if ( target.tagName === 'SPAN' ) {
+
+		if ( this.no_tap ) {
+			eventObj.stopPropagation();
+		} else if ( target.tagName === 'SPAN' ) {
 			var uid = target.attributes.getNamedItem( 'data-uid' ).value;
 			kudos.models.User.load( uid, {
 				success: function ( user ) {
@@ -58,7 +57,7 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 
 	// when an item is pressed
 	onSelect: function ( selectionmodel, records ) {
-		if ( records[ 0 ] ) {
+		if ( ( ! this.no_select ) && records[ 0 ] ) {
 			var self = this,
 				kudo = records[ 0 ];
 
