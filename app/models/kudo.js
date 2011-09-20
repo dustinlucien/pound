@@ -133,19 +133,24 @@ Kudo.methods.populateResponse = function ( cb ) {
 	});
 };
 
-Kudo.methods.findGloms = function ( conditions, field, options, callback ) {
-	conditions.merge( { parent: this });	
+Kudo.methods.findGloms = function ( conditions, fields, options, callback ) {
 	var Kudo = mongoose.model( 'Kudo' );
+
+	conditions = merge( conditions, { parent: this });		
+	console.log( conditions );
 	
-	Kudo.find( conditions, field, options, callback );
+	Kudo.find( conditions, fields, options, callback );
 };
 
-Kudo.methods.likes = function ( cb ) {
+Kudo.methods.likes = function ( conditions, fields, options, callback ) {
 	var Like = mongoose.model( 'Like' );
-	Like.find( { sender: this } )
-			.sort( 'created', 'descending' )
-			.run ( cb );
+	
+	conditions = merge( conditions, { sender: this } );
+	console.log( conditions );
+	
+	Like.find( conditions, fields, options, callback );
 }
+
 mongoose.model( 'Kudo', Kudo );
 
 module.exports = mongoose.model( 'Kudo' );
