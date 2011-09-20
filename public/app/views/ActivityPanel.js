@@ -58,18 +58,31 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 	// when an item is pressed
 	onSelect: function ( selectionmodel, records ) {
 		if ( records[ 0 ] ) {
-			var self = this;
+			var self = this,
+				kudo = records[ 0 ];
 
-			var kudoDetailCard = new kudos.views.KudoDetailPanel({
-				kudo: records[ 0 ],
-				card: true,
-				prevCard: self
-			});
+			if ( kudo.get( 'parent' ) ) {
+				kudos.models.Kudo.load( kudo.get( 'parent' ), {
+					success: function ( kudo ) {
+						create_card.call( self, kudo );
+					}
+				});
+			} else {
+				create_card.call( self, kudo );
+			}
 
-			this.ownerCt.setActiveItem( kudoDetailCard, {
-				type: 'slide',
-				direction: 'left'
-			});
+			function create_card ( kudo ) {
+				var kudoDetailCard = new kudos.views.KudoDetailPanel({
+					kudo: kudo,
+					card: true,
+					prevCard: this
+				});
+
+				this.ownerCt.setActiveItem( kudoDetailCard, {
+					type: 'slide',
+					direction: 'left'
+				});
+			}
 		}
 	}
 
