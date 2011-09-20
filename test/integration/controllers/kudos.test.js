@@ -315,6 +315,32 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			assert.equal( kudo.category._id, String( cats[ 0 ]._id ) );
 			assert.equal( kudo.parent, KUDO );
 		}
+	}
+
+}).addBatch({
+
+	'WHEN I get gloms': {
+		topic: function () {
+			api.get( 'kudos/' + KUDO + '/gloms', COOKIE_HEADER, this.callback );
+		},
+		'THEN I should get a 200': function ( err, res, body ) {
+			body = JSON.parse( body );
+
+			assert.equal( body.meta.code, 200 );
+		},
+		'THEN I should get the correct data': function ( err, res, body ) {
+			body = JSON.parse( body );
+
+			assert.equal( body.response.kudos.items.length, 1 );
+
+			var kudo = body.response.kudos.items[ 0 ];
+
+			assert.equal( kudo.message, 'blah blah' );
+			assert.equal( kudo.sender._id, String( user1._id ) );
+			assert.equal( kudo.recipient._id, String( user2._id ) );
+			assert.equal( kudo.category._id, String( cats[ 0 ]._id ) );
+			assert.equal( kudo.parent, KUDO );
+		}
 	},
 
 	teardown: teardown

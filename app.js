@@ -129,7 +129,11 @@ var kudo_category_controller = new KudoCategoryController();
 app.resource( 'kudo_categories', kudo_category_controller.router() );
 
 var kudo_controller = new KudoController();
-app.resource( 'kudos', kudo_controller.router() );
+var kudo_resource = app.resource( 'kudos', kudo_controller.router() );
+
+kudo_resource.map( 'get', 'gloms', function () {
+	kudo_controller.gloms.apply( kudo_controller, arguments );
+});
 
 /**
  * Start the app!

@@ -116,8 +116,7 @@ KudoController.prototype.create = function( req, res ) {
 	}
 };
 
-//GET /kudos/:kudo -> show
-KudoController.prototype.show = function( req, res ) {
+KudoController.prototype._find_kudo = function ( req, res, cb ) {
 	var self = this;
 
 	if ( ! req.params.kudo ) {
@@ -129,10 +128,31 @@ KudoController.prototype.show = function( req, res ) {
 			} else if ( ! doc ) {
 				self._respond( res, null, 404 );
 			} else {
-				self._respond( res, doc );
+				cb( doc );
 			}
 		});
 	}
+};
+
+//GET /kudos/:kudo -> show
+KudoController.prototype.show = function( req, res ) {
+	var self = this;
+	this._find_kudo( req, res, function ( kudo ) {
+		self._respond( res, kudo );
+	});
+};
+
+KudoController.prototype.gloms = function ( req, res ) {
+	var self = this;
+	this._find_kudo( req, res, function ( kudo ) {
+		kudo.findGloms( function ( err, gloms ) {
+			if ( err ) {
+				self._respond( res, null, 500 );
+			} else {
+				self._respond( res, gloms );
+			}
+		});
+	});
 };
 
 //PUT /kudos/:kudo -> update
