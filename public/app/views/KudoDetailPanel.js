@@ -66,6 +66,30 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 			  ( this.kudo.get( 'recipient' )._id !== kudos.data.uid ) ) {
 			this.insert( 3, add_button );
 		}
+
+		Ext.Ajax.request({
+			url: '/kudos/' + this.kudo.getId() + '/gloms',
+			success: function ( response ) {
+				var body = Ext.decode( response.responseText );
+				if ( body.success ) {
+					var glomStore = new Ext.data.Store({
+						model: kudos.models.Kudo,
+						data: body.response.kudos.items
+					});
+	
+					var activity = new kudos.views.ActivityPanel({
+						cls: 'kudo-list',
+						store: glomStore,
+						no_load: true,
+						width: '98%',
+						margin: '10 0 10 0',
+						scroll: false
+					});
+					self.insert( 3, activity );
+					self.doLayout();
+				}
+			}
+		});
 	}
 });
 

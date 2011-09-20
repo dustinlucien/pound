@@ -1,8 +1,5 @@
 kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 
-	store: 'kudoStore',
-	cls: 'kudo-list',
-
 	initComponent: function () {
 
 		var tpl = new Ext.XTemplate(
@@ -20,7 +17,9 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 
 		// on render, load activity
 		this.on('render', function() {
-			this.store.load();
+			if ( ! this.no_load ) {
+				this.store.load();
+			}
 		});
 
 		// register the selection handler

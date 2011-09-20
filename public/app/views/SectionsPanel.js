@@ -48,10 +48,14 @@ kudos.views.SectionsPanel = Ext.extend( Ext.Panel, {
 			dock: 'bottom',
 			items: [ buttons ]
 		}];
-		
+
+		kudos.views.activity_panel = new kudos.views.ActivityPanel({
+			store: 'kudoStore',
+			cls: 'kudo-list'
+		});
+
 		empty = new kudos.views.EmptyPanel();
 		kudos.views.user_profile_panel = new kudos.views.UserProfilePanel();
-		kudos.views.activity_panel = new kudos.views.ActivityPanel();
 		kudos.views.people_list_panel = new kudos.views.PeopleListPanel();
 
 		Ext.apply( this, {
