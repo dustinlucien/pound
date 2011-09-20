@@ -4,13 +4,23 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 
 	initComponent: function () {
 
+		var self = this;
+
 		var tpl = new Ext.XTemplate(
 			'<div class="kudo-item {[xindex % 2 === 0 ? "even" : "odd"]}">',
 				'<tpl if="sender._id === kudos.data.uid">You gave </tpl>',
 				'<tpl if="sender._id !== kudos.data.uid"><span class="link-text" data-uid="{sender._id}">{sender.name}</span> gave </tpl>',
 				'<tpl if="recipient._id === kudos.data.uid">you a kudo</tpl>',
 				'<tpl if="recipient._id !== kudos.data.uid"><br /><span class="link-text" data-uid="{recipient._id}">{recipient.name}</span> a kudo</tpl>',
-			'</div>'
+				'<tpl if="this.showSnippet()">',
+					'<div class="snippet">for {message}</div>',
+				'</tpl>',
+			'</div>',
+			{
+				showSnippet: function () {
+					return self.show_snippet || false;
+				}
+			}
 		);
 
 		Ext.apply( this, {
