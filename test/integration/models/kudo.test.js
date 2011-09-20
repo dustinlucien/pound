@@ -154,9 +154,38 @@ vows.describe( 'Kudo Model Integration Tests' ).addBatch({
 		'THEN the model should not validate': function ( err, gloms ) {
 			assert.isNotNull( err );
 		}
-	},
+	}
+}).addBatch({
 
-	teardown: teardown
+		'WHEN I add a like to a kudo': {
+			topic: function () {
+				var self = this;
+				var kudo = new Kudo();
+				kudo.message = 'Good job again!';
+				kudo.sender = user2._id;
+				kudo.recipient = user1._id;
+				kudo.category = cats[ 0 ]._id;
+				kudo.parent = null;
+				
+				async.waterfall([
+					function( callback ) {
+						kudo.save( callback );
+					},
+					function( kudo, callback ) {
+						var Like = kudo.model( 'Like' );
+						var like = new Like();
+						like.sender = user3.get( 'id' );
+						like.kudo = kudo.get( 'id' );
+						like.save( callback );
+					}], self.callback );
+			},
+			'THEN kudo should have a like added to it': function ( err, like ) {
+				assert.isNull( err );
+				assert.equal( like.sender, user3.get('id') );
+			}
+		},
+
+		teardown: teardown
 
 }).export( module );
 

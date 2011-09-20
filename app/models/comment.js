@@ -3,7 +3,8 @@ var mongoose = require('mongoose'),
 	timestamper = require('./timestamper');
 
 var Comment = new mongoose.Schema({
-	sender: ObjectId,
+	sender: { type: ObjectId, ref: 'User' },
+	kudo: { type: ObjectId, ref: 'Kudo' },
 	message: String
 });
 

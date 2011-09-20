@@ -145,13 +145,34 @@ KudoController.prototype.show = function( req, res ) {
 KudoController.prototype.gloms = function ( req, res ) {
 	var self = this;
 	this._find_kudo( req, res, function ( kudo ) {
-		kudo.findGloms( function ( err, gloms ) {
+		kudo.findGloms( {}, function ( err, gloms ) {
 			if ( err ) {
 				self._respond( res, null, 500 );
 			} else {
 				self._respond( res, gloms );
 			}
 		});
+	});
+};
+
+KudoController.prototype.like = function( req, res ) {
+	this._find_kudo( req, res, function( kudo ) {
+		if ( err ) {
+			self._respond( res, null, 500 );
+		} else {
+			var Like = mongoose.model('Like');
+			var like = new Like();
+			like.sender = req.session.uid;
+			like.kudo = kudo;
+			
+			like.save( function ( err ) {
+				if (err) {
+					self._respond( res, null, 500);
+				} else {
+					self._respond( res, null, 200);
+				}
+			});
+		}
 	});
 };
 

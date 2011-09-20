@@ -3,7 +3,8 @@ var async = require( 'async' ),
 	Like = require( './like' ),
 	Comment = require( './comment' ),
 	ObjectId = mongoose.Schema.ObjectId,
-	timestamper = require('./timestamper');
+	timestamper = require('./timestamper'),
+	merge = require('../util/merge');
 
 var Kudo = new mongoose.Schema({
 	message: {
@@ -28,9 +29,7 @@ var Kudo = new mongoose.Schema({
 	parent: {
 		type: ObjectId,
 		ref: 'Kudo'
-	},
-	likes: [ Like ],
-	comments: [ Comment ]
+	}
 });
 
 Kudo.pre( 'save', function ( next ) {
@@ -134,13 +133,19 @@ Kudo.methods.populateResponse = function ( cb ) {
 	});
 };
 
-Kudo.methods.findGloms = function ( cb ) {
+Kudo.methods.findGloms = function ( conditions, field, options, callback ) {
+	conditions.merge( { parent: this });	
 	var Kudo = mongoose.model( 'Kudo' );
-	Kudo.find({ parent: this })
-		.sort( 'date', 'descending' )
-		.run( cb );
+	
+	Kudo.find( conditions, field, options, callback );
 };
 
+Kudo.methods.likes = function ( cb ) {
+	var Like = mongoose.model( 'Like' );
+	Like.find( { sender: this } )
+			.sort( 'created', 'descending' )
+			.run ( cb );
+}
 mongoose.model( 'Kudo', Kudo );
 
 module.exports = mongoose.model( 'Kudo' );
