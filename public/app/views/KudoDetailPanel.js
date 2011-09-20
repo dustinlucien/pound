@@ -62,15 +62,20 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 
 		kudos.views.KudoDetailPanel.superclass.initComponent.apply( this, arguments );
 
-		if (  ( this.kudo.get( 'sender' )._id !== kudos.data.uid ) &&
-			  ( this.kudo.get( 'recipient' )._id !== kudos.data.uid ) ) {
-			this.insert( 3, add_button );
+		function insert_add_button ( insert ) {
+			if ( insert &&
+				 ( self.kudo.get( 'sender' )._id !== kudos.data.uid ) &&
+				 ( self.kudo.get( 'recipient' )._id !== kudos.data.uid ) ) {
+				self.insert( 3, add_button );
+				self.doLayout();
+			}
 		}
 
 		Ext.Ajax.request({
 			url: '/kudos/' + this.kudo.getId() + '/gloms',
 			success: function ( response ) {
 				var body = Ext.decode( response.responseText );
+
 				if ( body.success && body.response.kudos.count > 0 ) {
 					var glomStore = new Ext.data.Store({
 						model: kudos.models.Kudo,
@@ -93,9 +98,20 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 						width: '98%'
 					};
 
+					var insert = true;
+					Ext.each( body.response.kudos.items, function ( item ) {
+						if ( item.sender._id === kudos.data.uid ) {
+							insert = false;
+						}
+					});
+
+					insert_add_button( insert );
+
 					self.insert( 3, msg );
 					self.insert( 4, activity );
 					self.doLayout();
+				} else {
+					insert_add_button( true );
 				}
 			}
 		});
