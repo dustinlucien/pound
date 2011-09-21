@@ -346,7 +346,7 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 
 	'WHEN I add a like': {
 		topic: function () {
-			api.post( 'kudos/' + KUDO + '/like', COOKIE_HEADER, this.callback );
+			api.post( 'kudos/' + KUDO + '/likes', "", COOKIE_HEADER, this.callback );
 		},
 		'THEN I should get a 200': function ( err, res, body ) {
 			body = JSON.parse( body );
@@ -354,8 +354,6 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			assert.equal( body.meta.code, 200 );
 		},
 		'THEN I should get the like back': function ( err, res, body ) {
-			topic: function () {
-			}
 		}
 	}
 }).addBatch({

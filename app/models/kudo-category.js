@@ -19,7 +19,7 @@ KudoCategory.methods.populateResponse = function ( cb ) {
 	delete out.created;
 	delete out.updated;
 	
-	cb( null, this.toObject() );
+	cb( null, out );
 }
 
 mongoose.model( 'KudoCategory', KudoCategory );

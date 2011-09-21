@@ -73,6 +73,7 @@ GenericController.prototype._respond = function ( res, docs, code, err ) {
 				label = plural.pluralize( docs[0].constructor.modelName.toLowerCase() );	
 			}
 			
+			//this should move out of here for efficiencies sake.
 			for ( i = 0; i < docs.length; i++ ) {
 				(function ( i ) {
 					docs[i].populateResponse(function( err, out ) {
