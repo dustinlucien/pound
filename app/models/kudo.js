@@ -135,19 +135,43 @@ Kudo.methods.populateResponse = function ( cb ) {
 
 Kudo.methods.findGloms = function ( conditions, fields, options, callback ) {
 	var Kudo = mongoose.model( 'Kudo' );
+  
+	if ('function' == typeof conditions) {
+    callback = conditions;
+    conditions = {};
+    fields = null;
+    options = null;
+  } else if ('function' == typeof fields) {
+    callback = fields;
+    fields = null;
+    options = null;
+  } else if ('function' == typeof options) {
+    callback = options;
+    options = null;
+  }
 
-	conditions = merge( conditions, { parent: this });		
-	console.log( conditions );
-	
+	conditions = merge( conditions, { 'parent': this.get('id') });		
 	Kudo.find( conditions, fields, options, callback );
 };
 
-Kudo.methods.likes = function ( conditions, fields, options, callback ) {
+Kudo.methods.findLikes = function ( conditions, fields, options, callback ) {
 	var Like = mongoose.model( 'Like' );
 	
-	conditions = merge( conditions, { sender: this } );
-	console.log( conditions );
-	
+	if ('function' == typeof conditions) {
+    callback = conditions;
+    conditions = {};
+    fields = null;
+    options = null;
+  } else if ('function' == typeof fields) {
+    callback = fields;
+    fields = null;
+    options = null;
+  } else if ('function' == typeof options) {
+    callback = options;
+    options = null;
+  }
+
+	conditions = merge( conditions, { 'sender': this.get('id') } );
 	Like.find( conditions, fields, options, callback );
 }
 

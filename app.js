@@ -135,6 +135,14 @@ kudo_resource.map( 'get', 'gloms', function () {
 	kudo_controller.gloms.apply( kudo_controller, arguments );
 });
 
+kudo_resource.map( 'get', 'likes', function () {
+	kudo_controller.likes.apply( kudo_controller, arguments );
+});
+
+kudo_resource.map( 'post', 'likes', function () {
+	kudo_controller.create_like.apply( kudo_controller, arguments );
+});
+
 /**
  * Start the app!
  */

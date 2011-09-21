@@ -341,6 +341,32 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			assert.equal( kudo.category._id, String( cats[ 0 ]._id ) );
 			assert.equal( kudo.parent, KUDO );
 		}
+	}
+}).addBatch({
+
+	'WHEN I add a like': {
+		topic: function () {
+			api.post( 'kudos/' + KUDO + '/like', COOKIE_HEADER, this.callback );
+		},
+		'THEN I should get a 200': function ( err, res, body ) {
+			body = JSON.parse( body );
+
+			assert.equal( body.meta.code, 200 );
+		},
+		'THEN I should get the like back': function ( err, res, body ) {
+			topic: function () {
+			}
+		}
+	}
+}).addBatch({
+
+	'WHEN I delete the Kudo I created': {
+		topic: function () {
+			api.del( 'kudos/' + KUDO, COOKIE_HEADER, this.callback );
+		},
+		'THEN I should get a 403 status code': function ( err, res, body ) {
+			assert.equal( JSON.parse( body ).meta.code, 403 );
+		}
 	},
 
 	teardown: teardown

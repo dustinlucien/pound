@@ -155,7 +155,7 @@ KudoController.prototype.gloms = function ( req, res ) {
 	});
 };
 
-KudoController.prototype.like = function( req, res ) {
+KudoController.prototype.create_like = function( req, res ) {
 	this._find_kudo( req, res, function( kudo ) {
 		if ( err ) {
 			self._respond( res, null, 500 );
@@ -173,6 +173,19 @@ KudoController.prototype.like = function( req, res ) {
 				}
 			});
 		}
+	});
+};
+
+KudoController.prototype.likes = function ( req, res ) {
+	var self = this;
+	this._find_kudo( req, res, function ( kudo ) {
+		kudo.findLikes( {}, function ( err, likes ) {
+			if ( err ) {
+				self._respond( res, null, 500 );
+			} else {
+				self._respond( res, likes );
+			}
+		});
 	});
 };
 
