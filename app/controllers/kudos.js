@@ -59,9 +59,9 @@ KudoController.prototype._build_kudo = function ( req, res, fields, cb ) {
 	} else if ( fields.recipient_email ) {
 		User.find( { email: fields.recipient_email }, function ( err, docs ) {
 			if (err) {
-				self._respond( res, {}, 500, err );
+				self._respond( res, null, 500, err );
 			} else if ( ! docs || docs.length < 1 ) {
-				self._respond( res, {}, 404, 'No user by that email address' );
+				self._respond( res, null, 404, 'No user by that email address' );
 			} else {
 				cb( null, new Kudo({
 					recipient: docs[ 0 ]._id,
@@ -81,30 +81,30 @@ KudoController.prototype.create = function( req, res ) {
 
 	// if the records param was not given, return an error
 	if ( ! req.body.records ) {
-		self._respond( res, {}, 400, 'No records to create' );
+		self._respond( res, null, 400, 'No records to create' );
 	// if more than one record was given, return an error
 	} else if ( req.body.records.length !== 1 ) {
-		self._respond( res, {}, 400, 'Only one record may be created at a time' );
+		self._respond( res, null, 400, 'Only one record may be created at a time' );
 	// otherwise, create the kudo
 	} else {
 		User.findById( req.session.uid, function ( err, user ) {
 			if (err) {
-				self._respond( res, {}, 500, err);
+				self._respond( res, null, 500, err);
 			} else if (user.kudos.have > 0) {
 				self._build_kudo( req, res, req.body.records[ 0 ], function ( err, kudo ) {
 					if (err) {
-						self._respond( res, {}, 500, err );
+						self._respond( res, null, 500, err );
 					} else if ( String( kudo.sender ) !== String( req.session.uid ) ) {
-						self._respond( res, {}, 403, 'Cannot send Kudo as another user' );
+						self._respond( res, null, 403, 'Cannot send Kudo as another user' );
 					} else if ( String( kudo.sender ) === String( kudo.recipient ) ) {
-						self._respond( res, {}, 403, 'Cannot send Kudo to yourself' );
+						self._respond( res, null, 403, 'Cannot send Kudo to yourself' );
 					} else {
 						kudo.save( function ( err, doc ) {
 							if ( err ) {
 								var err_message = err.message || 'Unknown error',
 									err_code = ( err.message && 403 ) || 500;
 
-								self._respond( res, {}, err_code, err_message );
+								self._respond( res, null, err_code, err_message );
 							} else {
 								self._respond( res, doc );
 							}

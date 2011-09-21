@@ -48,15 +48,26 @@ GenericController.prototype._respond = function ( res, docs, code, err ) {
 	output.success = success;
 	output.meta = { code: code };
 
+	//try to take the label from the type of the model, not the controller
+	var label;
+	if ( this.overrideModelName || ( docs.length === 0 ) ) {
+		label = this.label;
+	} else {
+		label = plural.pluralize( docs[0].constructor.modelName.toLowerCase() );	
+	}
+
+	output.response = {};
+
 	if ( err ) {
 		output.error = {
 			type: error_type[ code ] || 'unknown',
 			description: err
 		};
-		
+
+		output.response[ label ] = { count: 0, items: [{}] };
+
 		res.send( JSON.stringify( output ) );
 	} else {
-		output.response = {};
 
 		var populated = []
 			, total = 0
@@ -64,15 +75,10 @@ GenericController.prototype._respond = function ( res, docs, code, err ) {
 
 		var self = this;
 
-		if (docs.length > 0) {
-			//try to take the label from the type of the model, not the controller
-			var label;
-			if (self.overrideModelName) {
-				label = self.label;
-			} else {
-				label = plural.pluralize( docs[0].constructor.modelName.toLowerCase() );	
-			}
-			
+		if ( docs.length === 0 ) {
+			output.response[ label ] = { count: 0, items: [] };
+			res.send( JSON.stringify( output ) );
+		} else {
 			for ( i = 0; i < docs.length; i++ ) {
 				(function ( i ) {
 					docs[i].populateResponse(function( err, out ) {
@@ -89,9 +95,6 @@ GenericController.prototype._respond = function ( res, docs, code, err ) {
 					});
 				})( i );
 			}
-		} else {
-			output.response[ self.label ] = { count: 0, items: [] };
-			res.send( JSON.stringify( output ) );
 		}
 	}
 };
