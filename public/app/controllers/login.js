@@ -39,7 +39,8 @@ Ext.regController( 'Login', {
 				if ( obj.meta.code === 404 ) {
 					Ext.Msg.alert( 'Uh oh!', 'Email or password invalid' );
 				} else if ( obj.meta.code !== 200 ) {
-					Ext.Msg.alert( 'Whoops!', 'Unknown error. Please try again' );
+					var msg = obj.error.description || 'Unknown error. Please try again';
+					Ext.Msg.alert( 'Whoops!', msg );
 				} else {
 
 					// store this user's id

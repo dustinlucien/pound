@@ -44,7 +44,7 @@ UserController.prototype.index = function( req, res ) {
 	User.find({}, function( err, docs ) {
 		if ( err ) {
 			// TODO log
-			self._respond( res, {}, 500 );
+			self._respond( res, null, 500 );
 		} else {
 			// TODO only show certain fields
 			self._respond( res, docs );
@@ -58,10 +58,10 @@ UserController.prototype.create = function( req, res ) {
 
 	// if the records param was not given, return an error
 	if ( ! req.body.records ) {
-		self._respond( res, {}, 400, 'No records to create' );
+		self._respond( res, null, 400, 'No records to create' );
 	// if more than one record was given, return an error
 	} else if ( req.body.records.length !== 1 ) {
-		self._respond( res, {}, 400, 'Only one record may be created at a time' );
+		self._respond( res, null, 400, 'Only one record may be created at a time' );
 	// otherwise, create the user
 	} else {
 		var user = new User({
@@ -76,7 +76,7 @@ UserController.prototype.create = function( req, res ) {
 				if ( err.message && err.message.indexOf( 'duplicate' ) > 0 ) {
 					msg = 'There is already a user with that email address';
 				}
-				self._respond( res, {}, 500, msg );
+				self._respond( res, null, 500, msg );
 			} else {
 				self._respond( res, doc );
 			}
@@ -88,14 +88,14 @@ UserController.prototype.create = function( req, res ) {
 UserController.prototype.show = function( req, res ) {
 	var self = this;
 	if ( ! req.params.user ) {
-		self._respond( res, {}, 400 );
+		self._respond( res, null, 400 );
 	} else {
 		// TODO only show certain fields
 		User.findById( req.params.user, function ( err, doc ) {
 			if ( err ) {
-				self._respond( res, {}, 500, err );
+				self._respond( res, null, 500, err );
 			} else if ( ! doc ) {
-				self._respond( res, {}, 404 );
+				self._respond( res, null, 404 );
 			} else {
 				self._respond( res, doc );
 			}
