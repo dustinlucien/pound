@@ -72,33 +72,38 @@ vows.describe( 'Users Api Integration Tests' ).addBatch({
 
 			ME = user._id;
 		}
-	},
+	}
 
-/*
 }).addBatch({
 
-	'WHEN I create a new User with valid data and post POST params': {
+	'WHEN I try to create the same user again': {
 		topic: function () {
-			var callback = this.callback;
-			User.remove( {}, function () {
-				var payload = 'name=test%20user&email=testuser@testdomain.com&password=1234';
-				api.post( 'users', payload, FORM_HEADER, callback );
+			var payload =  JSON.stringify({
+				records: [{
+					name: 'test user',
+					email: 'testuser@testdomain.com',
+					password: '1234'
+				}]
 			});
+
+			api.post( 'users', payload, JSON_HEADER, this.callback );
 		},
-		'THEN I should get the same User back as the response': function ( err, res, body ) {
-			var response = JSON.parse( body );
+		'THEN I should get a 500': function ( err, res, body ) {
+			body = JSON.parse( body );
 
-			should.exist( response.response.users );
-			response.response.users.count.should.equal( 1 );
+			assert.equal( body.meta.code, 500 );
+		},
+		'THEN I should get zero results back': function ( err, res, body ) {
+			body = JSON.parse( body );
 
-			var user = response.response.users.items[ 0 ];
+			assert.equal( body.response.users.count, 0 );
 
-			user.name.should.equal( 'test user' );
-			user.email.should.equal( 'testuser@testdomain.com' );
-			should.exist( user._id );
+			// there must be an empty object in the items array, otherwise
+			// sencha touch breaks. this can be removed after sencha is removed
+			assert.equal( Object.keys( body.response.users.items[ 0 ] ).length, 0 );
 		}
 	}
-*/
+
 }).addBatch({
 
 	'WHEN I log in': {
