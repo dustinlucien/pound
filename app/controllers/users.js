@@ -22,6 +22,20 @@ module.exports = UserController;
 /**
  * Class methods
  */
+//Will set req.user for every request with :user
+UserController.prototype.load = function( req, id, callback ) {
+	// TODO only show certain fields
+	User.findById( id, function ( err, doc ) {
+		if ( err ) {
+			console.log( callback );
+			callback ( err, null );
+		} else if ( !doc ) {
+			callback( new Error( 'unable to find user' ) , null );
+		} else {
+			callback( null, doc );
+		}
+	});
+}
 
 //GET /users  ->  index
 UserController.prototype.index = function( req, res ) {

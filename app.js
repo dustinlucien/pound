@@ -143,6 +143,10 @@ kudo_resource.map( 'post', 'likes', function () {
 	kudo_controller.create_like.apply( kudo_controller, arguments );
 });
 
+var like_controller = new LikeController();
+var like_resource = app.resource( 'likes', like_controller.router() );
+like_resource.load( function() { like_controller.load.apply( like_controller, arguments ) } );
+
 /**
  * Start the app!
  */

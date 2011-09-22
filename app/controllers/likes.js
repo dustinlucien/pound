@@ -21,8 +21,20 @@ module.exports = LikeController;
 /**
  * Class methods
  */
+LikeController.prototype.load = function( req, id, callback ) {
+	// TODO only show certain fields
+	Like.findById( id, function ( err, doc ) {
+		if ( err ) {
+			callback ( err, null );
+		} else if ( !doc ) {
+			callback( new Error( 'unable to find user' ) , null );
+		} else {
+			callback( null, doc );
+		}
+	});
+}
 
-//GET /users  ->  index
+//GET /likes  ->  index
 LikeController.prototype.index = function( req, res ) {
 	var self = this;
 
@@ -42,7 +54,7 @@ LikeController.prototype.create = function( req, res ) {
 
 //GET /likes/:like -> show
 LikeController.prototype.show = function( req, res ) {
-	
+	self._respond( res, req.like, 200 );
 };
 
 //PUT /likes/:like -> update
