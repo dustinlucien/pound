@@ -50,8 +50,7 @@ kudos.views.SectionsPanel = Ext.extend( Ext.Panel, {
 		}];
 
 		kudos.views.activity_panel = new kudos.views.ActivityPanel({
-			store: 'kudoStore',
-			cls: 'kudo-list'
+			stores: [ [ kudos.stores.Kudo, 'kudo' ] ]
 		});
 
 		empty = new kudos.views.EmptyPanel();

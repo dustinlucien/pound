@@ -1,5 +1,6 @@
 kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 
+	cls: 'feed-list',
 	selectedItemCls: undefined,
 
 	initComponent: function () {
@@ -7,13 +8,17 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 		var self = this;
 
 		var tpl = new Ext.XTemplate(
-			'<div class="kudo-item {[xindex % 2 === 0 ? "even" : "odd"]}">',
-				'<tpl if="sender._id === kudos.data.uid">You gave </tpl>',
-				'<tpl if="sender._id !== kudos.data.uid"><span class="link-text" data-uid="{sender._id}">{sender.name}</span> gave </tpl>',
-				'<tpl if="recipient._id === kudos.data.uid">you a kudo</tpl>',
-				'<tpl if="recipient._id !== kudos.data.uid"><br /><span class="link-text" data-uid="{recipient._id}">{recipient.name}</span> a kudo</tpl>',
-				'<tpl if="this.showSnippet()">',
-					'<div class="snippet">for {message}</div>',
+			'<div class="feed-item {[xindex % 2 === 0 ? "even" : "odd"]}">',
+				'<tpl if="type === \'kudo\'">',
+					'<tpl for="item">',
+					'<tpl if="sender._id === kudos.data.uid">You gave </tpl>',
+					'<tpl if="sender._id !== kudos.data.uid"><span class="link-text" data-uid="{sender._id}">{sender.name}</span> gave </tpl>',
+					'<tpl if="recipient._id === kudos.data.uid">you a kudo</tpl>',
+					'<tpl if="recipient._id !== kudos.data.uid"><br /><span class="link-text" data-uid="{recipient._id}">{recipient.name}</span> a kudo</tpl>',
+					'<tpl if="this.showSnippet()">',
+						'<div class="kudo-snippet">for {message}</div>',
+					'</tpl>',
+					'</tpl>',
 				'</tpl>',
 			'</div>',
 			{
@@ -23,15 +28,38 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 			}
 		);
 
+		var store = new Ext.data.Store({
+			model: 'FeedItem'
+		});
+
 		Ext.apply( this, {
-			itemTpl: tpl
+			itemTpl: tpl,
+			store: store
 		});
 
 		// on render, load activity
 		this.on('render', function() {
-			if ( ! this.no_load ) {
-				this.store.load();
-			}
+			var feedStore = this.store;
+			// remove all store data
+			feedStore.loadData( [], false );
+			Ext.each( this.stores, function ( storeDef ) {
+				var store = storeDef[ 0 ],
+					type = storeDef[ 1 ];
+				store.load( function ( records ) {
+					var data = [];
+					Ext.each( records, function ( record ) {
+						var raw = record.raw;
+						data.push({
+							_id: raw._id,	
+							created: new Date( raw.created ),
+							type: type,
+							item: raw
+						});
+					});
+					feedStore.loadData( data, true );
+					feedStore.sort( 'created' );
+				});
+			});
 		});
 
 		this.on( 'selectionchange', this.onSelect, this );
@@ -65,33 +93,42 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 		}
 	},
 
+	onKudoSelect: function ( kudo ) {
+		var self = this;
+
+		if ( kudo.get( 'parent' ) ) {
+			kudos.models.Kudo.load( kudo.get( 'parent' ), {
+				success: function ( kudo ) {
+					create_card.call( self, kudo );
+				}
+			});
+		} else {
+			create_card.call( self, kudo );
+		}
+
+		function create_card ( kudo ) {
+			var kudoDetailCard = new kudos.views.KudoDetailPanel({
+				kudo: kudo,
+				card: true,
+				prevCard: self 
+			});
+
+			this.ownerCt.setActiveItem( kudoDetailCard, {
+				type: 'slide',
+				direction: 'left'
+			});
+		}
+	},
+
 	// when an item is pressed
 	onSelect: function ( selectionmodel, records ) {
 		if ( ( ! this.no_select ) && records[ 0 ] ) {
 			var self = this,
-				kudo = records[ 0 ];
+				item = records[ 0 ];
 
-			if ( kudo.get( 'parent' ) ) {
-				kudos.models.Kudo.load( kudo.get( 'parent' ), {
-					success: function ( kudo ) {
-						create_card.call( self, kudo );
-					}
-				});
-			} else {
-				create_card.call( self, kudo );
-			}
-
-			function create_card ( kudo ) {
-				var kudoDetailCard = new kudos.views.KudoDetailPanel({
-					kudo: kudo,
-					card: true,
-					prevCard: this
-				});
-
-				this.ownerCt.setActiveItem( kudoDetailCard, {
-					type: 'slide',
-					direction: 'left'
-				});
+			if ( item.get( 'type' ) === 'kudo' ) {
+				var kudo_item = item.get( 'item' );
+				this.onKudoSelect( new kudos.models.Kudo( item.get( 'item' ) ) );
 			}
 		}
 	}

@@ -31,25 +31,25 @@
 }
 
 /* Activity feed */
-.kudo-item {
+.feed-item {
 	line-height: 1.5em;
 	min-height: 60px;
 	padding: 10px 15px;
 }
 
-.kudo-item.odd {
+.feed-item.odd {
 	background: #e9f5ff;
 }
 
-.kudo-item.even {
+.feed-item.even {
 	background: #ffebeb;
 }
 
-.x-list.kudo-list .x-list-item {
+.x-list.feed-list .x-list-item {
 	padding: 0;
 }
 
-.kudo-item .snippet {
+.feed-item .kudo-snippet {
 	font-style: italic;
 	text-align: right;
 	padding-right: 5px;

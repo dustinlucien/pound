@@ -5,7 +5,7 @@ kudos.models.Kudo = Ext.regModel( 'Kudo', {
 	fields: [
 		{ name: '_id', type: 'string' },
 		{ name: 'message', type: 'string' },
-		{ name: 'category', type: 'string' },
+		{ name: 'category', type: 'object' },
 		{ name: 'sender', type: 'object'},
 		{ name: 'recipient', type: 'object'},
 		{ name: 'parent', type: 'string' }

@@ -12,10 +12,10 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 	initComponent: function() {		
 
 		var self = this,
-			message = 'This is a Kudo for ' + this.kudo.raw.message;
+			message = 'This is a Kudo for ' + this.kudo.get( 'message' );
 
 		var cat_box = [ '<div class="cat-box">',
-						this.kudo.raw.category.name,
+						this.kudo.get( 'category' ).name,
 						'<br />',
 						'+1',
 						'</div>' ].join( '' );
@@ -83,8 +83,7 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 					});
 	
 					var activity = new kudos.views.ActivityPanel({
-						cls: 'kudo-list',
-						store: glomStore,
+						stores: [ [ glomStore, 'kudo' ] ],
 						no_load: true,
 						no_select: true,
 						no_tap: true,
