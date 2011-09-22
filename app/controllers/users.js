@@ -79,7 +79,11 @@ UserController.prototype.show = function( req, res ) {
 		// TODO only show certain fields
 		User.findById( req.params.user, function ( err, doc ) {
 			if ( err ) {
-				self._respond( res, null, 500, err );
+				if ( err.message === 'Invalid ObjectId' ) {
+					self._respond( res, null, 404 );
+				} else {
+					self._respond( res, null, 500, err );
+				}
 			} else if ( ! doc ) {
 				self._respond( res, null, 404 );
 			} else {

@@ -147,6 +147,21 @@ vows.describe( 'Users Api Integration Tests' ).addBatch({
 			assert.equal( user.name, 'test user' );
 			assert.equal( user.email, 'testuser@testdomain.com' );
 		}
+	},
+
+	'WHEN I get a non-existent user': {
+		topic: function () {
+			api.get( 'users/1234', COOKIE_HEADER, this.callback );
+		},
+		'THEN I should get a 404': function ( err, res, body ) {
+			body = JSON.parse( body );
+			assert.equal( body.meta.code, 404 );
+		},
+		'THEN I should get zero results': function ( err, res, body ) {
+			body = JSON.parse( body );
+			assert.isNotNull( body.response );
+			assert.equal( Object.keys( body.response.users.items[ 0 ] ).length, 0 );
+		}
 	}
 
 }).addBatch({
