@@ -181,7 +181,7 @@ vows.describe( 'Kudo Model Integration Tests' ).addBatch({
 			},
 			'THEN kudo should have a like added to it': function ( err, like ) {
 				assert.isNull( err );
-				assert.equal( like.sender, user3.get('id') );
+				assert.equal( like.sender.get('id'), user3.get('id') );
 			}
 		},
 

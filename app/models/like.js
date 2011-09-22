@@ -14,22 +14,22 @@ Like.methods.populateResponse = function( cb ) {
 	var self = this;
 	async.parallel({
 		user: function( callback ) {
-			var User = self.model('User');
-			User.findById( self.sender, function( err, user ) {
+			var User = self.model( 'User' );
+			User.findById( self.sender, function( err, doc ) {
 				if (err) {
 					callback(err);
 				} else {
-					user.populateResponse( callback );
+					doc.populateResponse( callback );
 				}
 			} );
 		},
 		kudo: function( callback ) {
 			var Kudo = self.model( 'Kudo' );
-			Kudo.findById( self.kudo, function ( err, kudo  ) {
+			Kudo.findById( self.kudo, function ( err, doc  ) {
 				if ( err ) {
 					callback( err );
 				} else {
-					kudo.populateResponse( callback );
+					doc.populateResponse( callback );
 				}
 			});
 		}

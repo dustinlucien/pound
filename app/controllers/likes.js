@@ -13,7 +13,7 @@ function LikeController () {
 
 // extend the GenericController class
 var GenericController = require( './generic.js' );
-UserController.prototype.__proto__ = GenericController.prototype;
+LikeController.prototype.__proto__ = GenericController.prototype;
 
 // export the UserController class
 module.exports = LikeController;
@@ -54,7 +54,7 @@ LikeController.prototype.create = function( req, res ) {
 
 //GET /likes/:like -> show
 LikeController.prototype.show = function( req, res ) {
-	self._respond( res, req.like, 200 );
+	this._respond( res, req.like, 200 );
 };
 
 //PUT /likes/:like -> update

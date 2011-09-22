@@ -24,7 +24,7 @@ var express = require('express')
 	, UserController = require( './app/controllers/users' )
 	, KudoCategoryController = require( './app/controllers/kudo-categories' )
 	, KudoController = require( './app/controllers/kudos' )
-
+	, LikeController = require( './app/controllers/likes' )
 // Middleware
 	, AuthMiddleware = require( './app/lib/auth' );
 	

@@ -15,6 +15,7 @@ var JSON_HEADER = {'Content-Type': 'application/json'},
 
 var User = require( '../../../app/models/user' ),
 	Kudo = require( '../../../app/models/kudo' ),
+	Like = require( '../../../app/models/like' ),
 	KudoCategory = require( '../../../app/models/kudo-category' );
 
 var user1, user2, user3, cats, KUDO;
@@ -25,6 +26,7 @@ function setup ( cb ) {
 		cats = c;
 		User.remove( {}, function () {
 		Kudo.remove( {}, function () {
+		Like.remove( {}, function () {
 			user1 = new User({
 				email: 'user1@user.com',
 				name: 'User 1',
@@ -46,6 +48,7 @@ function setup ( cb ) {
 				function ( callback ) { user2.save( callback ); },
 				function ( callback ) { user3.save( callback ); }
 			], cb );
+		});
 		});
 		});
 	});
@@ -354,20 +357,45 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 			assert.equal( body.meta.code, 200 );
 		},
 		'THEN I should get the like back': function ( err, res, body ) {
+			body = JSON.parse( body );
+			
+			assert.isTrue( body.response.likes.count > 0 );
+			LIKE = body.response.likes.items[0]._id;
 		}
 	}
 }).addBatch({
-
-	'WHEN I delete the Kudo I created': {
+	'WHEN I list ALL the likes': {
 		topic: function () {
-			api.del( 'kudos/' + KUDO, COOKIE_HEADER, this.callback );
+			api.get( 'likes', COOKIE_HEADER, this.callback );
 		},
-		'THEN I should get a 403 status code': function ( err, res, body ) {
-			assert.equal( JSON.parse( body ).meta.code, 403 );
+		'THEN I should get a 200': function( err, res, body ) {
+			body = JSON.parse( body );
+			
+			assert.equal( body.meta.code, 200 );
+		},
+		'THEN I should also get a like back': function ( err, res, body ) {
+			body = JSON.parse( body );
+			
+			assert.isTrue( body.response.likes.count > 0 );
+			assert.equal( KUDO, body.response.likes.items[0].kudo._id );
 		}
 	},
-
+	'WHEN I show the single created like': {
+		topic: function() {
+			api.get('likes/' + LIKE, COOKIE_HEADER, this.callback );
+		},
+		'THEN I should get a 200': function ( err, res, body ) {
+			body = JSON.parse( body );
+			
+			assert.equal( body.meta.code, 200 );
+		},
+		'THEN I should get the like back': function ( err, res, body ) {
+			body = JSON.parse( body );
+			
+			assert.equal( body.response.likes.count, 1 );
+			assert.equal( KUDO, body.response.likes.items[0].kudo._id );
+		}
+	},
 	teardown: teardown
-
 }).export( module );
 
