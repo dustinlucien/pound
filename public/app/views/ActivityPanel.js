@@ -38,33 +38,43 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 		});
 
 		// on render, load activity
-		this.on('render', function() {
-			var feedStore = this.store;
-			// remove all store data
-			feedStore.loadData( [], false );
-			Ext.each( this.stores, function ( storeDef ) {
-				var store = storeDef[ 0 ],
-					type = storeDef[ 1 ];
-				store.load( function ( records ) {
-					var data = [];
-					Ext.each( records, function ( record ) {
-						var raw = record.raw;
-						data.push({
-							_id: raw._id,	
-							created: new Date( raw.created ),
-							type: type,
-							item: raw
-						});
-					});
-					feedStore.loadData( data, true );
-					feedStore.sort( 'created' );
-				});
-			});
-		});
+		this.on( 'show', this.loadItems );
+		this.on( 'render', this.loadItems );
 
 		this.on( 'selectionchange', this.onSelect, this );
 
 		kudos.views.ActivityPanel.superclass.initComponent.apply( this, arguments );
+	},
+
+	loadItems: function () {
+		var feedStore = this.store;
+		// remove all store data
+		feedStore.loadData( [], false );
+		// iterate over stores
+		Ext.each( this.stores, function ( storeDef ) {
+			var store = storeDef[ 0 ],
+				type = storeDef[ 1 ];
+			// load the store data
+			store.load( function ( records ) {
+				var data = [];
+				// push all records onto an array
+				// (as a FeedItem)
+				Ext.each( records, function ( record ) {
+					var raw = record.raw;
+					data.push({
+						_id: raw._id,	
+						created: new Date( raw.created ),
+						type: type,
+						item: raw
+					});
+				});
+
+				// append the data into the store
+				feedStore.loadData( data, true );
+				// sorted everything by created date
+				feedStore.sort( 'created' );
+			});
+		});
 	},
 
 	onTap: function ( eventObj ) {

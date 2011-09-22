@@ -46,8 +46,6 @@ kudos.views.UserProfilePanel = Ext.extend( kudos.views.KudoCardPanel, {
 			uid = this.user.raw._id;
 			user_header.data = this.user.raw;
 		}
-
-;
 		
 		// add a Send Kudo button if this is not the current user
 		if ( !this.me ) {			

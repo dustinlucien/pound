@@ -68,8 +68,6 @@ Ext.regController( 'Kudo', {
 								action: 'list',
 								scope: options.scope,
 								callback: function () {
-									kudos.views.people_list_panel.setActiveItem( 0 );
-									kudos.views.sections_panel.buttons.setPressed( 1, true );
 									options.callback();
 								}
 							});
@@ -92,15 +90,12 @@ Ext.regController( 'Kudo', {
 	},
 	
 	list: function ( options ) {
-		var store = Ext.StoreMgr.lookup( 'kudoStore' );
-		store.load( function ( records, operation, success ) {
-			console.log( "reloaded the new kudos" );
-			console.log( "success? " + success );
-			kudos.views.sections_panel.setActiveItem( 1, {
-				type: 'slide',
-				direction: 'left',
-				after: function () { options.callback.apply( options.scope ); }
-			});
+		kudos.views.people_list_panel.setActiveItem( 0 );
+		kudos.views.sections_panel.buttons.setPressed( 1, true );
+		kudos.views.sections_panel.setActiveItem( 1, {
+			type: 'slide',
+			direction: 'left',
+			after: function () { options.callback.apply( options.scope ); }
 		});
 	}
 
