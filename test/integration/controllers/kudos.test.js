@@ -206,6 +206,21 @@ vows.describe( 'Kudos Api Integration Tests' ).addBatch({
 		}
 	},
 
+	'WHEN I get a non-existent Kudo': {
+		topic: function () {
+			api.get( 'kudos/1234', COOKIE_HEADER, this.callback );
+		},
+		'THEN I should get a 404': function ( err, res, body ) {
+			body = JSON.parse( body );
+			assert.equal( body.meta.code, 404 );
+		},
+		'THEN I should get zero results': function ( err, res, body ) {
+			body = JSON.parse( body );
+			assert.isNotNull( body.response );
+			assert.equal( Object.keys( body.response.kudos.items[ 0 ] ).length, 0 );
+		}
+	},
+
 	'WHEN I list the Kudos the sender has sent': {
 		topic: function() {
 			api.get( 'users/' + user1._id + '/kudos/sent', COOKIE_HEADER, this.callback );

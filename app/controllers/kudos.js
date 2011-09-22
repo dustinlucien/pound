@@ -124,7 +124,11 @@ KudoController.prototype._find_kudo = function ( req, res, cb ) {
 	} else {
 		Kudo.findById( req.params.kudo, function ( err, doc ) {
 			if ( err ) {
-				self._respond( res, null, 500, err );
+				if ( err.message === 'Invalid ObjectId' ) {
+					self._respond( res, null, 404 );
+				} else {
+					self._respond( res, null, 500, err );
+				}
 			} else if ( ! doc ) {
 				self._respond( res, null, 404 );
 			} else {
