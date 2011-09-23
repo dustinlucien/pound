@@ -32,6 +32,10 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 			model: 'FeedItem'
 		});
 
+		if ( !this.store_filter ) {
+			this.store_filter = function () { return true; };
+		}
+
 		Ext.apply( this, {
 			itemTpl: tpl,
 			store: store
@@ -47,7 +51,9 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 	},
 
 	loadItems: function () {
-		var feedStore = this.store;
+		var feedStore = this.store,
+			self = this;
+
 		// remove all store data
 		feedStore.loadData( [], false );
 		// iterate over stores
@@ -60,13 +66,15 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 				// push all records onto an array
 				// (as a FeedItem)
 				Ext.each( records, function ( record ) {
-					var raw = record.raw;
-					data.push({
-						_id: raw._id,	
-						created: new Date( raw.created ),
-						type: type,
-						item: raw
-					});
+					if ( self.store_filter( record ) ) {
+						var raw = record.raw;
+						data.push({
+							_id: raw._id,	
+							created: new Date( raw.created ),
+							type: type,
+							item: raw
+						});
+					}
 				});
 
 				// append the data into the store

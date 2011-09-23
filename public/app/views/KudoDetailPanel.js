@@ -42,6 +42,28 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 			}
 		};
 
+		var glom_filter = function ( record ) {
+			return record.get( 'parent' ) === self.kudo.get( '_id' );
+		};
+
+		var activity = new kudos.views.ActivityPanel({
+			stores: [ [ kudos.stores.Kudo, 'kudo' ] ],
+			store_filter: glom_filter,
+			no_load: true,
+			no_select: true,
+			no_tap: true,
+			show_snippet: true,
+			width: '98%',
+			margin: '10 0 10 0',
+			scroll: false
+		});
+
+		var msg = {
+			html: 'Other Kudos in this spree',
+			margin: '10 0 10 0',
+			width: '98%'
+		};
+
 		Ext.apply( this, {
 			items: [{
 				html: '<div class="big glow-suitcase"></div>',
@@ -54,6 +76,8 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 				margin: '10',
 				width: '100%'
 			},
+			msg,
+			activity,
 			// a spacer
 			{
 				height: 20
@@ -70,52 +94,6 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 				self.doLayout();
 			}
 		}
-
-		Ext.Ajax.request({
-			url: '/kudos/' + this.kudo.getId() + '/gloms',
-			success: function ( response ) {
-				var body = Ext.decode( response.responseText );
-
-				if ( body.success && body.response.kudos.count > 0 ) {
-					var glomStore = new Ext.data.Store({
-						model: kudos.models.Kudo,
-						data: body.response.kudos.items
-					});
-	
-					var activity = new kudos.views.ActivityPanel({
-						stores: [ [ glomStore, 'kudo' ] ],
-						no_load: true,
-						no_select: true,
-						no_tap: true,
-						show_snippet: true,
-						width: '98%',
-						margin: '10 0 10 0',
-						scroll: false
-					});
-
-					var msg = {
-						html: 'Other Kudos in this spree',
-						margin: '10 0 10 0',
-						width: '98%'
-					};
-
-					var insert = true;
-					Ext.each( body.response.kudos.items, function ( item ) {
-						if ( item.sender._id === kudos.data.uid ) {
-							insert = false;
-						}
-					});
-
-					insert_add_button( insert );
-
-					self.insert( 3, msg );
-					self.insert( 4, activity );
-					self.doLayout();
-				} else {
-					insert_add_button( true );
-				}
-			}
-		});
 	}
 });
 
