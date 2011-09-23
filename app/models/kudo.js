@@ -49,6 +49,12 @@ Kudo.pre( 'save', function ( next ) {
 						callback( err );
 					} else {
 						recipient.kudos.received += 1;
+						if ( ! recipient.kudos.totals ) {
+							recipient.kudos.totals = {};
+						}
+						var cat_total = ( recipient.kudos.totals[ self.category ] || 0 );
+						recipient.kudos.totals[ self.category ] = cat_total + 1;
+						recipient.markModified( 'kudos.totals' );
 						recipient.save( callback );
 					}
 				});

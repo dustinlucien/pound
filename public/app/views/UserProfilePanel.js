@@ -30,37 +30,33 @@ kudos.views.UserProfilePanel = Ext.extend( kudos.views.KudoCardPanel, {
 			tpl: new Ext.XTemplate(
 				'<div>',
 					'<h2 class="user-name link-text">{name}</h2>',
-					'<p>Kudos Sent: {kudos.sent.length} <span class="count-spacer">Kudos Received : {kudos.received.length}</span></p>',
+					'<p>Kudos Sent: {kudos.sent} <span class="count-spacer">Kudos Received : {kudos.received}</span></p>',
 				'</div>'
 			)
 		});
 
 		items.push( user_header );
-		
+
+		var uid = kudos.data.uid;
+
 		//TODO: fix up the parsing of the User JSON so that kudos.sent and kudos.received are correct
 		if ( this.user ) {
+			uid = this.user.raw._id;
 			user_header.data = this.user.raw;
-		} else {
-			this.on( 'render', function () {
-				User = Ext.ModelMgr.getModel( 'User' );
-				User.load( kudos.data.uid, {
-					success: function ( user ) {
-						console.log( 'successful data load of logged in user' );
-						self.user = user;
-						user_header.update( self.user.data );
-					}
-				});
-			});
 		}
+
+;
 		
 		// add a Send Kudo button if this is not the current user
 		if ( !this.me ) {			
 			var send_kudos_button = {
 				xtype: 'button',
 				ui: 'decline',
-				text: 'Give ' + this.user.data.name + ' a Kudo',
+				html: '<div class="suitcase"></div><span class="x-button-label">Give ' + this.user.data.name + ' a Kudo</span>',
 				scope: this,
 				width: '98%',
+				height: 43,
+				cls: 'send-kudo',
 				handler: function () {
 
 					var sendKudoPanel = new kudos.views.SendKudoPanel({
@@ -90,7 +86,7 @@ kudos.views.UserProfilePanel = Ext.extend( kudos.views.KudoCardPanel, {
 			tpl: new Ext.XTemplate(
 				'<tpl for="categories">',
 					'<div class="category">',
-						'<span class="total">+0</span>',
+						'<span class="total">+{total}</span>',
 						'{data.name}',
 					'</div>',
 				'</tpl>'
@@ -99,11 +95,37 @@ kudos.views.UserProfilePanel = Ext.extend( kudos.views.KudoCardPanel, {
 			margin: '0 0 10 0'
 		});
 
+		function update_totals ( self ) {
+			if ( self.categories && self.user ) {
+				Ext.each( self.categories, function ( cat ) {
+					if ( self.user.raw.kudos.totals ) {
+						cat.total = self.user.raw.kudos.totals[ cat.raw._id ] || 0;
+					} else {
+						cat.total = 0;
+					}
+				});
+				feedback_panel.update( { categories: self.categories } );
+			}
+		}
+
 		kudos.stores.KudoCategory.load( function ( records, operation, success ) {
-			feedback_panel.update( { categories: records } );
+			self.categories = records;
+			feedback_panel.update( { categories: self.categories } );
+			update_totals( self );
 		});
 
 		items.push( feedback_panel );
+
+		this.on( 'render', function () {
+			User = Ext.ModelMgr.getModel( 'User' );
+			User.load( uid, {
+				success: function ( user ) {
+					self.user = user;
+					user_header.update( self.user.data );
+					update_totals( self );
+				}
+			});
+		})
 
 		Ext.apply( this, {
 			items: items,

@@ -94,3 +94,15 @@
 	font-size: 1.2em;
 	margin-right: 5px;
 }
+
+/* Send Kudo button */
+.x-button.send-kudo .suitcase {
+	background-image: url( 'images/suitcase1.png' );
+	background-repeat: no-repeat;
+	background-size: 35px 35px;
+	height: 35px;
+	width: 35px;
+	position: absolute;
+	top: 3px;
+	right: 11px;
+}

@@ -42,6 +42,9 @@ var User = new mongoose.Schema({
 			type: Number, 
 			min: 0,
 			default: 0
+		},
+		totals: {
+			type: mongoose.Schema.Types.Mixed
 		}
 	}
 });

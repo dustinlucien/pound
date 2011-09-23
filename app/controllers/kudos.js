@@ -96,7 +96,10 @@ KudoController.prototype.index = function( req, res ) {
 	var self = this;
 
 	// TODO filter kudos
-	Kudo.find({}, function( err, docs ) {
+	Kudo.find({})
+		.sort( 'created', 'descending' )
+		.execFind( function( err, docs ) {
+console.log( arguments );
 		if ( err ) {
 			self.respond( res, null, 500, err );
 		} else {
