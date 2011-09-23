@@ -2,8 +2,8 @@
  * Dependencies
  */
 
-var User = require( '../models/user' );
-/*	, Kudo = require( '../models/kudo' );*/
+var User = require( '../models/user' )
+	, Kudo = require( '../models/kudo' );
 
 /**
  * Class def
@@ -158,9 +158,11 @@ UserController.prototype.destroy = function( req, res ) {
 UserController.prototype.kudos = function( req, res ) {
 	var self = this;
 	
+	console.log(req.params);
+	
 	if (! req.params.user ) {
 		self._respond( res, null, 400 );
-	} else if (! req.params.kudos ) {
+	} else if (! req.params.stream ) {
 		self._respond( res, null, 400 );
 	} else {
 		var field;
