@@ -52,7 +52,8 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 
 	loadItems: function () {
 		var feedStore = this.store,
-			self = this;
+			self = this,
+			count = 0;
 
 		// remove all store data
 		feedStore.loadData( [], false );
@@ -62,6 +63,7 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 				type = storeDef[ 1 ];
 			// load the store data
 			store.load( function ( records ) {
+				count++;
 				var data = [];
 				// push all records onto an array
 				// (as a FeedItem)
@@ -81,6 +83,10 @@ kudos.views.ActivityPanel = Ext.extend( Ext.List, {
 				feedStore.loadData( data, true );
 				// sorted everything by created date
 				feedStore.sort( 'created' );
+
+				if ( count === self.stores.length && self.onready ) {
+					self.onready();
+				}
 			});
 		});
 	},

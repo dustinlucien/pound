@@ -46,6 +46,15 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 			return record.get( 'parent' ) === self.kudo.get( '_id' );
 		};
 
+		function insert_add_button ( insert ) {
+			if ( insert &&
+				 ( self.kudo.get( 'sender' )._id !== kudos.data.uid ) &&
+				 ( self.kudo.get( 'recipient' )._id !== kudos.data.uid ) ) {
+				self.insert( 3, add_button );
+				self.doLayout();
+			}
+		}
+
 		var activity = new kudos.views.ActivityPanel({
 			stores: [ [ kudos.stores.Kudo, 'kudo' ] ],
 			store_filter: glom_filter,
@@ -55,7 +64,20 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 			show_snippet: true,
 			width: '98%',
 			margin: '10 0 10 0',
-			scroll: false
+			scroll: false,
+			onready: function () {
+				var store = activity.getStore(),
+					insert = true;
+
+				store.each( function ( record ) {
+					if ( record.get( 'item' ).sender._id === kudos.data.uid ) {
+						insert = false;
+						return false;
+					}
+				});
+
+				insert_add_button( insert );
+			}
 		});
 
 		var msg = {
@@ -85,15 +107,6 @@ kudos.views.KudoDetailPanel = Ext.extend( kudos.views.KudoCardPanel, {
 		});
 
 		kudos.views.KudoDetailPanel.superclass.initComponent.apply( this, arguments );
-
-		function insert_add_button ( insert ) {
-			if ( insert &&
-				 ( self.kudo.get( 'sender' )._id !== kudos.data.uid ) &&
-				 ( self.kudo.get( 'recipient' )._id !== kudos.data.uid ) ) {
-				self.insert( 3, add_button );
-				self.doLayout();
-			}
-		}
 	}
 });
 
