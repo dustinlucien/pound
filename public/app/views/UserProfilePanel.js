@@ -123,7 +123,26 @@ kudos.views.UserProfilePanel = Ext.extend( kudos.views.KudoCardPanel, {
 					update_totals( self );
 				}
 			});
-		})
+		});
+
+		var store_filter = function ( record ) {
+			return record.get( 'sender' )._id === uid ||
+				   record.get( 'recipient' )._id === uid;
+		};
+
+		var activity = new kudos.views.ActivityPanel({
+			stores: [ [ kudos.stores.Kudo, 'kudo' ] ],
+			store_filter: store_filter,
+			no_load: true,
+			no_select: true,
+			no_tap: true,
+			show_snippet: true,
+			width: '98%',
+			margin: '10 0 10 0',
+			scroll: false
+		});
+
+		items.push( activity );
 
 		// a spacer
 		items.push({
